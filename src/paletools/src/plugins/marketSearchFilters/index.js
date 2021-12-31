@@ -259,7 +259,7 @@ function run() {
     const UTMarketSearchResultsViewController_requestItems = UTMarketSearchResultsViewController.prototype._requestItems;
     UTMarketSearchResultsViewController.prototype._requestItems = function _requestItems(l) {
         if (!settings.enabled || !cfg.playerRating) {
-            UTMarketSearchResultsViewController_requestItems(this, l);
+            UTMarketSearchResultsViewController_requestItems.call(this, l);
             return;
         }
 

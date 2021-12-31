@@ -13,6 +13,7 @@ function run() {
         clubAnalyzerTab.setTag(9);
         clubAnalyzerTab.setText(localize("plugins.clubAnalyzer.settings.title"));
         clubAnalyzerTab.addClass("icon-club");
+        clubAnalyzerTab.getRootElement().classList.add("palesnipe-element");
         return clubAnalyzerTab;
     }
 

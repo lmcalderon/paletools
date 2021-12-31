@@ -6,11 +6,20 @@ import UTLabelWithToggleControl from "../../controls/UTLabelWithToggleControl";
 import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
 import localize from "../../localization";
-import { on } from "../../events";
+import { EVENTS, on } from "../../events";
 
 const cfg = settings.plugins.gridMode;
 
 function run(){
+
+    function addStyles(){
+        addStyle('paletools-grid', styles);
+    }
+
+    function removeStyles() {
+        removeStyle('paletools-grid');
+    }
+
     const UTCurrencyNavigationBarView__generate = UTCurrencyNavigationBarView.prototype._generate;
     UTCurrencyNavigationBarView.prototype._generate = function _generate() {
         UTCurrencyNavigationBarView__generate.call(this);
@@ -41,8 +50,18 @@ function run(){
                 })
                 .insertBefore(this.__currencies);
             
-            on('appEnabled', () => $(this._gridModeToggle.getRootElement()).show());
-            on('appDisabled', () => $(this._gridModeToggle.getRootElement()).hide());
+            on(EVENTS.APP_ENABLED, () => {
+                $(this._gridModeToggle.getRootElement()).show();
+                removeStyles();
+                if(cfg.enabled){
+                    addStyles();
+                }
+            });
+            
+            on(EVENTS.APP_DISABLED, () => {
+                $(this._gridModeToggle.getRootElement()).hide();
+                removeStyles();
+            });
 
             this._gridModeGenerated = true;
         }
