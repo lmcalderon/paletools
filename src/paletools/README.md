@@ -8,6 +8,11 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.4
+- Fixed issue with compare price when the plugin is disabled
+- Fixed styles when the plugin is  disabled
+- Hide club analyzer when the plugin is disabled
+
 ### v1.0.3
 - Fixed club load on Mark as duplicated plugin</li>
 - Fixed localization issues</li>

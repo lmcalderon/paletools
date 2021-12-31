@@ -8,6 +8,11 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.4
+- Arreglado error al comparar precio cuando paletools esta deshabilitado
+- Arreglados los estilos cuando paletools esta deshabilitado
+- Ocultado club analyzer cuando paletools esta deshabilitado
+
 ### v1.0.3
 - Arreglado la carga del club en el plugin de Marcar jugadores como duplicados</li>
 - Arreglado los problemas de globalización</li>
