@@ -29,6 +29,7 @@ export default function menu(){
     input(generalContainer, "buttons.enableDisable");
     toggle(generalContainer, "buttons.results.pressEnter");
     toggle(generalContainer, "buttons.search.enableBotMode");
+    toggle(generalContainer, "legacyMode");
 
     let searchContainer = document.createElement("div");
     input(searchContainer, "buttons.back");

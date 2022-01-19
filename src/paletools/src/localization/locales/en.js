@@ -67,6 +67,7 @@ export default {
     "plugins.snipe.settings.search.incMaxBuy": "Increase max buy now value",
     "plugins.snipe.settings.search.botModeMinBid": "Bot mode, increment min bid",
     "plugins.snipe.settings.search.botModeMinBuy": "Bot mode, increment min buy now",
+    "plugins.snipe.settings.legacyMode": "Use legacy mode for buying cards (palesnipe 3.1)",
     /// #endif
 
     // #if process.env.DUPLICATED_TO_SBC

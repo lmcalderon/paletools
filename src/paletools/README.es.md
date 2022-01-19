@@ -8,6 +8,9 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.5
+- Agregado modo legacy para snipear cartas (palesnipe 3.1) 
+
 ### v1.0.4
 - Arreglado error al comparar precio cuando paletools esta deshabilitado
 - Arreglados los estilos cuando paletools esta deshabilitado

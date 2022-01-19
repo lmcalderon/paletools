@@ -44,20 +44,32 @@ UTDefaultActionPanelView.prototype.render = function (e, t, i, o, n, r, s) {
 function run() {
 
     const
+        enterBtn = () => $('.ea-dialog-view .ut-button-group button:eq(0)'),
+        buyBtn = () => $('.buyButton'),
+        tryPressOkBtn = (callback) => {
+            if (!mouseClick(enterBtn())) {
+                if (callback) {
+                    setTimeout(callback(false), 0);
+                }
+
+                setTimeout(tryPressOkBtn, 10);
+                return;
+            }
+            else {
+                if (callback) {
+                    callback(true);
+                }
+            }
+        },
         buyNow = () => {
-            // if (cfg.buttons.results.pressEnter) {
-            //     let controller = getCurrentController();
-            //     let itemDetailsController = controller._rightController._currentController;
-            //     const currentAuction = itemDetailsController._currentAuction;
-            //     if (currentAuction._tradeState !== "expired") {
-            //         itemDetailsController._onBuyNow();
-            //         // itemDetailsController._requestedBid = currentAuction.buyNowPrice;
-            //         // itemDetailsController._eBidConfirmed();
-            //     }
-            // }
-            // else {
+            if (cfg.legacyMode) {
+                if (mouseClick(buyBtn())) {
+                    tryPressOkBtn();
+                }
+            }
+            else {
                 getCurrentController()._rightController._currentController._panel.onBuyNow.notify();
-            // }
+            }
         },
         bid = () => {
             const itemDetailsController = getCurrentController()._rightController._currentController;
@@ -306,7 +318,7 @@ function run() {
     });
 
     document.body.addEventListener('keydown', e => {
-        if(e.target.tagName === "INPUT" && e.target.type.toUpperCase() === "TEXT"){
+        if (e.target.tagName === "INPUT" && e.target.type.toUpperCase() === "TEXT") {
             return;
         }
 

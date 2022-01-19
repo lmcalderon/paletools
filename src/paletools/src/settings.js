@@ -63,7 +63,8 @@ let settings = {
             futbinSearch: true
         },
         snipe: {
-            buttons: buttons
+            buttons: buttons,
+            legacyMode: false
         },
         duplicatedToSbc: {
             enabled: true

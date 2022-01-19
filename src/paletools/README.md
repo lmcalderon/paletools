@@ -8,6 +8,9 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.5
+- Added legacy mode for sniping cards (same as palesnipe 3.1) 
+
 ### v1.0.4
 - Fixed issue with compare price when the plugin is disabled
 - Fixed styles when the plugin is  disabled
