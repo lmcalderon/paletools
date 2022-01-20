@@ -9,6 +9,7 @@ module.exports = (env) => {
         DUPLICATED_TO_SBC: true,
         FILL_SBC_FROM_FUTBIN: true,
         GRID_MODE: true,
+        WIDE_MODE: true,
         IMPROVED_PLAYER_SEARCH: true,
         MARK_DUPLICATED: true,
         MARKET_SEARCH_FILTERS: true,

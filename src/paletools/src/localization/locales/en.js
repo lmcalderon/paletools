@@ -5,6 +5,10 @@ export default {
     "plugins.gridMode.title": "Grid Mode",
     /// #endif
 
+    /// #if process.env.WIDE_MODE
+    "plugins.wideMode.title": "Wide Mode",
+    /// #endif
+
     "plugins.donation.title": "Powered by Paletools",
     "plugins.donation.paypal": "PayPal Donation",
     "plugins.donation.mercadopago": "MercadoPago Donation",

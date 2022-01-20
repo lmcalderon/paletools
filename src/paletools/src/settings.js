@@ -47,6 +47,9 @@ let settings = {
         gridMode: {
             enabled: false
         },
+        wideMode: {
+            enabled: false
+        },
         compareMinMaxPrices: {
             enabled: true
         },

@@ -16,6 +16,7 @@ import filterSbcs from "./filterSbcs";
 import sbcTimesCompleted from "./sbcTimesCompleted";
 import clubAnalyzer from "./clubAnalyzer";
 import showConsoleOutput from "./showConsoleOutput";
+import wideMode from "./wideMode";
 
 const plugins = [
     minMaxPrices,
@@ -25,6 +26,7 @@ const plugins = [
     donation,
     marketSearchFilters,
     gridMode,
+    wideMode,
     duplicatedToSbc,
     selectCheapest,
     snipe,

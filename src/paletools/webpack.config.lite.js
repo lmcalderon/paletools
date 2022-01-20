@@ -7,6 +7,7 @@ module.exports = (env) => {
         ...(process.env || {}),
         COMPARE_MIN_MAX_PRICES: true,
         GRID_MODE: true,
+        WIDE_MODE: true,
         MARKET_SEARCH_FILTERS: true,
         PLAYER_ACTIONS: true,
         SETTINGS_MENU: true,
