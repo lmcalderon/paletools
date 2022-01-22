@@ -57,6 +57,11 @@
     display: table-cell;
 }
 
+#paletools-settings-snipe-container > div > div > div > i {
+    display: table-cell;
+    color: red;
+}
+
 #paletools-settings-snipe-container > div > div > div > .ut-toggle-control {
     display: table-cell;
 }

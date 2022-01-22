@@ -13,10 +13,12 @@ const cfg = settings.plugins.gridMode;
 function run(){
 
     function addStyles(){
+        $(document.body).addClass("paletools-gridmode");
         addStyle('paletools-grid', styles);
     }
 
     function removeStyles() {
+        $(document.body).removeClass("paletools-gridmode");
         removeStyle('paletools-grid');
     }
 
@@ -29,10 +31,10 @@ function run(){
             this._gridModeToggle.setLabel(localize('plugins.gridMode.title'));
             this._gridModeToggle.onToggle = (elem, eventType, value) => {
                 if(value.toggleState){
-                    addStyle('paletools-grid', styles);
+                    addStyles();
                 }
                 else {
-                    removeStyle('paletools-grid');
+                    removeStyles();
                 }
                 cfg.enabled = value.toggleState;
                 saveConfiguration();

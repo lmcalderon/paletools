@@ -8,6 +8,12 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.6
+- Agregado el plugin Contar Mis Packs
+- Agregado soporte para remover asignaciones de teclas para sniping
+- Arreglado el bug que se activaban teclas de sniping en algunos input boxes
+- Agregado modo wide
+
 ### v1.0.5
 - Agregado modo legacy para snipear cartas (palesnipe 3.1) 
 

@@ -101,6 +101,9 @@ let settings = {
         },
         showConsoleOutput: {
             enabled: true
+        },
+        countMyPacks: {
+            enabled: true
         }
     }
 };

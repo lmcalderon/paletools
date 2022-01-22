@@ -134,7 +134,11 @@ export default {
     /// #endif
 
     /// #if process.env.SBC_TIMES_COMPLETED
-    "plugins.sbcTimesCompleted.settings.title": "SBC times completed notification"
+    "plugins.sbcTimesCompleted.settings.title": "SBC times completed notification",
+    /// #endif
+
+    /// #if process.env.COUNT_MY_PACKS
+    "plugins.countMyPacks.settings.title": "My Packs counter"
     /// #endif
 };
 

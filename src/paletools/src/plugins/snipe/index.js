@@ -318,7 +318,7 @@ function run() {
     });
 
     document.body.addEventListener('keydown', e => {
-        if (e.target.tagName === "INPUT" && e.target.type.toUpperCase() === "TEXT") {
+        if (e.target.tagName === "INPUT") {
             return;
         }
 

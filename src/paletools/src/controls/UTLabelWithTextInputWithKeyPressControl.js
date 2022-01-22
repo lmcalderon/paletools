@@ -4,6 +4,7 @@ const UTLabelWithTextInputWithKeyPressControl = function (t) {
     UTControl.call(this);
 }
 
+
 UTLabelWithTextInputWithKeyPressControl.prototype._generate = function _generate() {
     if (!this.generated) {
         const container = document.createElement("div");
@@ -14,18 +15,31 @@ UTLabelWithTextInputWithKeyPressControl.prototype._generate = function _generate
         container.appendChild(this._label.getRootElement());
         container.appendChild(this._input.getRootElement());
 
+        const clearButton = document.createElement("i");
+        clearButton.classList.add("fut_icon");
+        clearButton.classList.add("icon_close");
+        clearButton.addEventListener("click", () => {
+            this._input.setValue("");
+            fireInputCallbacks(this._input, "");
+        });
+        container.appendChild(clearButton);
+
         this._onInputChangeCallbacks = [];
 
         let self = this;
+
+        const fireInputCallbacks = (input, code) => {
+            for (let callback of self._onInputChangeCallbacks) {
+                (callback)(input, code);
+            }
+        }
 
         $(this._input.getRootElement()).keydown(function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             e.stopPropagation();
 
-            for (let callback of self._onInputChangeCallbacks) {
-                (callback)(this, e.originalEvent.code);
-            }
+            fireInputCallbacks(this, e.originalEvent.code);
             return false;
         });
 
@@ -34,7 +48,11 @@ UTLabelWithTextInputWithKeyPressControl.prototype._generate = function _generate
     }
 }
 
-UTLabelWithTextInputWithKeyPressControl.prototype.setLabelLocale = function(localeKey){
+UTLabelWithTextInputWithKeyPressControl.prototype.addClearButton = function (value) {
+    this._addClearButton = value;
+}
+
+UTLabelWithTextInputWithKeyPressControl.prototype.setLabelLocale = function (localeKey) {
     this._label.getRootElement().dataset.locale = localeKey;
 }
 

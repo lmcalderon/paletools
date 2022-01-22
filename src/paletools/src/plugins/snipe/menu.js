@@ -11,7 +11,7 @@ export default function menu(){
             elem.value = code;
             setObjectPropertyByPath(cfg, path, code);
             saveConfiguration();
-        });
+        }, null, true);
     }
 
     function toggle(container, path){

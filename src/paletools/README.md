@@ -8,6 +8,12 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.6
+- Added My Packs counter plugin
+- Added support for removing sniping assignments
+- Fixed bug where snipe keys where actioned on inputs
+- Added wide mode toggle
+
 ### v1.0.5
 - Added legacy mode for sniping cards (same as palesnipe 3.1) 
 

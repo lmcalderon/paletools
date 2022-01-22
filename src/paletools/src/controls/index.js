@@ -4,8 +4,11 @@ import localize from "../localization";
 import UTLabelWithLinkControl from "./UTLabelWithLinkControl";
 import UTLabelWithTextInputControl from "./UTLabelWithTextInputControl";
 
-export function addLabelWithTextInputWithKeyPress(container, labelLocaleKey, defaultValue, onInputChange, inputId) {
+export function addLabelWithTextInputWithKeyPress(container, labelLocaleKey, defaultValue, onInputChange, inputId, addClearButton) {
     const labelWithInput = new UTLabelWithTextInputWithKeyPressControl();
+    if(addClearButton){
+        labelWithInput.addClearButton(addClearButton);
+    }
     labelWithInput.setLabel(localize(labelLocaleKey));
     if(inputId){
         labelWithInput.setInputId(inputId);

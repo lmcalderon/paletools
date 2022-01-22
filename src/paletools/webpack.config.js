@@ -24,6 +24,7 @@ module.exports = (env) => {
         SBC_TIMES_COMPLETED: true,
         CLUB_ANALYZER: true,
         SHOW_CONSOLE_OUTPUT: true,
+        COUNT_MY_PACKS: true,
         ...env
     };
 
