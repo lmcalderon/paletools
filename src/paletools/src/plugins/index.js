@@ -18,6 +18,7 @@ import clubAnalyzer from "./clubAnalyzer";
 import showConsoleOutput from "./showConsoleOutput";
 import wideMode from "./wideMode";
 import countMyPacks from "./countMyPacks";
+import groupMyPacks from "./groupMyPacks";
 
 const plugins = [
     minMaxPrices,
@@ -38,7 +39,8 @@ const plugins = [
     sbcTimesCompleted,
     clubAnalyzer,
     showConsoleOutput,
-    countMyPacks
+    countMyPacks,
+    groupMyPacks
 ].filter(x => x);
 
 const menus = [];

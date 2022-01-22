@@ -1,0 +1,19 @@
+.ut-store-hub-view--content .ut-store-pack-details-view {
+	position: relative;
+}
+
+.pack-counter {
+    position: absolute;
+    display: block;
+    right: 0;
+    top: 0;
+    background-color: #f11656;
+    width: 20px;
+    text-align: center;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding: 4px;
+    z-index: 1000;
+    cursor: pointer;
+    cursor: hand;
+}

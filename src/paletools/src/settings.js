@@ -104,6 +104,9 @@ let settings = {
         },
         countMyPacks: {
             enabled: true
+        },
+        groupMyPacks: {
+            enabled: false
         }
     }
 };

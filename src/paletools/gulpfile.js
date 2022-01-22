@@ -4,7 +4,7 @@ const path = require('path');
 const gulpCopy = require('gulp-copy');
 
 
-const VERSION = "1.0.6";
+const VERSION = "1.0.7";
 
 function getJsCode(filePath, vinylFile){
     return vinylFile.contents;

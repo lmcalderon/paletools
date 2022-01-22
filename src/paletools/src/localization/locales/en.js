@@ -138,7 +138,11 @@ export default {
     /// #endif
 
     /// #if process.env.COUNT_MY_PACKS
-    "plugins.countMyPacks.settings.title": "My Packs counter"
+    "plugins.countMyPacks.settings.title": "My Packs counter",
+    /// #endif
+
+    /// #if process.env.GROUP_MY_PACKS
+    "plugins.groupMyPacks.settings.title": "Group My Packs"
     /// #endif
 };
 

@@ -8,6 +8,9 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.7
+- Added Group My Packs plugin
+
 ### v1.0.6
 - Added My Packs counter plugin
 - Added support for removing sniping assignments

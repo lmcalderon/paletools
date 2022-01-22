@@ -25,6 +25,7 @@ module.exports = (env) => {
         CLUB_ANALYZER: true,
         SHOW_CONSOLE_OUTPUT: true,
         COUNT_MY_PACKS: true,
+        GROUP_MY_PACKS: true,
         ...env
     };
 
