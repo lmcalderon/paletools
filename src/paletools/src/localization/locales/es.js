@@ -110,6 +110,11 @@ export default {
     /// #if process.env.FILTER_SBCS
     "plugins.filterSbcs.settings.title": "Filtrar SBCs",
     "plugins.filterSbcs.label": "Buscar",
+    "plugins.filterSbcs.sort.label": "-- Ordenar --",
+    "plugins.filterSbcs.sort.byId": "Agregados Recientemente Primero",
+    "plugins.filterSbcs.sort.byEndTime": "Expiración Mas Cercana Primero",
+    "plugins.filterSbcs.sort.byTimesCompleted": "Mayor Cantidad de Veces Completado Primero",
+    "plugins.filterSbcs.sort.byChallengesCompletedCount": "Mayor Cantidad de Desafíos Completados Primero",
     // #endif
 
     /// #if process.env.SETTINGS_MENU

@@ -110,6 +110,11 @@ export default {
     /// #if process.env.FILTER_SBCS
     "plugins.filterSbcs.settings.title": "Filter SBCs",
     "plugins.filterSbcs.label": "Search",
+    "plugins.filterSbcs.sort.label": "-- Sort By --",
+    "plugins.filterSbcs.sort.byId": "Newly added first",
+    "plugins.filterSbcs.sort.byEndTime": "Closes expiration first",
+    "plugins.filterSbcs.sort.byTimesCompleted": "More Times Completed first",
+    "plugins.filterSbcs.sort.byChallengesCompletedCount": "More completed first",
     // #endif
 
     /// #if process.env.SETTINGS_MENU

@@ -106,7 +106,7 @@ let settings = {
             enabled: true
         },
         groupMyPacks: {
-            enabled: false
+            enabled: true
         }
     }
 };

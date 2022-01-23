@@ -8,6 +8,11 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.8
+- Plugin Group My Packs enabled by default
+- Fixed visual bug with numbers in Group My Packs plugin
+- Allow sorting SBCs
+
 ### v1.0.7
 - Added Group My Packs plugin
 

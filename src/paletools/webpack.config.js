@@ -56,14 +56,14 @@ module.exports = (env) => {
             entry: "./src/index.js",
             output: {
                 path: path.resolve(__dirname, "dist"),
-                filename: "paletools.prod.obfuscated.js"
+                filename: "paletools.prod.js"
             },
             plugins: [
                 new WebpackObfuscator({ rotateStringArray: true, reservedStrings: ["\s*"] }, [])
             ],
             module: {
                 rules: [
-                    {
+                    /*{
                         enforce: "post",
                         use: {
                             loader: WebpackObfuscator.loader,
@@ -72,7 +72,7 @@ module.exports = (env) => {
                                 rotateStringArray: true
                             }
                         }
-                    },
+                    },*/
                     {
                         test: /\.css$/i,
                         use: ["raw-loader"]

@@ -8,6 +8,14 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.8
+- Plugin Agrupar Mis Packs activado por default
+- Arreglado un bug visual con el plugin Agrupar Mis Packs
+- Permite ordenar los SBCs
+
+### v1.0.7
+- Agregado el plugin Agrupar Mis Packs
+
 ### v1.0.6
 - Agregado el plugin Contar Mis Packs
 - Agregado soporte para remover asignaciones de teclas para sniping
