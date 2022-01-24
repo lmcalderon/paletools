@@ -21,7 +21,7 @@ function run() {
     ImprovedSearchEngine.prototype.getEntriesForString = function (str) {
         if (str.length <= 1) return [];
 
-        str = removeDiacritics(str.toLowerCase());
+        str = removeDiacritics(str.trim().toLowerCase());
         let where = null;
         let sort = null;
 

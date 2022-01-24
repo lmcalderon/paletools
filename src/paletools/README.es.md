@@ -8,6 +8,9 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.9
+- Se agregó compatibilidad con FUT Trade Enhacer
+
 ### v1.0.8
 - Plugin Agrupar Mis Packs activado por default
 - Arreglado un bug visual con el plugin Agrupar Mis Packs
