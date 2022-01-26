@@ -9,6 +9,7 @@ import styles from "./styles.css";
 import { addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
 import { on } from "../../events";
+import { updateBanner } from "../../utils/banner";
 
 const cfg = settings.plugins.marketSearchFilters;
 
@@ -32,6 +33,8 @@ function run() {
         UTMarketSearchFiltersView__generate.call(this);
 
         if (!settings.enabled) return;
+
+        updateBanner("");
 
         if (!this._generateMarketSearchFilters) {
             const container = document.createElement("div");

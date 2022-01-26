@@ -12,10 +12,10 @@ function run() {
     const UTMarketSearchResultsSplitViewController_eListDataChanged = UTMarketSearchResultsSplitViewController.prototype._eListDataChanged;
     UTMarketSearchResultsSplitViewController.prototype._eListDataChanged = function _eListDataChanged(e, t) {
         UTMarketSearchResultsSplitViewController_eListDataChanged.call(this, e, t);
-        if(!settings.enabled || !cfg.enabled) return;
+        if (!settings.enabled || !cfg.enabled) return;
 
         let itemsData = t.items;
-        if(itemsData.length === 0) return;
+        if (itemsData.length === 0) return;
 
         let minBuyNow = Number.MAX_VALUE;
         let selectedIndex;
@@ -28,8 +28,9 @@ function run() {
             }
         }
 
-        if (selectedIndex) {
-            updateBanner(localize("plugins.selectCheapest.banner.text").replace("{name}", itemsData[selectedIndex]._staticData.name).replace("{minBuyNow}", localizeNumber(minBuyNow)));
+        updateBanner(localize("plugins.selectCheapest.banner.text").replace("{name}", itemsData[selectedIndex]._staticData.name).replace("{minBuyNow}", localizeNumber(minBuyNow)));
+
+        if(selectedIndex){
             UTMarketSearchResultsSplitViewControllerHelpers.selectListItemByIndex(selectedIndex);
         }
     }
