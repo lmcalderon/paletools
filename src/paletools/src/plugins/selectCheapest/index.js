@@ -34,6 +34,12 @@ function run() {
             UTMarketSearchResultsSplitViewControllerHelpers.selectListItemByIndex(selectedIndex);
         }
     }
+
+    const UTMarketSearchFiltersViewController_getNavigationTitle = UTMarketSearchFiltersViewController.prototype.getNavigationTitle;
+    UTMarketSearchFiltersViewController.prototype.getNavigationTitle = function getNavigationTitle() {
+        updateBanner("");
+        return UTMarketSearchFiltersViewController_getNavigationTitle.call(this);
+    }
 }
 
 function menu() {
