@@ -8,6 +8,12 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.10
+- Se agregó el plugin Arreglar Cagadas de EA (arregla los sbcs de ligas)
+- Se agregó el nombre y precio del jugador mas barato en el título
+- Se agregó soporte de integración para el AutoBuyer
+- Se arregló un problema de estilos con los SBC
+
 ### v1.0.9
 - Se agregó compatibilidad con FUT Trade Enhacer
 

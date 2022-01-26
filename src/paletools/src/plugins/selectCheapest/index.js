@@ -1,9 +1,10 @@
 let plugin;
 /// #if process.env.SELECT_CHEAPEST
-import { addLabelWithToggle } from "../controls";
-import UTMarketSearchResultsSplitViewControllerHelpers from "../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
-import settings, { saveConfiguration } from "../settings";
-import getCurrentController from "../utils/controller";
+import { addLabelWithToggle } from "../../controls";
+import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
+import localize, { localizeNumber } from "../../localization";
+import settings, { saveConfiguration } from "../../settings";
+import { updateBanner } from "../../utils/banner";
 
 const cfg = settings.plugins.selectCheapest;
 
@@ -28,6 +29,7 @@ function run() {
         }
 
         if (selectedIndex) {
+            updateBanner(localize("plugins.selectCheapest.banner.text").replace("{name}", itemsData[selectedIndex]._staticData.name).replace("{minBuyNow}", localizeNumber(minBuyNow)));
             UTMarketSearchResultsSplitViewControllerHelpers.selectListItemByIndex(selectedIndex);
         }
     }

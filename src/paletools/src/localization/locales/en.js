@@ -82,6 +82,7 @@ export default {
 
     /// #if process.env.SELECT_CHEAPEST
     "plugins.selectCheapest.settings.title": "Select cheapest player automatically",
+    "plugins.selectCheapest.banner.text": "Mas Barato: {name} - {minBuyNow}",
     /// #endif
 
     /// #if process.env.FILL_SBC_FROM_FUTBIN
@@ -124,7 +125,7 @@ export default {
     /// #if process.env.CLUB_ANALYZER
     "plugins.clubAnalyzer.settings.title": "Club Analyzer",
     "plugins.clubAnalyzer.view.dashboard.description": "Players count (including duplicated, not including loans) in club + unnasigned up to 50, watchlist (won) up to 100 and tradepile",
-    "plugins.clubAnalyzer.view.loading.players": "Loading players #COUNT# loaded...",
+    "plugins.clubAnalyzer.view.loading.players": "Loading players {count} loaded...",
     "plugins.clubAnalyzer.view.loading.usermassinfo": "Loading unassigned players data...",
     "plugins.clubAnalyzer.view.loading.watchlist": "Loading watchlist data...",
     "plugins.clubAnalyzer.view.loading.tradepile": "Loading tradepile data...",
@@ -147,7 +148,9 @@ export default {
     /// #endif
 
     /// #if process.env.GROUP_MY_PACKS
-    "plugins.groupMyPacks.settings.title": "Group My Packs"
+    "plugins.groupMyPacks.settings.title": "Group My Packs",
     /// #endif
+
+    "plugins.eaBugFixer.settings.title": "Fix EA mistakes"
 };
 

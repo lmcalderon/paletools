@@ -82,6 +82,7 @@ export default {
 
     /// #if process.env.SELECT_CHEAPEST
     "plugins.selectCheapest.settings.title": "Elegir el jugador mas barato automáticamente",
+    "plugins.selectCheapest.banner.text": "Mas Barato: {name} - {minBuyNow}",
     /// #endif
 
     /// #if process.env.FILL_SBC_FROM_FUTBIN
@@ -147,7 +148,9 @@ export default {
     /// #endif
 
     /// #if process.env.GROUP_MY_PACKS
-    "plugins.groupMyPacks.settings.title": "Agrupar Mis Packs"
+    "plugins.groupMyPacks.settings.title": "Agrupar Mis Packs",
     /// #endif
+
+    "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"
 };
 

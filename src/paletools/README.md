@@ -8,6 +8,12 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.10
+- Added Fix EA Mistakes plugin (it fixes the issue with League Upgrades)
+- Added player name and price for cheapest player on the title
+- Added support for AutoBuyer integration
+- Fixed style issue on SBCs
+
 ### v1.0.9
 - Added compatiblity with FUT Trade Enhacer
 

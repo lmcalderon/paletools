@@ -107,6 +107,9 @@ let settings = {
         },
         groupMyPacks: {
             enabled: true
+        },
+        eaBugFixer: {
+            enabled: true
         }
     }
 };

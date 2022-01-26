@@ -19,6 +19,7 @@ import showConsoleOutput from "./showConsoleOutput";
 import wideMode from "./wideMode";
 import countMyPacks from "./countMyPacks";
 import groupMyPacks from "./groupMyPacks";
+import eaBugFixer from "./eaBugFixer";
 
 const plugins = [
     minMaxPrices,
@@ -40,7 +41,8 @@ const plugins = [
     clubAnalyzer,
     showConsoleOutput,
     countMyPacks,
-    groupMyPacks
+    groupMyPacks,
+    eaBugFixer
 ].filter(x => x);
 
 const menus = [];
