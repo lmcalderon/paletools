@@ -8,6 +8,10 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.11
+- Se arreglaron todos los SBC de mejoras
+- Se arregló que se muestren el plugin de Filtros de Mercado solo en la búsqueda de jugadores
+
 ### v1.0.10
 - Se agregó el plugin Arreglar Cagadas de EA (arregla los sbcs de ligas)
 - Se agregó el nombre y precio del jugador mas barato en el título

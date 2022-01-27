@@ -8,6 +8,10 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.11
+- Fixed all repeateable upgrades
+- Show market search filters only on players search
+
 ### v1.0.10
 - Added Fix EA Mistakes plugin (it fixes the issue with League Upgrades)
 - Added player name and price for cheapest player on the title

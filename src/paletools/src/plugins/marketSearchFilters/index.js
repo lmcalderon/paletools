@@ -9,6 +9,7 @@ import styles from "./styles.css";
 import { addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
 import { on } from "../../events";
+import { show, hide } from "../../utils/visibility";
 
 const cfg = settings.plugins.marketSearchFilters;
 
@@ -94,10 +95,24 @@ function run() {
 
             $(container).insertBefore($(".ut-item-search-view", this.__root));
 
-            on("appEnabled", () => $(container).show());
-            on("appDisabled", () => $(container).hide());
+            this._marketSearchFilters = container;
+
+            on("appEnabled", () => show(container));
+            on("appDisabled", () => hide(container));
 
             this._generateMarketSearchFilters = true;
+        }
+    }
+
+    const UTMarketSearchFiltersViewController_eSearchCategoryChanged = UTMarketSearchFiltersViewController.prototype._eSearchCategoryChanged;
+    UTMarketSearchFiltersViewController.prototype._eSearchCategoryChanged = function _eSearchCategoryChanged(t, e, i) {
+        UTMarketSearchFiltersViewController_eSearchCategoryChanged.call(this, t, e, i);
+
+        if(i.id === enums.SearchBucket.PLAYER){
+            show(this.getView()._marketSearchFilters);
+        }
+        else {
+            hide(this.getView()._marketSearchFilters)
         }
     }
 
