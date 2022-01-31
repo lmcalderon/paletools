@@ -10,7 +10,7 @@ function run() {
     const UTSBCSetTileView_render = UTSBCSetTileView.prototype.render;
     UTSBCSetTileView.prototype.render = function render() {
         UTSBCSetTileView_render.call(this);
-        if(cfg.enabled){
+        if(cfg.enabled && this.data){
             $(`<span>&nbsp;(Completed ${this.data.timesCompleted} times)</span>`).insertAfter($(this.__rewardsHeader));
         }
     }

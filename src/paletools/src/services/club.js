@@ -1,6 +1,7 @@
 import { triggerEvent } from "../events";
 import delay from "../utils/delay";
 import promiseState from "../utils/promiseState";
+import { randomInt } from "../utils/random";
 import http from "./http";
 
 const MAX_ITEMS_REQUEST = 150;
@@ -50,6 +51,23 @@ export function getAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback)
         }
     });
 };
+
+export function quickRefreshClub(){
+    return new Promise((resolve, reject) => {
+        const searchCriteria = new UTItemSearchViewModel().searchCriteria;
+        searchCriteria.count = MAX_ITEMS_REQUEST;
+        searchCriteria.defId = [randomInt(1000, 10000)];
+        const search = () => {
+            services.Item.searchClub(searchCriteria).observe(
+                this,
+                async function (sender, response) {
+                    resolve();
+                }
+            );
+        };
+        search();
+    });
+}
 
 function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback){
     return new Promise((resolve, reject) => {

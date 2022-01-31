@@ -19,6 +19,7 @@ import showConsoleOutput from "./showConsoleOutput";
 import wideMode from "./wideMode";
 import countMyPacks from "./countMyPacks";
 import groupMyPacks from "./groupMyPacks";
+import transferListSendAllToClub from "./transferListSendAllToClub";
 import eaBugFixer from "./eaBugFixer";
 
 const plugins = [
@@ -42,6 +43,7 @@ const plugins = [
     showConsoleOutput,
     countMyPacks,
     groupMyPacks,
+    transferListSendAllToClub,
     eaBugFixer
 ].filter(x => x);
 

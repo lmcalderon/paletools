@@ -60,6 +60,7 @@ function run() {
             this._filterContainer.id = "filter-sbcs";
 
             this._searchInput = new UTTextInputControl();
+            this._searchInput.init();
             this._searchInput.setPlaceholder(localize("plugins.filterSbcs.label"));
             this._searchInput.getRootElement().id = "search-sbcs";
             $(this._searchInput.getRootElement()).keyup(ev => {
@@ -100,19 +101,28 @@ function run() {
     UTSBCHubView.prototype.populateTiles = function (e, t) {
         UTSBCHubView_populateTiles.call(this, e, t);
 
-        if (this._searchInput.getValue()) {
+        if (this._searchInput && this._searchInput.getValue()) {
             searchSbcs(this._searchInput.getValue());
         }
 
-        if(this._sortDropDown.getValue()){
+        if (this._sortDropDown && this._sortDropDown.getValue()) {
             sortSbcs(this._sortDropDown.getValue());
         }
     }
 
     const UTSBCHubView_dealloc = UTSBCHubView.prototype.dealloc;
     UTSBCHubView.prototype.dealloc = function () {
-        this._sortDropDown.dealloc();
-        this._searchInput.dealloc();
+        try {
+            if (this._sortDropDown) {
+                this._sortDropDown.dealloc();
+            }
+
+            if (this._searchInput) {
+                this._searchInput.dealloc();
+            }
+        } catch {
+
+        }
     }
 
     const UTSBCSetTileView_render = UTSBCSetTileView.prototype.render;

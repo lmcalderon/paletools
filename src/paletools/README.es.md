@@ -8,6 +8,10 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.12
+- Plugin Enviar No Duplicados de la Lista de Transferible al Club
+- Se arreglaron varios errores
+
 ### v1.0.11
 - Se arreglaron todos los SBC de mejoras
 - Se arregló que se muestren el plugin de Filtros de Mercado solo en la búsqueda de jugadores

@@ -8,6 +8,10 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.12
+- Plugin Send Non Duplicated from Transfer List to Club
+- Bugfixes
+
 ### v1.0.11
 - Fixed all repeateable upgrades
 - Show market search filters only on players search

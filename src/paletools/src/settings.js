@@ -108,9 +108,13 @@ let settings = {
         groupMyPacks: {
             enabled: true
         },
+        transferListSendAllToClub: {
+            enabled: true
+        },
         eaBugFixer: {
             enabled: true
         }
+
     }
 };
 

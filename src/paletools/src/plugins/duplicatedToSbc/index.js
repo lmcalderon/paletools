@@ -3,7 +3,7 @@ let plugin;
 /// #if process.env.DUPLICATED_TO_SBC
 import { addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
-import { getAllClubPlayers, getClubPlayers, getUnnasignedPlayers } from "../../services/club";
+import { getAllClubPlayers, getClubPlayers, getUnnasignedPlayers, quickRefreshClub } from "../../services/club";
 import getCurrentController from "../../utils/controller";
 import settings from "../../settings";
 import { on } from "../../events";
@@ -54,6 +54,8 @@ function run() {
         return new Promise(resolve => {
             getUnnasignedPlayers().then(unnasigned => {
                 const distinctItemIds = {};
+                if(!unnasigned.duplicateItemIdList) return;
+                
                 for (const duplicated of unnasigned.duplicateItemIdList) {
                     if (!distinctItemIds[duplicated.duplicateItemId]) {
                         distinctItemIds[duplicated.duplicateItemId] = duplicated.itemId;
@@ -96,8 +98,7 @@ function run() {
         
                     _squad.setPlayers(players, true);
                     services.SBC.saveChallenge(_challenge);
-
-                    resolve();
+                    repositories.Item.unassigned.expiryTimestamp = 0;
                 });
             });
         });

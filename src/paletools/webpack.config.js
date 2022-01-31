@@ -26,6 +26,7 @@ module.exports = (env) => {
         SHOW_CONSOLE_OUTPUT: true,
         COUNT_MY_PACKS: true,
         GROUP_MY_PACKS: true,
+        TRANSFER_LIST_SEND_ALL_TO_CLUB: true,
         ...env
     };
 

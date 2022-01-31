@@ -151,6 +151,11 @@ export default {
     "plugins.groupMyPacks.settings.title": "Agrupar Mis Packs",
     /// #endif
 
+    /// #if process.env.TRANSFER_LIST_SEND_ALL_TO_CLUB
+    "plugins.transferListSendAllToClub.settings.title": "Enviar No Duplicados de la Lista de Transferencia al Club",
+    "plugins.transferListSendAllToClub.button.text": "Enviar No Duplicados al Club",
+    /// #endif
+
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"
 };
 

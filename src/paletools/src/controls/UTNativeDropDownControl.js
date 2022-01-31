@@ -44,7 +44,12 @@ UTNativeDropDownControl.prototype.setOptions = function(options){
 }
 
 UTNativeDropDownControl.prototype.dealloc = function() {
-    this._removeListenersByName(EventType.CHANGE);
+    try{
+        this._removeListenersByName(EventType.CHANGE);
+    }
+    catch{
+
+    }
 }
 
 UTNativeDropDownControl.prototype.getRootElement = function () {
