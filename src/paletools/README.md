@@ -8,6 +8,11 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.13
+- Plugin SBC Creator by Rating
+- Send duplicated items to SBC orders them by rating
+- Bugfixes
+
 ### v1.0.12
 - Plugin Send Non Duplicated from Transfer List to Club
 - Bugfixes

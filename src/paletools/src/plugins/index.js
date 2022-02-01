@@ -20,6 +20,7 @@ import wideMode from "./wideMode";
 import countMyPacks from "./countMyPacks";
 import groupMyPacks from "./groupMyPacks";
 import transferListSendAllToClub from "./transferListSendAllToClub";
+import sbcBuilderByRating from "./sbcBuilderByRating";
 import eaBugFixer from "./eaBugFixer";
 
 const plugins = [
@@ -44,6 +45,7 @@ const plugins = [
     countMyPacks,
     groupMyPacks,
     transferListSendAllToClub,
+    sbcBuilderByRating,
     eaBugFixer
 ].filter(x => x);
 

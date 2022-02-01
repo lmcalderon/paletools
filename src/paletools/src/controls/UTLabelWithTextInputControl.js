@@ -40,6 +40,9 @@ UTLabelWithTextInputControl.prototype.setInputValue = function (value) {
     this._input.setValue(value);
 }
 
+UTLabelWithTextInputControl.prototype.getInputValue = function(){
+    return this._input.getValue();
+}
 
 UTLabelWithTextInputControl.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
     $(this.__root).remove();

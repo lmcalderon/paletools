@@ -111,6 +111,9 @@ let settings = {
         transferListSendAllToClub: {
             enabled: true
         },
+        sbcBuilderByRating: {
+            enabled: true
+        },
         eaBugFixer: {
             enabled: true
         }

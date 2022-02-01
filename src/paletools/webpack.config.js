@@ -27,6 +27,7 @@ module.exports = (env) => {
         COUNT_MY_PACKS: true,
         GROUP_MY_PACKS: true,
         TRANSFER_LIST_SEND_ALL_TO_CLUB: true,
+        SBC_BUILDER_BY_RATING: true,
         ...env
     };
 

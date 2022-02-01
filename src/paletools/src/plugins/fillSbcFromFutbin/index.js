@@ -5,11 +5,12 @@ import localize from "../../localization";
 import { getAllClubPlayers, getClubPlayers, getUnnasignedPlayers } from "../../services/club";
 import getCurrentController from "../../utils/controller";
 import settings from "../../settings";
-import { on } from "../../events";
+import { EVENTS, on } from "../../events";
 import styles from "./styles.css";
 import { addStyle } from "../../utils/styles";
 import { getConceptPlayers } from "../../services/players";
 import { notifyFailure } from "../../utils/notifications";
+import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.fillSbcFromFutbin;
 
@@ -37,8 +38,8 @@ function run() {
             this.__content.appendChild(this._fillSbcFromFutbinButton.getRootElement());
 
 
-            on("appEnabled", () => $(this)._fillSbcFromFutbinButton.getRootElement().show());
-            on("appDisabled", () => $(this)._fillSbcFromFutbinButton.getRootElement().hide());
+            on(EVENTS.APP_ENABLED, () => show(this._fillSbcFromFutbinButton));
+            on(EVENTS.APP_DISABLED, () => hide(this._fillSbcFromFutbinButton));
 
             this._fillSbcFromFutbinCalled = true;
         }
@@ -98,6 +99,8 @@ function run() {
 
                         _squad.setPlayers(players, true);
                         services.SBC.saveChallenge(_challenge);
+                        repositories.Item.unassigned.expiryTimestamp = 0;
+                        repositories.Item.transfer.expiryTimestamp = 0;
                         resolve();
                     });
                 });

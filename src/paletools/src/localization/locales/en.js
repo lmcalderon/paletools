@@ -156,6 +156,14 @@ export default {
     "plugins.transferListSendAllToClub.button.text": "Send Non Duplicated To Club",
     /// #endif
 
+    /// #if process.env.SBC_BUILDER_BY_RATING
+    "plugins.sbcBuilderByRating.settings.title": "SBC Builder by Ratings",
+    "plugins.sbcBuilderByRating.filter.title": "Ratings",
+    "plugins.sbcBuilderByRating.filter.min.label": "Min",
+    "plugins.sbcBuilderByRating.filter.max.label": "Max",
+    /// #endif
+
+
     "plugins.eaBugFixer.settings.title": "Fix EA mistakes"
 };
 

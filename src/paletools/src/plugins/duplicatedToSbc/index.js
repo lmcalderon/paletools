@@ -6,7 +6,8 @@ import localize from "../../localization";
 import { getAllClubPlayers, getClubPlayers, getUnnasignedPlayers, quickRefreshClub } from "../../services/club";
 import getCurrentController from "../../utils/controller";
 import settings from "../../settings";
-import { on } from "../../events";
+import { EVENTS, on } from "../../events";
+import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.duplicatedToSbc;
 
@@ -33,9 +34,8 @@ function run() {
             } , EventType.TAP);
             this.__content.appendChild(this._useUnnasignedPlayersButton.getRootElement());
 
-
-            on("appEnabled", () => $(this)._useUnnasignedPlayersButton.getRootElement().show());
-            on("appDisabled", () => $(this)._useUnnasignedPlayersButton.getRootElement().hide());
+            on(EVENTS.APP_ENABLED, () => show(this._useUnnasignedPlayersButton));
+            on(EVENTS.APP_DISABLED, () => hide(this._useUnnasignedPlayersButton));
 
             this._unnasignedToSbcCalled = true;
         }
@@ -55,7 +55,7 @@ function run() {
             getUnnasignedPlayers().then(unnasigned => {
                 const distinctItemIds = {};
                 if(!unnasigned.duplicateItemIdList) return;
-                
+
                 for (const duplicated of unnasigned.duplicateItemIdList) {
                     if (!distinctItemIds[duplicated.duplicateItemId]) {
                         distinctItemIds[duplicated.duplicateItemId] = duplicated.itemId;
@@ -77,6 +77,9 @@ function run() {
                     }, {});
     
                     club = club.filter(x => playerIds.indexOf(x.id) > -1);
+                    club.sort((a, b) => {
+                        return a.rating < b.rating ? -1 : a.rating > b.rating ? 1 : 0;
+                    });
         
                     let substituteIndex = 11;
                     const players = new Array(23);
@@ -99,6 +102,7 @@ function run() {
                     _squad.setPlayers(players, true);
                     services.SBC.saveChallenge(_challenge);
                     repositories.Item.unassigned.expiryTimestamp = 0;
+                    repositories.Item.transfer.expiryTimestamp = 0;
                 });
             });
         });

@@ -8,6 +8,11 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.13
+- Plugin Creador de Plantilla por Valoración
+- Enviar duplicados a SBC los ordena por valoración de menor a mayor
+- Se arreglaron varios errores
+
 ### v1.0.12
 - Plugin Enviar No Duplicados de la Lista de Transferible al Club
 - Se arreglaron varios errores

@@ -156,6 +156,13 @@ export default {
     "plugins.transferListSendAllToClub.button.text": "Enviar No Duplicados al Club",
     /// #endif
 
+    /// #if process.env.SBC_BUILDER_BY_RATING
+    "plugins.sbcBuilderByRating.settings.title": "Creador de Plantilla por Valoración",
+    "plugins.sbcBuilderByRating.filter.title": "Valoración",
+    "plugins.sbcBuilderByRating.filter.min.label": "Min.",
+    "plugins.sbcBuilderByRating.filter.max.label": "Max.",
+    /// #endif
+
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"
 };
 

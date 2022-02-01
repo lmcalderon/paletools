@@ -1,0 +1,8 @@
+.sbc-ratings-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sbc-ratings-container > div {
+    width: 45%;
+}
