@@ -33,7 +33,13 @@ function run() {
             sendAllToClubButton.addTarget(this, () => {
                 const controller = getCurrentController();
                 services.Item.move(nonDuplicatedNonActiveItems, ItemPile.CLUB).observe(this, (t, e) => {
-                    controller._leftController.refreshList();
+                    if(controller instanceof UTTransferListViewController){
+                        controller.refreshList();
+                    }
+                    else {
+                        controller._leftController.refreshList();
+                    }
+                    
                 });
 
             }, EventType.TAP)
