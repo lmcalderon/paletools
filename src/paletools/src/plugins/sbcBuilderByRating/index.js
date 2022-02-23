@@ -56,8 +56,8 @@ function run() {
         }
     }
 
-    const UTSquadBuilderViewController_onClubSearchComplete = UTSquadBuilderViewController.prototype._onClubSearchComplete;
-    UTSquadBuilderViewController.prototype._onClubSearchComplete = function _onClubSearchComplete(t, e) {
+    const UTSquadBuilderViewController_onClubSearchComplete = UTSquadBuilderViewController.prototype.onClubSearchComplete;
+    UTSquadBuilderViewController.prototype.onClubSearchComplete = function onClubSearchComplete(t, e) {
         if (cfg.enabled) {
             const minRating = this.getView()._minRating.getInputValue();
             const maxRating = this.getView()._maxRating.getInputValue();

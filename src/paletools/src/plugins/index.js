@@ -48,8 +48,6 @@ const plugins = [
     transferListSendAllToClub,
     sbcBuilderByRating,
     eaBugFixer,
-
-    
     snipeMobile
 ].filter(x => x);
 
@@ -60,6 +58,8 @@ export default function runPlugins() {
         return a.order - b.order;
     });
     for (let plugin of plugins) {
+        if(!plugin.run) continue;
+        
         plugin.run();
         if (plugin.settings) {
             menus.push(plugin.settings);
