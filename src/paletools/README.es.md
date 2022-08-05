@@ -8,6 +8,11 @@ Si consideras esta herramienta útil, por favor considera realizar una donación
 
 ## CHANGELOG
 
+### v1.0.15
+- Agregado soporte para limitar la cantidad de jugadores en SBC
+- Se persisten las opciones elegidas entre creador de plantillas
+- Agregada opcion para ignorar la posici&oacute;n de los jugadores
+
 ### v1.0.13
 - Plugin Creador de Plantilla por Valoración
 - Enviar duplicados a SBC los ordena por valoración de menor a mayor

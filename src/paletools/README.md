@@ -8,6 +8,11 @@ If you find this tool useful, please condier donating
 
 ## CHANGELOG
 
+### v1.0.15
+- Added support for limiting the ammount of players in an SBC
+- Selected options are persisted among SBC creation
+- Added option to ignore the player position
+
 ### v1.0.13
 - Plugin SBC Creator by Rating
 - Send duplicated items to SBC orders them by rating
