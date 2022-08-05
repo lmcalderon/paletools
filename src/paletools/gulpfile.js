@@ -3,7 +3,7 @@ const through = require('through2');
 const path = require('path');
 
 
-const VERSION = "1.0.13";
+const VERSION = "1.0.15";
 
 function getJsCode(filePath, vinylFile){
     return vinylFile.contents;

@@ -23,7 +23,7 @@ export default {
     "plugins.playerActions.settings.title": "Player Actions",
     "plugins.playerActions.settings.copyPlayerId": "Enable Copy Player Id",
     "plugins.playerActions.settings.futbinSearch": "Enable FUTBIN search",
-    "plugins.playerActions.copyPlayerId": "Copy Player Id to clipbpard",
+    "plugins.playerActions.copyPlayerId": "Copy Player Id to clipboard",
     "plugins.playerActions.futbinSearch": "FUTBIN search",
     /// #endif
 
@@ -156,13 +156,19 @@ export default {
     "plugins.transferListSendAllToClub.button.text": "Send Non Duplicated To Club",
     /// #endif
 
-    /// #if process.env.SBC_BUILDER_BY_RATING
-    "plugins.sbcBuilderByRating.settings.title": "SBC Builder by Ratings",
-    "plugins.sbcBuilderByRating.filter.title": "Ratings",
-    "plugins.sbcBuilderByRating.filter.min.label": "Min",
-    "plugins.sbcBuilderByRating.filter.max.label": "Max",
+    /// #if process.env.SBC_BUILDER_ENHACER
+    "plugins.sbcBuilderEnhacer.settings.title": "SBC Builder by Ratings",
+    "plugins.sbcBuilderEnhacer.filter.ratings.title": "Ratings",
+    "plugins.sbcBuilderEnhacer.filter.ratings.min.label": "Min",
+    "plugins.sbcBuilderEnhacer.filter.ratings.max.label": "Max",
+    "plugins.sbcBuilderEnhacer.filter.settings.title": "Settings",
+    "plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label": "Players Count",
+    "plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos": "Ignore Players Positions",
     /// #endif
 
+    /// #if process.env.SBC_SMART_BUILDER
+    "plugins.sbcSmartBuilder.button.text": "Smart Builder",
+    /// #endif
 
     "plugins.eaBugFixer.settings.title": "Fix EA mistakes"
 };

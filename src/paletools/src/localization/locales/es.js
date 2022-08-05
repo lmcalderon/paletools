@@ -156,11 +156,18 @@ export default {
     "plugins.transferListSendAllToClub.button.text": "Enviar No Duplicados al Club",
     /// #endif
 
-    /// #if process.env.SBC_BUILDER_BY_RATING
-    "plugins.sbcBuilderByRating.settings.title": "Creador de Plantilla por Valoración",
-    "plugins.sbcBuilderByRating.filter.title": "Valoración",
-    "plugins.sbcBuilderByRating.filter.min.label": "Min.",
-    "plugins.sbcBuilderByRating.filter.max.label": "Max.",
+    /// #if process.env.SBC_BUILDER_ENHACER
+    "plugins.sbcBuilderEnhacer.settings.title": "Creador de Plantilla por Valoración",
+    "plugins.sbcBuilderEnhacer.filter.ratings.title": "Valoración",
+    "plugins.sbcBuilderEnhacer.filter.ratings.min.label": "Min.",
+    "plugins.sbcBuilderEnhacer.filter.ratings.max.label": "Max.",
+    "plugins.sbcBuilderEnhacer.filter.settings.title": "Configuración",
+    "plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label": "Cant. de Jugadores",
+    "plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos": "Ignorar Posición del Jugador",
+    /// #endif
+
+    /// #if process.env.SBC_SMART_BUILDER
+    "plugins.sbcSmartBuilder.button.text": "Creador Inteligente",
     /// #endif
 
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"

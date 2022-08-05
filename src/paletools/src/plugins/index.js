@@ -20,9 +20,10 @@ import wideMode from "./wideMode";
 import countMyPacks from "./countMyPacks";
 import groupMyPacks from "./groupMyPacks";
 import transferListSendAllToClub from "./transferListSendAllToClub";
-import sbcBuilderByRating from "./sbcBuilderByRating";
+import sbcBuilderEnhacer from "./sbcBuilderEnhacer";
 import eaBugFixer from "./eaBugFixer";
 import snipeMobile from "./snipeMobile";
+import sbcSmartBuilder from "./sbcSmartBuilder";
 
 const plugins = [
     minMaxPrices,
@@ -46,9 +47,10 @@ const plugins = [
     countMyPacks,
     groupMyPacks,
     transferListSendAllToClub,
-    sbcBuilderByRating,
+    sbcBuilderEnhacer,
     eaBugFixer,
-    snipeMobile
+    snipeMobile,
+    sbcSmartBuilder
 ].filter(x => x);
 
 const menus = [];

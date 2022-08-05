@@ -6,3 +6,7 @@
 .sbc-ratings-container > div {
     width: 45%;
 }
+
+.sbc-settings >  div:not(.ut-toggle-control-group-view) {
+    width: 45%;
+}

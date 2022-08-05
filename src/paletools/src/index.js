@@ -3,9 +3,17 @@ import { EVENTS, triggerEvent } from "./events";
 import { addStyle } from "./utils/styles";
 import styles from "./styles.css";
 import getCurrentController from "./utils/controller";
+import VERSION from "./version";
 
 let initialized = false;
 function init() {
+    const app = getAppMain();
+    if(!app._ptVersion){
+        app._ptVersion = VERSION;
+    }
+    else {
+        return;
+    }
 
     //reset console
     var iframe = document.createElement('iframe');
