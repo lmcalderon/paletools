@@ -253,7 +253,7 @@ function run() {
             }
 
             const storageKey = `sbc:${this.challenge.id}:searchSettings`;
-            let searchSettings = storage.get(storageKey);
+            let searchSettings = storage.get(storageKey) || {};
             Object.assign(searchSettings, {
                 minRating: minRating,
                 maxRating: maxRating,
@@ -273,7 +273,7 @@ function run() {
         }
 
         const controller = getCurrentController();
-        const searchSettings = storage.get(`sbc:${controller._challengeId}:searchSettings`);
+        const searchSettings = storage.get(`sbc:${controller._challengeId}:searchSettings`) || {};
         if (!searchSettings.ignorePlayerPos) {
             return UTSquadBuilderViewModel_generatePlayerCollection.call(this, t, o, n);
         }

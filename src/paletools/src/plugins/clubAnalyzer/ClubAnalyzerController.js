@@ -115,27 +115,20 @@ function analyzeClub(loadingCallback) {
             .then(p => {
                 players = p;
                 loadingCallback("usermassinfo");
-                http('usermassinfo').then(umi => {
-                    usermassinfo = umi;
+                loadingCallback("tradepile");
+                loadingCallback("watchlist");
 
-                    loadingCallback("tradepile");
-                    http('tradepile').then(tp => {
-                        tradepile = tp;
+                Promise.allSettled([http('usermassinfo'), http('tradepile'), http('watchlist')]).then(results => {
+                    usermassinfo = results[0].status === "fulfilled" ? results[0].value : null;
+                    tradepile = results[1].status === "fulfilled" ? results[1].value : null;
+                    watchlist = results[2].status === "fulfilled" ? results[2].value : null;
 
-                        loadingCallback("watchlist");
-                        http('watchlist').then(wl => {
-                            watchlist = wl;
-
-                            let allPlayerNames = {
-                                players: {}
-                            };
-
-                            loadingCallback("process");
-                            const viewmodel = processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist);
-                            resolve(viewmodel);
-                        });
-                    });
-
+                    loadingCallback("process");
+                    let allPlayerNames = {
+                        players: {}
+                    };
+                    const viewmodel = processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist);
+                    resolve(viewmodel);
                 });
             })
     });
@@ -259,9 +252,9 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
         }
     };
 
-    viewmodel.counters.unnasignedTotal = usermassinfo.userInfo.unassignedPileSize;
-    viewmodel.counters.watchlistTotal = watchlist.total;
-    viewmodel.counters.tradepileTotal = tradepile.auctionInfo.length;
+    viewmodel.counters.unnasignedTotal = usermassinfo ? usermassinfo.userInfo.unassignedPileSize : 0;
+    viewmodel.counters.watchlistTotal = watchlist ? watchlist.total : 0;
+    viewmodel.counters.tradepileTotal = tradepile ? tradepile.auctionInfo.length : 0;
 
     const itemFactory = new UTItemEntityFactory();
 
@@ -276,18 +269,32 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
         }
     }
 
-    overrideItemData(usermassinfo.purchasedItems.itemData);
-    overrideItemData(tradepile.auctionInfo, "itemData");
-    overrideItemData(watchlist.auctionInfo, "itemData");
+    if (usermassinfo) {
+        overrideItemData(usermassinfo.purchasedItems.itemData);
+    }
+    if (tradepile) {
+        overrideItemData(tradepile.auctionInfo, "itemData");
+    }
+    if (watchlist) {
+        overrideItemData(watchlist.auctionInfo, "itemData");
+    }
 
-    processPlayers(usermassinfo.purchasedItems.itemData, viewmodel.players.unnasigned.all, x => x, undefined, true);
-    processPlayers(usermassinfo.purchasedItems.itemData.filter(x => !x.untradeable), viewmodel.players.unnasigned.tradeable, x => x, undefined, true);
-    processPlayers(usermassinfo.purchasedItems.itemData.filter(x => x.untradeable), viewmodel.players.unnasigned.untradeable, x => x, undefined, true);
-    processPlayers(tradepile.auctionInfo, viewmodel.players.tradepile, x => x.itemData, undefined, true);
-    processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistWon, x => x.itemData, x => x.bidState === "highest" && x.tradeState === "closed", true);
-    processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistWinning, x => x.itemData, x => x.bidState === "highest" && x.tradeState !== "closed");
-    processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistLoosing, x => x.itemData, x => x.bidState === "outbid" && x.tradeState !== "closed");
-    processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistLost, x => x.itemData, x => x.bidState === "outbid" && x.tradeState === "closed");
+    if (usermassinfo) {
+        processPlayers(usermassinfo.purchasedItems.itemData, viewmodel.players.unnasigned.all, x => x, undefined, true);
+        processPlayers(usermassinfo.purchasedItems.itemData.filter(x => !x.untradeable), viewmodel.players.unnasigned.tradeable, x => x, undefined, true);
+        processPlayers(usermassinfo.purchasedItems.itemData.filter(x => x.untradeable), viewmodel.players.unnasigned.untradeable, x => x, undefined, true);
+    }
+
+    if (tradepile) {
+        processPlayers(tradepile.auctionInfo, viewmodel.players.tradepile, x => x.itemData, undefined, true);
+    }
+
+    if (watchlist) {
+        processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistWon, x => x.itemData, x => x.bidState === "highest" && x.tradeState === "closed", true);
+        processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistWinning, x => x.itemData, x => x.bidState === "highest" && x.tradeState !== "closed");
+        processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistLoosing, x => x.itemData, x => x.bidState === "outbid" && x.tradeState !== "closed");
+        processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistLost, x => x.itemData, x => x.bidState === "outbid" && x.tradeState === "closed");
+    }
 
     for (let player of players) {
         viewmodel.players.all[player.definitionId] = player;
