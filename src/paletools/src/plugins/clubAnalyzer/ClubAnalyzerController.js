@@ -119,12 +119,20 @@ function analyzeClub(loadingCallback) {
             tradepile = await http('tradepile');
         }
         catch{
+            tradepile = {
+                auctionInfo: []
+            }
         }
+
         try {
             loadingCallback("watchlist");
             watchlist = await http('watchlist');
         }   
         catch {
+            watchlist = {
+                total: 0,
+                auctionInfo: []
+            }
         }
 
         let allPlayerNames = {
