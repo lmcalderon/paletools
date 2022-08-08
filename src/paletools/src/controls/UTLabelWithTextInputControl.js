@@ -21,6 +21,14 @@ UTLabelWithTextInputControl.prototype._generate = function _generate() {
     }
 }
 
+UTLabelWithTextInputControl.prototype.init = function() {
+    this._input.init();
+}
+
+UTLabelWithTextInputControl.prototype.addTarget = function(caller, callback, eventType){
+    this._input.addTarget(caller, callback, eventType);
+}
+
 UTLabelWithTextInputControl.prototype.onKeyDown = function (callback) {
     $(this._input.getRootElement()).keydown(function (e) {
         (callback)(this);

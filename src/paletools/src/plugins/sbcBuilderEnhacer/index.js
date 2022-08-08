@@ -10,7 +10,7 @@ import { EVENTS, on } from "../../events";
 import { hide, show } from "../../utils/visibility";
 import { addStyle, removeStyle } from "../../utils/styles";
 import storage from "../../services/storage";
-import getCurrentController from "../../utils/controller";
+import getCurrentController, { findControllerByType } from "../../utils/controller";
 
 
 const cfg = settings.plugins.sbcBuilderEnhacer;
@@ -37,9 +37,11 @@ function run() {
             this.__sortContainer.appendChild(this._ratingTitle);
 
             this._minRating = new UTLabelWithTextInputControl();
+            this._minRating.init();
             this._minRating.setLabel(localize("plugins.sbcBuilderEnhacer.filter.ratings.min.label"));
 
             this._maxRating = new UTLabelWithTextInputControl();
+            this._maxRating.init();
             this._maxRating.setLabel(localize("plugins.sbcBuilderEnhacer.filter.ratings.max.label"));
 
 
@@ -56,6 +58,7 @@ function run() {
             this._settingsTitle.textContent = localize("plugins.sbcBuilderEnhacer.filter.settings.title");
 
             this._maxPlayers = new UTLabelWithTextInputControl();
+            this._maxPlayers.init();
             this._maxPlayers.setLabel(localize("plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label"));
 
             this.__sortContainer.appendChild(this._settingsTitle);
@@ -83,33 +86,57 @@ function run() {
         }
     }
 
+    UTSquadBuilderView.prototype.onMinRatingChange = function (callback) {
+        if (!this._minRating) return;
+        if (!callback) return;
+        this._minRating.onKeyDown(() => callback(this._minRating.value));
+    }
+
+    UTSquadBuilderView.prototype.onMaxRatingChange = function (callback) {
+        if (!this._maxRating) return;
+        if (!callback) return;
+        this._maxRating.onKeyDown(() => callback(this._maxRating.value));
+    }
+
+    UTSquadBuilderView.prototype.onMaxPlayersChange = function (callback) {
+        if (!this._maxPlayers) return;
+        if (!callback) return;
+        this._maxPlayers.onKeyDown(() => callback(this._maxPlayers.value));
+    }
+
+    UTSquadBuilderView.prototype.onMinRatingChange = function (callback) {
+        if (!this._minRating) return;
+        if (!callback) return;
+        this._minRating.onKeyDown(() => callback(this._minRating.value));
+    }
+
     UTSquadBuilderView.prototype.setMinRating = function (value) {
-        if(!this._minRating) return;
+        if (!this._minRating) return;
         this._minRating.setInputValue(value);
     }
 
     UTSquadBuilderView.prototype.setMaxRating = function (value) {
-        if(!this._maxRating) return;
+        if (!this._maxRating) return;
         this._maxRating.setInputValue(value);
     }
 
     UTSquadBuilderView.prototype.setMaxPlayers = function (value) {
-        if(!this._maxPlayers) return;
+        if (!this._maxPlayers) return;
         this._maxPlayers.setInputValue(value);
     }
 
     UTSquadBuilderView.prototype.getMinRating = function () {
-        if(!this._minRating) return;
+        if (!this._minRating) return;
         return parseInt(this._minRating.getInputValue()) || null;
     }
 
     UTSquadBuilderView.prototype.getMaxRating = function () {
-        if(!this._maxRating) return;
+        if (!this._maxRating) return;
         return parseInt(this._maxRating.getInputValue()) || null;
     }
 
     UTSquadBuilderView.prototype.getMaxPlayers = function () {
-        if(!this._maxPlayers) return;
+        if (!this._maxPlayers) return;
         return parseInt(this._maxPlayers.getInputValue()) || null;
     }
 
@@ -132,47 +159,74 @@ function run() {
 
         if (!cfg.enabled) return;
 
-        const storageKey = `sbc:${this.challenge.id}:searchSettings`;
-        let searchSettings = storage.get(storageKey);
-        if (searchSettings) {
-            Object.assign(this.viewModel.searchCriteria, searchSettings.searchCriteria);
+        let storageKey;
+        let searchSettings = {};
+        if (this.challenge && this.challenge.id) {
+            storageKey = `sbc:${this.challenge.id}:searchSettings`;
+            searchSettings = storage.get(storageKey);
+            if (searchSettings) {
+                Object.assign(this.viewModel.searchCriteria, searchSettings.searchCriteria);
 
-            this.getView().setMinRating(searchSettings.minRating);
-            this.getView().setMaxRating(searchSettings.maxRating);
-            this.getView().setMaxPlayers(searchSettings.maxPlayers);
-            if (searchSettings.ignorePlayerPos) {
-                this.getView().getSearchToggles().toggleById('ignore-positions');
+                this.getView().setMinRating(searchSettings.minRating || "");
+                this.getView().setMaxRating(searchSettings.maxRating || "");
+                this.getView().setMaxPlayers(searchSettings.maxPlayers || "");
+                if (searchSettings.ignorePlayerPos) {
+                    this.getView().getSearchToggles().toggleById('ignore-positions');
+                }
+
+                if (searchSettings.filterBy) {
+                    if (searchSettings.filterBy[enums.UISortOptionType.CONCEPT]) {
+                        this.getView().getSortOptions().toggleById(enums.UISortOptionType.CONCEPT);
+                    }
+                    if (searchSettings.filterBy[enums.UISortOptionType.UNTRADEABLE]) {
+                        this.getView().getSortOptions().toggleById(enums.UISortOptionType.UNTRADEABLE);
+                    }
+                    if (searchSettings.filterBy[enums.UISortOptionType.EXCLUDE_SQUAD]) {
+                        this.getView().getSortOptions().toggleById(enums.UISortOptionType.EXCLUDE_SQUAD);
+                    }
+                    if (searchSettings.filterBy[enums.UISortOptionType.REPLACE]) {
+                        this.getView().getSortOptions().toggleById(enums.UISortOptionType.REPLACE);
+                    }
+                }
+
+                if (searchSettings.sortBy) {
+                    this.getView().getSortDropDown().setIndexById(searchSettings.sortBy);
+                }
             }
-
-            if (searchSettings.filterBy) {
-                if (searchSettings.filterBy[enums.UISortOptionType.CONCEPT]) {
-                    this.getView().getSortOptions().toggleById(enums.UISortOptionType.CONCEPT);
-                }
-                if (searchSettings.filterBy[enums.UISortOptionType.UNTRADEABLE]) {
-                    this.getView().getSortOptions().toggleById(enums.UISortOptionType.UNTRADEABLE);
-                }
-                if (searchSettings.filterBy[enums.UISortOptionType.EXCLUDE_SQUAD]) {
-                    this.getView().getSortOptions().toggleById(enums.UISortOptionType.EXCLUDE_SQUAD);
-                }
-                if (searchSettings.filterBy[enums.UISortOptionType.REPLACE]) {
-                    this.getView().getSortOptions().toggleById(enums.UISortOptionType.REPLACE);
-                }
-            }
-
-            if (searchSettings.sortBy) {
-                this.getView().getSortDropDown().setIndexById(searchSettings.sortBy);
+            else {
+                searchSettings = {};
             }
         }
-        else {
-            searchSettings = {};
+
+        this.viewModel.searchSettings = searchSettings;
+
+        const storeSettings = () => {
+            if (storageKey) {
+                storage.set(storageKey, searchSettings);
+            }
+            this.viewModel.searchSettings = searchSettings;
         }
+
+        this.getView()._minRating.addTarget(this, () => {
+            searchSettings.minRating = this.getView().getMinRating();
+            storeSettings();
+        }, EventType.CHANGE);
+
+        this.getView()._maxRating.addTarget(this, () => {
+            searchSettings.maxRating = this.getView().getMaxRating();
+            storeSettings();
+        }, EventType.CHANGE);
+
+        this.getView()._maxPlayers.addTarget(this, () => {
+            searchSettings.maxPlayers = this.getView().getMaxPlayers();
+            storeSettings();
+        }, EventType.CHANGE);
 
         this.getView()._searchToggles.addTarget(this, (_, __, opt) => {
             if (opt.id === "ignore-positions") {
                 searchSettings.ignorePlayerPos = opt.checked;
             }
-
-            storage.set(storageKey, searchSettings);
+            storeSettings();
         }, EventType.CHANGE);
 
         this.getView().getSortOptions().addTarget(this, (_, __, opt) => {
@@ -181,49 +235,30 @@ function run() {
             }
 
             searchSettings.filterBy[opt.id] = opt.checked;
-            storage.set(storageKey, searchSettings);
+            storeSettings();
         }, EventType.CHANGE);
 
         this.getView().getSortDropDown().addTarget(this, (t) => {
             searchSettings.sortBy = t.id;
-            storage.set(storageKey, searchSettings);
+            storeSettings();
         }, EventType.CHANGE);
     }
-
-    UTSquadBuilderViewController.prototype.eDropDownChanged = function (t, e, i) {
-        if (this.viewModel)
-            switch (this.viewModel.searchCriteria.sort = t.value, t.id) {
-                case enums.SearchSortID.VALUE_DESC:
-                case enums.SearchSortID.VALUE_ASC:
-                    this.viewModel.searchCriteria.sortBy = SearchSortType.VALUE;
-                    break;
-                case enums.SearchSortID.RATING_DESC:
-                case enums.SearchSortID.RATING_ASC:
-                    this.viewModel.searchCriteria.sortBy = SearchSortType.RATING;
-                    break;
-                case enums.SearchSortID.RECENCY_DESC:
-                    this.viewModel.searchCriteria.sortBy = SearchSortType.RECENCY;
-                    break;
-                default:
-                    DebugUtils.Assert(!1, "SquadBuilder :: Passed an invalid SearchSort Enums.")
-            }
-    }
-
 
     const UTSquadBuilderViewController_onClubSearchComplete = UTSquadBuilderViewController.prototype.onClubSearchComplete;
     UTSquadBuilderViewController.prototype.onClubSearchComplete = function onClubSearchComplete(t, e) {
 
         if (cfg.enabled) {
-            const minRating = this.getView().getMinRating();
-            const maxRating = this.getView().getMaxRating();
-            const maxPlayers = this.getView().getMaxPlayers();
+            this.viewModel.searchSettings = this.viewModel.searchSettings || {};
+            this.viewModel.searchSettings.minRating = this.getView().getMinRating();
+            this.viewModel.searchSettings.maxRating = this.getView().getMaxRating();
+            this.viewModel.searchSettings.maxPlayers = this.getView().getMaxPlayers();
 
             e.data.items = e.data.items.filter(x => {
-                if (minRating && x.rating < minRating) {
+                if (this.viewModel.searchSettings.minRating && x.rating < this.viewModel.searchSettings.minRating) {
                     return false;
                 }
 
-                if (maxRating && x.rating > maxRating) {
+                if (this.viewModel.searchSettings.maxRating && x.rating > this.viewModel.searchSettings.maxRating) {
                     return false;
                 }
 
@@ -248,19 +283,19 @@ function run() {
                 });
             }
 
-            if (maxPlayers && e.data.items.length > maxPlayers) {
-                e.data.items = e.data.items.slice(0, maxPlayers);
+            if (this.viewModel.searchSettings.maxPlayers && e.data.items.length > this.viewModel.searchSettings.maxPlayers) {
+                e.data.items = e.data.items.slice(0, this.viewModel.searchSettings.maxPlayers);
             }
 
-            const storageKey = `sbc:${this.challenge.id}:searchSettings`;
-            let searchSettings = storage.get(storageKey) || {};
-            Object.assign(searchSettings, {
-                minRating: minRating,
-                maxRating: maxRating,
-                maxPlayers: maxPlayers,
-                searchCriteria: this.viewModel.searchCriteria
-            });
-            storage.set(storageKey, searchSettings);
+            if (this.challenge && this.challenge.id) {
+                const storageKey = `sbc:${this.challenge.id}:searchSettings`;
+                let searchSettings = storage.get(storageKey) || {};
+                Object.assign(searchSettings, {
+                    ...this.viewModel.searchSettings,
+                    searchCriteria: this.viewModel.searchCriteria
+                });
+                storage.set(storageKey, searchSettings);
+            }
         }
 
         UTSquadBuilderViewController_onClubSearchComplete.call(this, t, e);
@@ -272,8 +307,8 @@ function run() {
             return UTSquadBuilderViewModel_generatePlayerCollection.call(this, t, o, n);
         }
 
-        const controller = getCurrentController();
-        const searchSettings = storage.get(`sbc:${controller._challengeId}:searchSettings`) || {};
+        const controller = findControllerByType(UTSquadBuilderViewController);
+        const searchSettings = controller && controller.viewModel.searchSettings || {};
         if (!searchSettings.ignorePlayerPos) {
             return UTSquadBuilderViewModel_generatePlayerCollection.call(this, t, o, n);
         }
