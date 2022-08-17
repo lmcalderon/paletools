@@ -3,13 +3,14 @@ let plugin;
 // #if process.env.PLAYER_ACTIONS
 import copyPlayerIdAction from "./copyPlayerIdAction";
 import futbinSearchAction from "./futbinSearchAction";
+import findLowestPriceAction from "./findLowestPrice";
 import { addLabelWithToggle } from "../../controls";
 import settings, { saveConfiguration } from "../../settings";
 
 const cfg = settings.plugins.playerActions;
 
 function run() {
-    let actions = [copyPlayerIdAction, futbinSearchAction];
+    let actions = [copyPlayerIdAction, futbinSearchAction, findLowestPriceAction];
 
     function addActionsToActionPanel(className, buttonsContainerFunc) {
         const generate = className.prototype._generate;
@@ -71,6 +72,7 @@ function menu(){
 
     add('copyPlayerId');
     add('futbinSearch');
+    add('findLowestPrice');
 
     return container;
 }

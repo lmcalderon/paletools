@@ -24,6 +24,7 @@ import sbcBuilderEnhacer from "./sbcBuilderEnhacer";
 import eaBugFixer from "./eaBugFixer";
 import snipeMobile from "./snipeMobile";
 import sbcSmartBuilder from "./sbcSmartBuilder";
+import disablePackAnimations from "./disablePackAnimations";
 
 const plugins = [
     minMaxPrices,
@@ -50,7 +51,8 @@ const plugins = [
     sbcBuilderEnhacer,
     eaBugFixer,
     snipeMobile,
-    sbcSmartBuilder
+    sbcSmartBuilder,
+    disablePackAnimations
 ].filter(x => x);
 
 const menus = [];

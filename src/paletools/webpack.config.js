@@ -29,6 +29,7 @@ module.exports = (env) => {
         TRANSFER_LIST_SEND_ALL_TO_CLUB: true,
         SBC_BUILDER_ENHACER: true,
         SBC_SMART_BUILDER: true,
+//        DISABLE_PACK_ANIMATIONS: true,
         ...env
     };
 

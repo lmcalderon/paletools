@@ -25,6 +25,9 @@ export default {
     "plugins.playerActions.settings.futbinSearch": "Enable FUTBIN search",
     "plugins.playerActions.copyPlayerId": "Copy Player Id to clipboard",
     "plugins.playerActions.futbinSearch": "FUTBIN search",
+    "plugins.playerActions.findLowestPrice.button": "Find lowest market price",
+    "plugins.playerActions.findLowestPrice.notFound": "Extinct",
+    "plugins.playerActions.findLowestPrice.searching": "Searching...",
     /// #endif
 
     /// #if process.env.MARKET_SEARCH_FILTERS
@@ -170,6 +173,12 @@ export default {
     "plugins.sbcSmartBuilder.button.text": "Smart Builder",
     /// #endif
 
-    "plugins.eaBugFixer.settings.title": "Fix EA mistakes"
+    /// #if process.env.DISABLE_PACK_ANIMATIONS
+    "plugins.disablePackAnimations.settings.title": "Disable Pack Opening Animations",
+    /// #endif
+
+    "plugins.eaBugFixer.settings.title": "Fix EA mistakes",
+
+
 };
 

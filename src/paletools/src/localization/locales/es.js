@@ -25,6 +25,9 @@ export default {
     "plugins.playerActions.settings.futbinSearch": "Habilitar búsqueda en FUTBIN",
     "plugins.playerActions.copyPlayerId": "Copiar Id del jugador al portapapeles",
     "plugins.playerActions.futbinSearch": "Buscar en FUTBIN",
+    "plugins.playerActions.findLowestPrice.button": "Buscar el valor más barato",
+    "plugins.playerActions.findLowestPrice.notFound": "Extincto",
+    "plugins.playerActions.findLowestPrice.searching": "Buscando...",
     /// #endif
 
     /// #if process.env.MARKET_SEARCH_FILTERS
@@ -168,6 +171,10 @@ export default {
 
     /// #if process.env.SBC_SMART_BUILDER
     "plugins.sbcSmartBuilder.button.text": "Creador Inteligente",
+    /// #endif
+
+    /// #if process.env.DISABLE_PACK_ANIMATIONS
+    "plugins.disablePackAnimations.settings.title": "Deshabilitar animaciones de apertura de packs",
     /// #endif
 
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"

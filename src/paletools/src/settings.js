@@ -63,7 +63,8 @@ let settings = {
         },
         playerActions: {
             copyPlayerId: true,
-            futbinSearch: true
+            futbinSearch: true,
+            findLowestPrice: true
         },
         snipe: {
             buttons: buttons,
@@ -119,8 +120,10 @@ let settings = {
         },
         eaBugFixer: {
             enabled: true
+        },
+        disablePackAnimations: {
+            enabled: false
         }
-
     }
 };
 
