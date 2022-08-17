@@ -21,7 +21,7 @@ const findLowestPriceAction = {
             on("appEnabled", () => $(instance._findLowestPriceButton.getRootElement()).show());
             on("appDisabled", () => $(instance._findLowestPriceButton.getRootElement()).hide());
             on("findLowestPriceAction:searchstart", () => {
-                tryAndCatch(() => { 
+                tryAndCatch(() => {
                     instance._findLowestPriceButton.setText(localize("plugins.playerActions.findLowestPrice.searching"));
                     instance._findLowestPriceButton.setSubtext('');
                 });
@@ -29,7 +29,18 @@ const findLowestPriceAction = {
             on("findLowestPriceAction:searchend", (ev) => {
                 tryAndCatch(() => {
                     instance._findLowestPriceButton.setText(localize("plugins.playerActions.findLowestPrice.button"));
-                    instance._findLowestPriceButton.setSubtext(ev.detail);
+                    if(ev.detail === "ERROR"){
+                        instance._findLowestPriceButton.setSubtext("ERROR");    
+                    }
+                    else {
+                        let html = "<ol>";
+                        for(let value of ev.detail){
+                            html += `<li>${value.value} x${value.count}</li>`;
+                        }
+                        html += "</ol>";
+
+                        instance._findLowestPriceButton.__subtext.innerHTML = html;
+                    }
                 });
             });
         }
@@ -60,19 +71,11 @@ const findLowestPriceAction = {
 
             triggerEvent("findLowestPriceAction:searchstart");
 
-            let counter = 0;
-            while (counter < 3) {
-                try {
-                    const minPrice = await findLowestMarketPrice(this._viewmodel.current().definitionId);
-                    triggerEvent("findLowestPriceAction:searchend", minPrice || localize("plugins.playerActions.findLowestPrice.notFound"));
-                    break;
-                }
-                catch {
-                    counter++;
-                }
+            try {
+                const minPrice = await findLowestMarketPrice(this._viewmodel.current().definitionId);
+                triggerEvent("findLowestPriceAction:searchend", minPrice || localize("plugins.playerActions.findLowestPrice.notFound"));
             }
-
-            if(counter >= 3){
+            catch {
                 triggerEvent("findLowestPriceAction:searchend", "ERROR");
             }
 
