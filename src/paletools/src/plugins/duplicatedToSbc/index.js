@@ -8,6 +8,7 @@ import getCurrentController from "../../utils/controller";
 import settings from "../../settings";
 import { EVENTS, on } from "../../events";
 import { hide, show } from "../../utils/visibility";
+import { getPlayerAlternativePositions, getPlayerSecondaryAlternativePositions } from "../../services/players";
 
 const cfg = settings.plugins.duplicatedToSbc;
 
@@ -84,31 +85,67 @@ function run() {
                     let playersOutOfPosition = [];
 
                     const players = new Array(23);
+
+
                     for (const player of club) {
-                        const preferredPosition = positionIndexes[PlayerPosition[player.preferredPosition]];
-                        if (preferredPosition && preferredPosition.length > 0) {
-                            players[preferredPosition.shift()] = player;
-                            if (preferredPosition.length === 0) {
-                                delete positionIndexes[player.preferredPosition];
+                        const squadPosition = positionIndexes[PlayerPosition[player.preferredPosition]];
+
+                        // Position each player on its preferred position if the position is not occupied
+                        if (squadPosition && squadPosition.length > 0) {
+                            players[squadPosition.shift()] = player;
+                            if (squadPosition.length === 0) {
+                                delete positionIndexes[PlayerPosition[player.preferredPosition]];
                             }
                         }
+                        // if the position is occupied, put player as out of position
                         else {
                             playersOutOfPosition.push(player);
-                            // if (substituteIndex < 23) {
-                            //     players[substituteIndex] = player;
-                            //     substituteIndex++;
-                            // }
                         }
                     }
 
-                    for(let position of Object.keys(positionIndexes)){
-                        if(playersOutOfPosition.length === 0) break;
+                    function processAlternativePositions(getPositionFunc) {
+                        // if there is still open positions in the starting 11, try to put players in their alternatives positions
+                        for (let outOfPositionIndex = 0; outOfPositionIndex < playersOutOfPosition.length && Object.keys(positionIndexes).length > 0;) {
+                            let player = playersOutOfPosition.shift();
 
-                        for(let positionIndex of positionIndexes[position]){
-                            if(playersOutOfPosition.length === 0) break;
-                            
+                            let squadPosition = null;
+                            for (let alternativePositionIndex of getPositionFunc(player.preferredPosition)) {
+                                squadPosition = positionIndexes[PlayerPosition[alternativePositionIndex]];
+                                if (!squadPosition || squadPosition.length == 0) continue;
+
+                                players[squadPosition.shift()] = player;
+                                if (squadPosition.length === 0) {
+                                    delete positionIndexes[PlayerPosition[alternativePositionIndex]];
+                                    break;
+                                }
+                            }
+
+                            if (!squadPosition) {
+                                playersOutOfPosition.push(player);
+                                outOfPositionIndex++;
+                            }
+                        }
+                    }
+
+                    processAlternativePositions(getPlayerAlternativePositions);
+                    processAlternativePositions(getPlayerSecondaryAlternativePositions);
+
+                    // position players of pending open positions in the starting 11
+                    for (let position of Object.keys(positionIndexes)) {
+                        if (playersOutOfPosition.length === 0) break;
+
+                        for (let positionIndex of positionIndexes[position]) {
+                            if (playersOutOfPosition.length === 0) break;
+
                             players[positionIndex] = playersOutOfPosition.shift();
                         }
+                    }
+
+                    // position players on the bench
+                    for (let player of playersOutOfPosition) {
+                        if (substituteIndex >= 23) break;
+
+                        players[substituteIndex++] = player;
                     }
 
 

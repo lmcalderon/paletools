@@ -1,47 +1,87 @@
 import delay from "../utils/delay";
 
-export function getConceptPlayers(playerIds){
-    let promises = [];
-    for(let playerId of playerIds){
-        promises.push(getConceptPlayer(playerId));
-    }
+export function getPlayerAlternativePositions(preferredPosition) {
+  switch (preferredPosition) {
+    case PlayerPosition.ST: return [PlayerPosition.CF];
+    case PlayerPosition.CF: return [PlayerPosition.ST, PlayerPosition.CAM];
+    case PlayerPosition.CAM: return [PlayerPosition.CM,PlayerPosition.CF];
+    case PlayerPosition.CM: return [PlayerPosition.CAM, PlayerPosition.CDM];
+    case PlayerPosition.CDM: return [PlayerPosition.CM];
+    case PlayerPosition.LM: return [PlayerPosition.LW, PlayerPosition.LF];
+    case PlayerPosition.LF: return [PlayerPosition.LW, PlayerPosition.LM];
+    case PlayerPosition.LW: return  [PlayerPosition.LF, PlayerPosition.LM];
+    case PlayerPosition.RM: return [PlayerPosition.RW, PlayerPosition.RF];
+    case PlayerPosition.RF: return [PlayerPosition.RW, PlayerPosition.RM];
+    case PlayerPosition.RW: return [PlayerPosition.RF, PlayerPosition.RM];
+    case PlayerPosition.LB: return [PlayerPosition.LWB];
+    case PlayerPosition.LWB: return [PlayerPosition.LB];
+    case PlayerPosition.RB: return [PlayerPosition.RWB];
+    case PlayerPosition.RWB: return [PlayerPosition.RB];
+  }
 
-    return Promise.all(promises);
+  return [];
 }
 
-export function getConceptPlayer(playerId){
-    return new Promise(resolve => {
-        playerId = parseInt(playerId);
+export function getPlayerSecondaryAlternativePositions(preferredPosition){
+  switch (preferredPosition) {
+    case PlayerPosition.CDM: return [PlayerPosition.CB];
+    case PlayerPosition.LM: return [PlayerPosition.LB, PlayerPosition.LWB];
+    case PlayerPosition.LF: return [PlayerPosition.ST];
+    case PlayerPosition.LW: return  [PlayerPosition.LWB, PlayerPosition.LB];
+    case PlayerPosition.RM: return [PlayerPosition.RB, PlayerPosition.RWB];
+    case PlayerPosition.RF: return [PlayerPosition.ST];
+    case PlayerPosition.RW: return [PlayerPosition.RWB, PlayerPosition.RB];
+    case PlayerPosition.LB: return [PlayerPosition.LM, PlayerPosition.LW];
+    case PlayerPosition.LWB: return [PlayerPosition.LW, PlayerPosition.LWB];
+    case PlayerPosition.RB: return [PlayerPosition.RM, PlayerPosition.RW];
+    case PlayerPosition.RWB: return [PlayerPosition.RW, PlayerPosition.RM];
+  }
 
-        getConceptPlayersByDefinitionId(playerId).then(players => {
-            let player = players.find(x => x.definitionId === playerId)
-            resolve(player);
-        });
+  return [];
+}
+
+export function getConceptPlayers(playerIds) {
+  let promises = [];
+  for (let playerId of playerIds) {
+    promises.push(getConceptPlayer(playerId));
+  }
+
+  return Promise.all(promises);
+}
+
+export function getConceptPlayer(playerId) {
+  return new Promise(resolve => {
+    playerId = parseInt(playerId);
+
+    getConceptPlayersByDefinitionId(playerId).then(players => {
+      let player = players.find(x => x.definitionId === playerId)
+      resolve(player);
     });
+  });
 }
 
 function getConceptPlayersByDefinitionId(playerId) {
-    return new Promise((resolve, reject) => {
-      const searchCriteria = new UTItemSearchViewModel().searchCriteria;
-      if (playerId) {
-        searchCriteria.defId = [playerId];
-      }
-      const gatheredPlayers = [];
-  
-      const getAllConceptPlayers = () => {
-        services.Item.searchConceptItems(searchCriteria).observe(
-          this,
-          async function (sender, response) {
-            gatheredPlayers.push(...response.data.items);
-            if (response.status !== 400 && !response.data.endOfList) {
-              searchCriteria.offset += searchCriteria.count;
-              delay(100).then(() => getAllConceptPlayers());
-            } else {
-              resolve(gatheredPlayers);
-            }
+  return new Promise((resolve, reject) => {
+    const searchCriteria = new UTItemSearchViewModel().searchCriteria;
+    if (playerId) {
+      searchCriteria.defId = [playerId];
+    }
+    const gatheredPlayers = [];
+
+    const getAllConceptPlayers = () => {
+      services.Item.searchConceptItems(searchCriteria).observe(
+        this,
+        async function (sender, response) {
+          gatheredPlayers.push(...response.data.items);
+          if (response.status !== 400 && !response.data.endOfList) {
+            searchCriteria.offset += searchCriteria.count;
+            delay(100).then(() => getAllConceptPlayers());
+          } else {
+            resolve(gatheredPlayers);
           }
-        );
-      };
-      getAllConceptPlayers();
-    });
-  };
+        }
+      );
+    };
+    getAllConceptPlayers();
+  });
+};
