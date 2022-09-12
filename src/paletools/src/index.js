@@ -4,6 +4,7 @@ import { addStyle } from "./utils/styles";
 import styles from "./styles.css";
 import getCurrentController from "./utils/controller";
 import VERSION from "./version";
+import { playAudio } from "./utils/fx";
 
 let initialized = false;
 function init() {
@@ -35,6 +36,9 @@ function init() {
     addStyle("paletools", styles);
     triggerEvent(EVENTS.APP_STARTED);
     initialized = true;
+    /// #if process.env.FX
+    playAudio("castigo");
+    /// #endif
 }
 
 init();

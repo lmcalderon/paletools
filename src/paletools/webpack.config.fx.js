@@ -34,7 +34,7 @@ module.exports = (env) => {
         DISABLE_PACK_ANIMATIONS: true,
         XML_HTTP_REQUESTS: true,
         SELL_MULTIPLE: true,
-        FX: false,
+        FX: true,
         ...env
     };
 
