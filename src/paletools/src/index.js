@@ -36,9 +36,6 @@ function init() {
     addStyle("paletools", styles);
     triggerEvent(EVENTS.APP_STARTED);
     initialized = true;
-    /// #if process.env.FX
-    playAudio("castigo");
-    /// #endif
 }
 
 init();
