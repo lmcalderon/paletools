@@ -1,5 +1,7 @@
 export default {
     "enabled": "Enabled",
+    "valid": "valid",
+    "invalid": "invalid",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Grid Mode",
@@ -160,7 +162,7 @@ export default {
     /// #endif
 
     /// #if process.env.SBC_BUILDER_ENHACER
-    "plugins.sbcBuilderEnhacer.settings.title": "SBC Builder by Ratings",
+    "plugins.sbcBuilderEnhacer.settings.title": "SBC Builder Enhacer",
     "plugins.sbcBuilderEnhacer.filter.ratings.title": "Ratings",
     "plugins.sbcBuilderEnhacer.filter.ratings.min.label": "Min",
     "plugins.sbcBuilderEnhacer.filter.ratings.max.label": "Max",
@@ -168,6 +170,10 @@ export default {
     "plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label": "Players Count",
     "plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos": "Ignore Players Positions",
     /// #endif
+
+
+    /// #if process.env.CLUB_SEARCH_ENHACER
+    "plugins.clubSearchEnhacer.settings.title": "Club Search Enhacer",
 
     /// #if process.env.SBC_SMART_BUILDER
     "plugins.sbcSmartBuilder.button.text": "Smart Builder",
@@ -177,8 +183,19 @@ export default {
     "plugins.disablePackAnimations.settings.title": "Disable Pack Opening Animations",
     /// #endif
 
+    /// #if process.env.KEEP_PLAYER_SELL_VALUES
+    "plugins.keepPlayerSellValues.settings.title": "Keep player sell values",
+    /// #endif
+
+    /// #if process.env.SELL_MULTIPLE
+    "plugins.sellMultiple.settings.title": "Sell multiple items at once",
+    "plugins.sellMultiple.button.text": "Sell Multiple",
+    "plugins.sellMultiple.label.ignoredCards": "Card will be ignored if teh price range does not fall in the provided values",
+    "plugins.sellMultiple.warning": "This is an automation feature, your account could potentially be banned if you are abusing of it, are you sure you want to enable it?",
+    "plugins.sellMultiple.notifications.maxPlayersReached": "You have reached the limit of {PLAYERS} players you can list",
+    "plugins.sellMultiple.notifications.wait": "Please wait {SECONDS} seconds before performing another list",
+    /// #endif
+
     "plugins.eaBugFixer.settings.title": "Fix EA mistakes",
-
-
 };
 

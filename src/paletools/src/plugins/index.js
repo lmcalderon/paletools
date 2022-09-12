@@ -25,6 +25,10 @@ import eaBugFixer from "./eaBugFixer";
 import snipeMobile from "./snipeMobile";
 import sbcSmartBuilder from "./sbcSmartBuilder";
 import disablePackAnimations from "./disablePackAnimations";
+import clubSearchEnhacer from "./clubSearchEnhacer";
+import keepPlayerSellValues from "./keepPlayerSellValues";
+import sellMultiple from "./sellMultiple";
+import xmlHttpRequest from "./xmlHttpRequest";
 
 const plugins = [
     minMaxPrices,
@@ -52,7 +56,11 @@ const plugins = [
     eaBugFixer,
     snipeMobile,
     sbcSmartBuilder,
-    disablePackAnimations
+    disablePackAnimations,
+    clubSearchEnhacer,
+    keepPlayerSellValues,
+    sellMultiple,
+    xmlHttpRequest
 ].filter(x => x);
 
 const menus = [];

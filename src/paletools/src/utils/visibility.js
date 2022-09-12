@@ -1,4 +1,6 @@
 export function show(elem){
+    if(!elem) return;
+
     if(elem.getRootElement){
         elem = elem.getRootElement();
     }
@@ -7,6 +9,8 @@ export function show(elem){
 }
 
 export function hide(elem){
+    if(!elem) return;
+
     if(elem.getRootElement){
         elem = elem.getRootElement();
     }

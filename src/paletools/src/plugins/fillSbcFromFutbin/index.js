@@ -2,7 +2,7 @@ let plugin;
 /// #if process.env.FILL_SBC_FROM_FUTBIN
 import { addLabelWithLink, addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
-import { getAllClubPlayers, getClubPlayers, getUnnasignedPlayers } from "../../services/club";
+import { getAllClubPlayers } from "../../services/club";
 import getCurrentController from "../../utils/controller";
 import settings from "../../settings";
 import { EVENTS, on } from "../../events";

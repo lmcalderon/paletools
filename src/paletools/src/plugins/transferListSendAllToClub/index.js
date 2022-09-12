@@ -12,7 +12,6 @@ import { hide, show } from "../../utils/visibility";
 const cfg = settings.plugins.transferListSendAllToClub;
 
 function run() {
-    if (!cfg.enabled) return;
 
     const UTTransferListView_renderSection = UTTransferListView.prototype.renderSection;
     UTTransferListView.prototype.renderSection = function (t, e, i) {
@@ -48,6 +47,10 @@ function run() {
 
             on(EVENTS.APP_ENABLED, () => show(sendAllToClubButton));
             on(EVENTS.APP_DISABLED, () => hide(sendAllToClubButton));
+
+            if(!cfg.enabled){
+                hide(sendAllToClubButton);
+            }
         }
 
         return output;

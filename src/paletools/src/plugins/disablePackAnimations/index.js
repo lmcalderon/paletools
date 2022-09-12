@@ -2,22 +2,27 @@ let plugin;
 
 // #if process.env.DISABLE_PACK_ANIMATIONS
 import { addLabelWithToggle } from "../../controls";
-import { EVENTS, on } from "../../events";
-import localize from "../../localization";
 import settings, { saveConfiguration } from "../../settings";
 
 const cfg = settings.plugins.disablePackAnimations;
 
-function run(){
+function run() {
+
+    const UTPackAnimationView_runAnimation = UTPackAnimationView.prototype.runAnimation;
+    UTPackAnimationView.prototype.runAnimation = function (e, t) {
+        if (!cfg.enabled) {
+            UTPackAnimationView_runAnimation.call(this, e, t);
+        }
+    }
 
     const UTPackAnimationViewController_runAnimation = UTPackAnimationViewController.prototype.runAnimation;
     UTPackAnimationViewController.prototype.runAnimation = function () {
-        if(!cfg.enabled) {
+        if (!cfg.enabled) {
             UTPackAnimationViewController_runAnimation.call(this);
             return;
         }
 
-        this.runCallback.bind(this);
+        this.runCallback();
     }
 }
 

@@ -118,6 +118,15 @@ let settings = {
         sbcSmartBuilder: {
             enabled: true
         },
+        clubSearchEnhacer: {
+            enabled: true
+        },
+        keepPlayerSellValues: {
+            enabled: true
+        },
+        sellMultiple: {
+            enabled: false
+        },
         eaBugFixer: {
             enabled: true
         },

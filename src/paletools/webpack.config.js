@@ -28,8 +28,12 @@ module.exports = (env) => {
         GROUP_MY_PACKS: true,
         TRANSFER_LIST_SEND_ALL_TO_CLUB: true,
         SBC_BUILDER_ENHACER: true,
-        SBC_SMART_BUILDER: true,
-//        DISABLE_PACK_ANIMATIONS: true,
+        SBC_SMART_BUILDER: false,
+        CLUB_SEARCH_ENHACER: false,
+        KEEP_PLAYER_SELL_VALUES: true,
+        DISABLE_PACK_ANIMATIONS: true,
+        XML_HTTP_REQUESTS: true,
+        SELL_MULTIPLE: true,
         ...env
     };
 

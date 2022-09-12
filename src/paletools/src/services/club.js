@@ -3,6 +3,7 @@ import delay from "../utils/delay";
 import promiseState from "../utils/promiseState";
 import { randomInt } from "../utils/random";
 import http from "./http";
+import sendPinEvents from "./pinEvents";
 
 const MAX_ITEMS_REQUEST = 150;
 
@@ -36,9 +37,9 @@ let getAllClubPlayersExecutingPromise = null;
 
 export function getAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback) {
     return new Promise(resolve => {
-        if(getAllClubPlayersExecutingPromise){
+        if (getAllClubPlayersExecutingPromise) {
             promiseState(getAllClubPlayersExecutingPromise, state => {
-                if(state !== "pending"){
+                if (state !== "pending") {
                     getAllClubPlayersExecutingPromise = internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback);
                 }
 
@@ -52,7 +53,7 @@ export function getAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback)
     });
 };
 
-export function quickRefreshClub(){
+export function quickRefreshClub() {
     return new Promise((resolve, reject) => {
         const searchCriteria = new UTItemSearchViewModel().searchCriteria;
         searchCriteria.count = MAX_ITEMS_REQUEST;
@@ -69,7 +70,7 @@ export function quickRefreshClub(){
     });
 }
 
-function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback){
+function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback) {
     return new Promise((resolve, reject) => {
         const searchCriteria = new UTItemSearchViewModel().searchCriteria;
         if (playerId) {
@@ -89,13 +90,13 @@ function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback
                     ];
                     if (response.status !== 400 && !response.data.retrievedAll) {
                         searchCriteria.offset += searchCriteria.count;
-                        if(onBatchLoadedCallback){
-                            (onBatchLoadedCallback)(searchCriteria.offset);    
+                        if (onBatchLoadedCallback) {
+                            (onBatchLoadedCallback)(searchCriteria.offset);
                         }
                         delay(100 + (Math.random() * 100)).then(() => getAllSquadMembers());
                     } else {
-                        if(onBatchLoadedCallback){
-                            (onBatchLoadedCallback)(searchCriteria.offset, gatheredSquad);    
+                        if (onBatchLoadedCallback) {
+                            (onBatchLoadedCallback)(searchCriteria.offset, gatheredSquad);
                         }
                         resolve(gatheredSquad);
                     }
@@ -107,5 +108,12 @@ function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback
 }
 
 export function getUnnasignedPlayers() {
-    return http('purchased/items');
+    //return http('purchased/items');
+    sendPinEvents("Unassigned Items - List View");
+    return new Promise((resolve) => {
+        services.Item.requestUnassignedItems().observe(this, (sender, response) => {
+            resolve(response.data.items);
+        });
+    });
+
 }

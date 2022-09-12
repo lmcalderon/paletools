@@ -1,5 +1,7 @@
 export default {
     "enabled": "Habilitado",
+    "valid": "válido",
+    "invalid": "inválido",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Modo grilla",
@@ -175,6 +177,19 @@ export default {
 
     /// #if process.env.DISABLE_PACK_ANIMATIONS
     "plugins.disablePackAnimations.settings.title": "Deshabilitar animaciones de apertura de packs",
+    /// #endif
+
+    /// #if process.env.KEEP_PLAYER_SELL_VALUES
+    "plugins.keepPlayerSellValues.settings.title": "Matener precio de venta del jugador",
+    /// #endif
+
+    /// #if process.env.SELL_MULTIPLE
+    "plugins.sellMultiple.settings.title": "Vender masiva de items",
+    "plugins.sellMultiple.button.text": "Venta Masiva",
+    "plugins.sellMultiple.label.ignoredCards": "Las cartas serán ignoradas si el rango de valores no se encuentra entre los valores provistos",
+    "plugins.sellMultiple.warning": "Esto es una función de automatización, tu cuenta puede ser banneada si haces abuso de la misma, ¿estas seguro que quieres habilitarla?",
+    "plugins.sellMultiple.notifications.maxPlayersReached": "Has alcanzado el límite de {PLAYERS} jugadores que puedes listar",
+    "plugins.sellMultiple.notifications.wait": "Por favor espera {SECONDS} segundos antes de realizar otro listado",
     /// #endif
 
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"

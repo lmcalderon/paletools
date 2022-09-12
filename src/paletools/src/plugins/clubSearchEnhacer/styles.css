@@ -1,0 +1,12 @@
+.club-search-ratings-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.club-search-ratings-container > div {
+    width: 45%;
+}
+
+.club-search-ratings-container >  div:not(.ut-toggle-control-group-view) {
+    width: 45%;
+}

@@ -1,4 +1,4 @@
-export function notifySuccess(msg) {
+ export function notifySuccess(msg) {
     services.Notification.queue([msg, UINotificationType.POSITIVE]);
 }
 
