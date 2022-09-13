@@ -38,6 +38,10 @@ function init() {
     initialized = true;
 
 /// #if process.env.FX
+    app._ptVersion += "fx";
+
+    playAudio("castigo");
+
     document.addEventListener("click", ev => {
         playAudio("tuki");
     });

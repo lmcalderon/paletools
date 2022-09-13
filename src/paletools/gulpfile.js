@@ -14,7 +14,6 @@ function base64Encode(getCode){
         // 1. clone new vinyl file for manipulation
         // (See https://github.com/wearefractal/vinyl for vinyl attributes and functions)
         var transformedFile = vinylFile.clone();
-        let filePath = path.parse(transformedFile.path);
         // 2. set new contents
         // * contents can only be a Buffer, Stream, or null
         // * This allows us to modify the vinyl file in memory and prevents the need to write back to the file system.

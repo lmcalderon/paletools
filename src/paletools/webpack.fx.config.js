@@ -6,6 +6,7 @@ module.exports = (env) => {
     process.env = {
         ...(process.env || {}),
         ...plugins,
+        FX: true,
         ...env
     };
 
@@ -15,7 +16,7 @@ module.exports = (env) => {
             entry: "./src/index.js",
             output: {
                 path: path.resolve(__dirname, "dist"),
-                filename: "paletools.js"
+                filename: "paletools-fx.js"
             },
             module: {
                 rules: [
@@ -36,7 +37,7 @@ module.exports = (env) => {
             entry: "./src/index.js",
             output: {
                 path: path.resolve(__dirname, "dist"),
-                filename: "paletools.prod.js"
+                filename: "paletools-fx.prod.js"
             },
             plugins: [
                 new WebpackObfuscator({ rotateStringArray: true, reservedStrings: ["\s*"] }, [])
