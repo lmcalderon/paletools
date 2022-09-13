@@ -37,6 +37,7 @@ export default {
     "plugins.marketSearchFilters.settings.savedFilters": "Enable Saved Filters",
     "plugins.marketSearchFilters.settings.playerId": "Enable Player Id",
     "plugins.marketSearchFilters.settings.playerRating": "Enable Player Rating",
+    "plugins.marketSearchFilters.settings.hideDuplicateds": "Hide player duplicateds in Market Search",
     "plugins.marketSearchFilters.filterSaved": "Filter saved",
     "plugins.marketSearchFilters.filterDeleted": "Filter deleted",
     "plugins.marketSearchFilters.loadFilters": "-- Select a filter to load --",
