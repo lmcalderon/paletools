@@ -24,6 +24,7 @@ export function getPlayerAlternativePositions(preferredPosition) {
 
 export function getPlayerSecondaryAlternativePositions(preferredPosition){
   switch (preferredPosition) {
+    case PlayerPosition.CB: return [PlayerPosition.LB, PlayerPosition.RB]
     case PlayerPosition.CDM: return [PlayerPosition.CB];
     case PlayerPosition.LM: return [PlayerPosition.LB, PlayerPosition.LWB];
     case PlayerPosition.LF: return [PlayerPosition.ST];
@@ -31,10 +32,10 @@ export function getPlayerSecondaryAlternativePositions(preferredPosition){
     case PlayerPosition.RM: return [PlayerPosition.RB, PlayerPosition.RWB];
     case PlayerPosition.RF: return [PlayerPosition.ST];
     case PlayerPosition.RW: return [PlayerPosition.RWB, PlayerPosition.RB];
-    case PlayerPosition.LB: return [PlayerPosition.LM, PlayerPosition.LW];
-    case PlayerPosition.LWB: return [PlayerPosition.LW, PlayerPosition.LWB];
-    case PlayerPosition.RB: return [PlayerPosition.RM, PlayerPosition.RW];
-    case PlayerPosition.RWB: return [PlayerPosition.RW, PlayerPosition.RM];
+    case PlayerPosition.LB: return [PlayerPosition.LM, PlayerPosition.LW, PlayerPosition.RB];
+    case PlayerPosition.LWB: return [PlayerPosition.LW, PlayerPosition.LWB, PlayerPosition.RWB];
+    case PlayerPosition.RB: return [PlayerPosition.RM, PlayerPosition.RW, PlayerPosition.LB];
+    case PlayerPosition.RWB: return [PlayerPosition.RW, PlayerPosition.RM, PlayerPosition.LWB];
   }
 
   return [];

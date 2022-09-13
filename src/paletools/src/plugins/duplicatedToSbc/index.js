@@ -116,8 +116,8 @@ function run() {
                                 players[squadPosition.shift()] = player;
                                 if (squadPosition.length === 0) {
                                     delete positionIndexes[PlayerPosition[alternativePositionIndex]];
-                                    break;
                                 }
+                                break;
                             }
 
                             if (!squadPosition) {

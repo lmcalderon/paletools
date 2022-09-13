@@ -4,11 +4,12 @@ import { addStyle } from "./utils/styles";
 import styles from "./styles.css";
 import getCurrentController from "./utils/controller";
 import VERSION from "./version";
+import playAudio from "./utils/fx";
 
 let initialized = false;
 function init() {
     const app = getAppMain();
-    if(!app._ptVersion){
+    if (!app._ptVersion) {
         app._ptVersion = VERSION;
     }
     else {
@@ -21,7 +22,7 @@ function init() {
     document.body.appendChild(iframe);
     window.console = iframe.contentWindow.console;
 
-    if(!services.Localization) {
+    if (!services.Localization) {
         setTimeout(init, 1000);
         return;
     }
@@ -35,6 +36,12 @@ function init() {
     addStyle("paletools", styles);
     triggerEvent(EVENTS.APP_STARTED);
     initialized = true;
+
+/// #if process.env.FX
+    document.addEventListener("click", ev => {
+        playAudio("tuki");
+    });
+/// #endif
 }
 
 init();
