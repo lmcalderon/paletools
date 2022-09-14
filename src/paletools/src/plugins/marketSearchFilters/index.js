@@ -10,42 +10,18 @@ import { addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
 import { on } from "../../events";
 import { show, hide } from "../../utils/visibility";
-import { getAllClubPlayers } from "../../services/club";
-import { updateBanner } from "../../utils/banner";
+import { loadClubPlayers } from "../../services/ui/club";
 
 
 const cfg = settings.plugins.marketSearchFilters;
 
-function run() {    
-    let club = null;
+function run() {  
+    let club = {};
 
-
-    function loadClubPlayers(){
-        function playersToDictionary(players){
-            console.log(players);
-            if(!players) return {};
-
-            const playersDict = {};
-            for(let player of players){
-                playersDict[player.definitionId] = player;
-            }
-            return playersDict;
-        }
-
-        return new Promise(resolve => {
-            getAllClubPlayers(true, null, (loadedPlayersCount, currentClub) => {
-                club = playersToDictionary(currentClub);
-                updateBanner(localize("plugins.markDuplicated.loading").replace("{count}", loadedPlayersCount));
-            }).then(currentClub => {
-                club = playersToDictionary(currentClub); 
-                updateBanner("");
-                resolve(club);
-            });
+    if (settings.enabled && cfg.hideDuplicates) {
+        loadClubPlayers().then(currentClub => {
+            club = currentClub
         });
-    }
-
-    if (settings.enabled && cfg.hideDuplicateds) {
-        loadClubPlayers();
     }
 
     const UTMarketSearchFiltersView__generate = UTMarketSearchFiltersView.prototype._generate
@@ -324,7 +300,7 @@ function run() {
                 else {
                     var i = this._paginationViewModel.getNumItemsPerPage()
                         , o = t.data.items.slice().filter(x => shouldRenderItem(x, this._searchCriteria)) // added .filter
-                    if(cfg.hideDuplicateds && Object.keys(club).length 
+                    if(cfg.hideDuplicates && Object.keys(club).length 
                        && getCurrentController() instanceof UTMarketSearchResultsSplitViewController){
                         o = o.filter(item => !club[item.definitionId])
                     }
@@ -415,7 +391,7 @@ function menu() {
     add('savedFilters');
     add('playerId');
     add('playerRating');
-    add('hideDuplicateds');
+    add('hideDuplicates');
 
     return container;
 }

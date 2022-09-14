@@ -57,7 +57,7 @@ let settings = {
             playerId: false,
             playerRating: true,
             savedFilters: true,
-            hideDuplicateds: false
+            hideDuplicates: false
         },
         donation: {
             enabled: true

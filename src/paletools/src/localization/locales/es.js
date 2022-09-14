@@ -2,6 +2,7 @@ export default {
     "enabled": "Habilitado",
     "valid": "válido",
     "invalid": "inválido",
+    "ui.loadingPlayers": "Cargando club: {count} jugadores cargados",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Modo grilla",
@@ -37,7 +38,7 @@ export default {
     "plugins.marketSearchFilters.settings.savedFilters": "Habilitar filtros guardados",
     "plugins.marketSearchFilters.settings.playerId": "Habilitar Id del jugador",
     "plugins.marketSearchFilters.settings.playerRating": "Habilitar valoración del jugador",
-    "plugins.marketSearchFilters.settings.hideDuplicateds": "Ocultar jugadores duplicados en el mercado",
+    "plugins.marketSearchFilters.settings.hideDuplicates": "Ocultar jugadores duplicados en el mercado",
     "plugins.marketSearchFilters.filterSaved": "Filtro guardado",
     "plugins.marketSearchFilters.filterDeleted": "Filter eliminado",
     "plugins.marketSearchFilters.loadFilters": "-- Elija un filtro a cargar --",
@@ -103,7 +104,6 @@ export default {
 
     /// #if process.env.MARK_DUPLICATED
     "plugins.markDuplicated.settings.title": "Marcar jugadores duplicados",
-    "plugins.markDuplicated.loading": "Cargando club: {count} jugadores cargados",
     /// #endif
 
     /// #if process.env.IMPROVED_PLAYER_SEARCH

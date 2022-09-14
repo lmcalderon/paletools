@@ -2,6 +2,7 @@ export default {
     "enabled": "Enabled",
     "valid": "valid",
     "invalid": "invalid",
+    "ui.loadingPlayers": "Loading club players: {count} loaded",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Grid Mode",
@@ -37,7 +38,7 @@ export default {
     "plugins.marketSearchFilters.settings.savedFilters": "Enable Saved Filters",
     "plugins.marketSearchFilters.settings.playerId": "Enable Player Id",
     "plugins.marketSearchFilters.settings.playerRating": "Enable Player Rating",
-    "plugins.marketSearchFilters.settings.hideDuplicateds": "Hide player duplicateds in Market Search",
+    "plugins.marketSearchFilters.settings.hideDuplicates": "Hide player duplicates in Market Search",
     "plugins.marketSearchFilters.filterSaved": "Filter saved",
     "plugins.marketSearchFilters.filterDeleted": "Filter deleted",
     "plugins.marketSearchFilters.loadFilters": "-- Select a filter to load --",
@@ -103,7 +104,6 @@ export default {
 
     /// #if process.env.MARK_DUPLICATED
     "plugins.markDuplicated.settings.title": "Highlight duplicated players",
-    "plugins.markDuplicated.loading": "Loading club players: {count} loaded",
     /// #endif
 
     /// #if process.env.IMPROVED_PLAYER_SEARCH
