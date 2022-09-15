@@ -7,10 +7,9 @@ import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
 import { EVENTS, on } from "../../events";
 import { addLabelWithToggle } from "../../controls";
-import { getAllClubPlayers } from "../../services/club";
 import getCurrentController from "../../utils/controller";
 import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
-import { updateBanner } from "../../utils/banner";
+import { loadClubPlayers } from "../../services/ui/club";
 import localize from "../../localization";
 const cfg = settings.plugins.markDuplicated;
 
@@ -19,32 +18,8 @@ function run() {
     let club = null;
 
 
-    function loadClubPlayers(){
-        function playersToDictionary(players){
-            console.log(players);
-            if(!players) return {};
-
-            const playersDict = {};
-            for(let player of players){
-                playersDict[player.definitionId] = player;
-            }
-            return playersDict;
-        }
-
-        return new Promise(resolve => {
-            getAllClubPlayers(true, null, (loadedPlayersCount, currentClub) => {
-                club = playersToDictionary(currentClub);
-                updateBanner(localize("plugins.markDuplicated.loading").replace("{count}", loadedPlayersCount));
-            }).then(currentClub => {
-                club = playersToDictionary(currentClub); 
-                updateBanner("");
-                resolve(club);
-            });
-        });
-    }
-
     if (settings.enabled && cfg.enabled) {
-        loadClubPlayers();
+        loadClubPlayers().then(currentClub => {club = currentClub});
     }
 
     const UTTransfersHubViewController_requestTransferTargetData = UTTransfersHubViewController.prototype._requestTransferTargetData;
