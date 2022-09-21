@@ -1,5 +1,11 @@
-export function on(eventName, callback) {
-    window.addEventListener(eventName, callback);
+export function on(target, eventName, callback) {
+    if(typeof target === "string"){
+        callback = eventName;
+        eventName = target;
+        target = window;
+    }
+
+    target.addEventListener(eventName, callback);
 }
 
 export function triggerEvent(eventName, data) {

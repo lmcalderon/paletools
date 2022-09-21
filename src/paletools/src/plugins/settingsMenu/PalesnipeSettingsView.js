@@ -1,4 +1,5 @@
 import localize from "../../localization";
+import { createElem } from "../../utils/dom";
 
 const PalesnipeSettingsView = function (menus) {
     this._menus = menus;
@@ -27,13 +28,10 @@ PalesnipeSettingsView.prototype._generate = function _generate() {
         contentContainer.appendChild(content);
 
         for(let menu of this._menus){
-            const menuContainer = document.createElement("div");
-            $(menuContainer)
-                .attr("id", `paletools-settings-${menu.name}-container`)
-                .addClass('tile')
-                .append(`<header><h3 class="tileHeader">${localize(menu.title)}</h3></header>`)
-                .append(menu.menu());
-
+            const menuContainer = createElem("div", { id: `paletools-settings-${menu.name}-container`, className: "tile"})
+            const header = createElem("header", `<h3 class="tileHeader">${localize(menu.title)}</h3>`);
+            menuContainer.appendChild(header);
+            menuContainer.appendChild(menu.menu());
             content.appendChild(menuContainer);
         }
 

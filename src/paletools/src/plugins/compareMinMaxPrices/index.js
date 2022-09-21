@@ -6,6 +6,8 @@ import styles from "./styles.css";
 import { addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
 import { on } from "../../events";
+import { addClass, append, createElem, insertBefore } from "../../utils/dom";
+import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.compareMinMaxPrices;
 
@@ -22,23 +24,22 @@ function run() {
                 this._maxPriceText.classList.add("max-price-value");
                 const minPriceContainer = document.createElement("span");
                 minPriceContainer.classList.add("min-price");
-                $(minPriceContainer)
-                    .append(`<span class="min-price-label">${localize("plugins.compareMinMaxPrices.minPriceLabel")}</span>`)
-                    .append(this._minPriceText);
+                append(minPriceContainer, 
+                    createElem("span", { className: "min-price-label" }, localize("plugins.compareMinMaxPrices.minPriceLabel")),
+                    this._minPriceText
+                );
+
                 const maxPriceContainer = document.createElement("span");
                 maxPriceContainer.classList.add("max-price");
-                $(maxPriceContainer)
-                    .append(`<span class="max-price-label">${localize("plugins.compareMinMaxPrices.maxPriceLabel")}</span>`)
-                    .append(this._maxPriceText);
+                append(maxPriceContainer, 
+                    createElem("span", { className: "max-price-label" }, localize("plugins.compareMinMaxPrices.maxPriceLabel")),
+                    this._maxPriceText
+                );
 
-
-                $(this._minMaxPriceContainer)
-                    .addClass("min-max-prices")
-                    .addClass("palesnipe-element")
-                    .hide()
-                    .append(minPriceContainer)
-                    .append(maxPriceContainer)
-                    .insertBefore(this._list.getRootElement());
+                addClass(this._minMaxPriceContainer, "min-max-prices", "palesnipe-element");
+                hide(this._minMaxPriceContainer);
+                append(this._minMaxPriceContainer, minPriceContainer, maxPriceContainer);
+                insertBefore(this._minMaxPriceContainer, this._list.getRootElement());
 
                 this._minBuyNowPrice = Number.MAX_VALUE;
                 this._maxBuyNowPrice = 0;
@@ -67,10 +68,10 @@ function run() {
                 }
                 this._minPriceText.textContent = this._minBuyNowPrice;
                 this._maxPriceText.textContent = this._maxBuyNowPrice;
-                $(this._minMaxPriceContainer).show();
+                show(this._minMaxPriceContainer);
             }
             else {
-                $(this._minMaxPriceContainer).hide();
+                hide(this._minMaxPriceContainer);
             }
         }
 
@@ -80,7 +81,7 @@ function run() {
     addStyle('paletools-compare-min-max-prices', styles);
 }
 
-function menu(){
+function menu() {
     const container = document.createElement("div");
     addLabelWithToggle(container, "enabled", cfg.enabled, toggleState => {
         cfg.enabled = toggleState;

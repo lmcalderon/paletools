@@ -138,7 +138,7 @@ let settings = {
 
 if (localStorage.getItem("paletools:settings")) {
     const savedSettings = JSON.parse(atob(localStorage.getItem("paletools:settings")));
-    $.extend(true, settings, savedSettings);
+    settings = { ...savedSettings };
     triggerEvent(EVENTS.CONFIGURATION_LOADED, settings);
 }
 

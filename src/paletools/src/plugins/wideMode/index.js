@@ -7,6 +7,7 @@ import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
 import localize from "../../localization";
 import { EVENTS, on } from "../../events";
+import { css, insertBefore } from "../../utils/dom";
 
 const cfg = settings.plugins.wideMode;
 
@@ -42,13 +43,13 @@ function run(){
                 this._wideModeToggle.toggle();
             }
             
-            $(this._wideModeToggle.getRootElement())
-                .css({
+            css(this._wideModeToggle.getRootElement(), {
                     borderRight: "1px solid white",
                     marginRight: "10px",
                     paddingRight: "10px"
-                })
-                .insertBefore(this.__currencies);
+                });
+
+            insertBefore(this._wideModeToggle.getRootElement(), this.__currencies);   
             
             on(EVENTS.APP_ENABLED, () => {
                 $(this._wideModeToggle.getRootElement()).show();

@@ -1,3 +1,5 @@
+import { addClass, removeClass } from "./dom";
+
 export function show(elem){
     if(!elem) return;
 
@@ -5,7 +7,7 @@ export function show(elem){
         elem = elem.getRootElement();
     }
 
-    $(elem).removeClass("hide");
+    removeClass(elem, "hide");
 }
 
 export function hide(elem){
@@ -14,6 +16,6 @@ export function hide(elem){
     if(elem.getRootElement){
         elem = elem.getRootElement();
     }
-    
-    $(elem).addClass("hide");
+
+    addClass(elem, "hide");
 }

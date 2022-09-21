@@ -1,8 +1,5 @@
 export function dispatchMouseEvent(target, eventName) {
-    if (!(target instanceof HTMLElement)) {
-        if (target.length === 0) return false;
-        target = target[0];
-    }
+    if(!target) return false;
 
     const mouseEvent = new MouseEvent(eventName, {
         bubbles: true,

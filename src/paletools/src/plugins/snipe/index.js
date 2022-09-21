@@ -10,6 +10,7 @@ import { addStyle, removeStyle } from "../../utils/styles";
 import menu from "./menu";
 import getCurrentController from "../../utils/controller";
 import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
+import { isVisible, select } from "../../utils/dom";
 
 const cfg = settings.plugins.snipe;
 
@@ -44,8 +45,8 @@ UTDefaultActionPanelView.prototype.render = function (e, t, i, o, n, r, s) {
 function run() {
 
     const
-        enterBtn = () => $('.ea-dialog-view .ut-button-group button:eq(0)'),
-        buyBtn = () => $('.buyButton'),
+        enterBtn = () => select('.ea-dialog-view .ut-button-group button:nth-child(1)'),
+        buyBtn = () => select('.buyButton'),
         tryPressOkBtn = (callback) => {
             if (!mouseClick(enterBtn())) {
                 if (callback) {
@@ -94,10 +95,10 @@ function run() {
             view.eSearchButtonSelected();
         },
 
-        transferBtn = () => $("button.send-to-transfer-list"),
-        clubBtn = () => $("button.send-to-club"),
-        sellBtn = () => $("button.quick-sell"),
-        compareBtn = () => $("button.compare-price"),
+        transferBtn = () => select("button.send-to-transfer-list"),
+        clubBtn = () => select("button.send-to-club"),
+        sellBtn = () => select("button.quick-sell"),
+        compareBtn = () => select("button.compare-price"),
 
         addMarketSearchKeys = (keys, buttons, controller) => {
             if (!(controller instanceof UTMarketSearchFiltersViewController)) return;
@@ -242,16 +243,16 @@ function run() {
         },
 
         addPaginationKeys = (keys, buttons, controller) => {
-            if ($(".pagingContainer").is(":visible")) {
+            if (isVisible(select(".pagingContainer"))) {
                 keys[buttons.lists.prev] = () => {
-                    const prevPage = $(".pagingContainer > button.pagination.prev");
-                    if (prevPage.is(":visible")) {
+                    const prevPage = select(".pagingContainer > button.pagination.prev");
+                    if (isVisible(prevPage)) {
                         mouseClick(prevPage);
                     }
                 }
                 keys[buttons.lists.next] = () => {
-                    const nextPage = $(".pagingContainer > button.pagination.next");
-                    if (nextPage.is(":visible")) {
+                    const nextPage = select(".pagingContainer > button.pagination.next");
+                    if (isVisible(nextPage)) {
                         mouseClick(nextPage);
                     }
                 }

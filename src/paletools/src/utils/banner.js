@@ -1,12 +1,13 @@
+import { createElem, insertAfter, select } from "./dom";
 
 
 export function updateBanner(msg){
-    let bannerMessage = $("#banner-message");
-    if(bannerMessage.length === 0){
-        bannerMessage = $(document.createElement("div"));
-        bannerMessage.attr("id", "banner-message").addClass("title");
-        bannerMessage.insertAfter($(".ut-navigation-bar-view .title"));
+    let bannerMessage = select("#banner-message");
+
+    if(!bannerMessage){
+        bannerMessage = createElem("div", { id: "banner-message", className: "title"});
+        insertAfter(bannerMessage, select(".ut-navigation-bar-view .title"));
     }
 
-    bannerMessage.text(msg);
+    bannerMessage.textContent = msg;
 }

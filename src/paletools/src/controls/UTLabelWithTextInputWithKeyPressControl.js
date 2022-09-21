@@ -1,3 +1,4 @@
+import { on } from "../events";
 import UTLabelControl from "./UTLabelControl";
 
 const UTLabelWithTextInputWithKeyPressControl = function (t) {
@@ -34,12 +35,12 @@ UTLabelWithTextInputWithKeyPressControl.prototype._generate = function _generate
             }
         }
 
-        $(this._input.getRootElement()).keydown(function (e) {
+        on(this._input.getRootElement(), "keydown", function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             e.stopPropagation();
 
-            fireInputCallbacks(this, e.originalEvent.code);
+            fireInputCallbacks(this, e.code);
             return false;
         });
 

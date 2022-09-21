@@ -154,6 +154,11 @@ section.ui-layout-right .listFUTItem .entityContainer .consumable+.name+.dataStr
 	text-align:center;
 }
 
+section.ui-layout-right .listFUTItem .entityContainer .ut-squad-slot-chemistry-points-view.item {
+	width: 18px;
+	height: 18px;
+}
+
 
 section.ui-layout-right .listFUTItem .entityContainer .name.untradeable {
 	color: red;

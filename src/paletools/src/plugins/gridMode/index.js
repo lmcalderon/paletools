@@ -7,18 +7,20 @@ import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
 import localize from "../../localization";
 import { EVENTS, on } from "../../events";
+import { addClass, css, insertBefore, removeClass } from "../../utils/dom";
+import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.gridMode;
 
 function run(){
 
     function addStyles(){
-        $(document.body).addClass("paletools-gridmode");
+        addClass(document.body, "paletools-gridmode");
         addStyle('paletools-grid', styles);
     }
 
     function removeStyles() {
-        $(document.body).removeClass("paletools-gridmode");
+        removeClass(document.body, "paletools-gridmode");
         removeStyle('paletools-grid');
     }
 
@@ -44,16 +46,16 @@ function run(){
                 this._gridModeToggle.toggle();
             }
             
-            $(this._gridModeToggle.getRootElement())
-                .css({
-                    borderRight: "1px solid white",
+            css(this._gridModeToggle.getRootElement(), {
+                borderRight: "1px solid white",
                     marginRight: "10px",
                     paddingRight: "10px"
-                })
-                .insertBefore(this.__currencies);
+            });
+
+            insertBefore(this._gridModeToggle.getRootElement(), this.__currencies);
             
             on(EVENTS.APP_ENABLED, () => {
-                $(this._gridModeToggle.getRootElement()).show();
+                show(this._gridModeToggle);
                 removeStyles();
                 if(cfg.enabled){
                     addStyles();
@@ -61,7 +63,7 @@ function run(){
             });
             
             on(EVENTS.APP_DISABLED, () => {
-                $(this._gridModeToggle.getRootElement()).hide();
+                hide(this._gridModeToggle);
                 removeStyles();
             });
 

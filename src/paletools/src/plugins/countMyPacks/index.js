@@ -22,8 +22,8 @@ function run(){
         const myPacksNavItem = this.getView()._navigation.items.find(x => x.id === "mypacks");
         const elem = myPacksNavItem.getRootElement();
 
-        const updateCount = () => $(elem).text(`${localize("store.group.mypacks")} (${this.viewmodel.myPacks.length})`);
-        const reset = () => $(elem).text(localize("store.group.mypacks"));
+        const updateCount = () => elem.textContent = `${localize("store.group.mypacks")} (${this.viewmodel.myPacks.length})`;
+        const reset = () => elem.textContent = localize("store.group.mypacks");
 
         updateCount();
 
