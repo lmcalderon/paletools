@@ -10,10 +10,20 @@ import { addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
 import { on } from "../../events";
 import { show, hide } from "../../utils/visibility";
+import { loadClubPlayers } from "../../services/ui/club";
+
 
 const cfg = settings.plugins.marketSearchFilters;
 
-function run() {
+function run() {  
+    let club = {};
+
+    if (settings.enabled && cfg.hideDuplicates) {
+        loadClubPlayers().then(currentClub => {
+            club = currentClub
+        });
+    }
+
     const UTMarketSearchFiltersView__generate = UTMarketSearchFiltersView.prototype._generate
     UTMarketSearchFiltersView.prototype._generate = function _generate() {
         function createContainer(child) {
@@ -290,6 +300,10 @@ function run() {
                 else {
                     var i = this._paginationViewModel.getNumItemsPerPage()
                         , o = t.data.items.slice().filter(x => shouldRenderItem(x, this._searchCriteria)) // added .filter
+                    if(cfg.hideDuplicates && Object.keys(club).length 
+                       && getCurrentController() instanceof UTMarketSearchResultsSplitViewController){
+                        o = o.filter(item => !club[item.definitionId])
+                    }
                     if (this.onDataChange.notify({
                         items: o
                     }),
@@ -377,6 +391,7 @@ function menu() {
     add('savedFilters');
     add('playerId');
     add('playerRating');
+    add('hideDuplicates');
 
     return container;
 }

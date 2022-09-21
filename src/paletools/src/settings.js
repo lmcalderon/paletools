@@ -56,7 +56,8 @@ let settings = {
         marketSearchFilters: {
             playerId: false,
             playerRating: true,
-            savedFilters: true
+            savedFilters: true,
+            hideDuplicates: false
         },
         donation: {
             enabled: true
