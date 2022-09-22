@@ -8,6 +8,7 @@ import { addStyle, removeStyle } from "../../utils/styles";
 import localize from "../../localization";
 import { EVENTS, on } from "../../events";
 import { css, insertBefore } from "../../utils/dom";
+import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.wideMode;
 
@@ -52,7 +53,7 @@ function run(){
             insertBefore(this._wideModeToggle.getRootElement(), this.__currencies);   
             
             on(EVENTS.APP_ENABLED, () => {
-                $(this._wideModeToggle.getRootElement()).show();
+                show(this._wideModeToggle.getRootElement());
                 removeStyles();
                 if(cfg.enabled){
                     addStyles();
@@ -60,7 +61,7 @@ function run(){
             });
             
             on(EVENTS.APP_DISABLED, () => {
-                $(this._wideModeToggle.getRootElement()).hide();
+                hide(this._wideModeToggle.getRootElement());
                 removeStyles();
             });
 

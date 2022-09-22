@@ -1,3 +1,5 @@
+import { remove } from "../utils/dom";
+
 const UTLabelControl = function (t) {
     UTControl.call(this);
 }
@@ -15,7 +17,7 @@ UTLabelControl.prototype.setText = function (text) {
 }
 
 UTLabelControl.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
-    $(this.__root).remove();
+    remove(this.__root);
     this.__root = null;
 }
 

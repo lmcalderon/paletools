@@ -253,7 +253,7 @@ function run() {
             this.viewModel.searchSettings.maxRating = this.getView().getMaxRating();
             this.viewModel.searchSettings.maxPlayers = this.getView().getMaxPlayers();
 
-            e.data.items = e.data.items.filter(x => {
+            e.response.items = e.response.items.filter(x => {
                 if (this.viewModel.searchSettings.minRating && x.rating < this.viewModel.searchSettings.minRating) {
                     return false;
                 }
@@ -274,7 +274,7 @@ function run() {
             });
 
             if (this.viewModel.searchCriteria.sortBy === SearchSortType.RATING) {
-                e.data.items.sort((a, b) => {
+                e.response.items.sort((a, b) => {
                     if (this.viewModel.searchCriteria.sort === "asc") {
                         return a.rating - b.rating;
                     } else {
@@ -283,8 +283,8 @@ function run() {
                 });
             }
 
-            if (this.viewModel.searchSettings.maxPlayers && e.data.items.length > this.viewModel.searchSettings.maxPlayers) {
-                e.data.items = e.data.items.slice(0, this.viewModel.searchSettings.maxPlayers);
+            if (this.viewModel.searchSettings.maxPlayers && e.response.items.length > this.viewModel.searchSettings.maxPlayers) {
+                e.response.items = e.response.items.slice(0, this.viewModel.searchSettings.maxPlayers);
             }
 
             if (this.challenge && this.challenge.id) {

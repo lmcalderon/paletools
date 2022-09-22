@@ -1,3 +1,7 @@
+let plugin;
+
+// #if process.env.EA_BUG_FIXER
+
 import { addLabelWithToggle } from "../../controls";
 import settings, { saveConfiguration } from "../../settings";
 import fixLeagueUpdates from "./fixLeagueUpdates";
@@ -19,7 +23,7 @@ function menu() {
     return container;
 }
 
-let plugin = {
+plugin = {
     run: run,
     order: 1000,
     settings: {
@@ -28,5 +32,5 @@ let plugin = {
         menu: menu
     }
 };
-
+/// #endif
 export default plugin;

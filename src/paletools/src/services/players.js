@@ -73,8 +73,8 @@ function getConceptPlayersByDefinitionId(playerId) {
       services.Item.searchConceptItems(searchCriteria).observe(
         this,
         async function (sender, response) {
-          gatheredPlayers.push(...response.data.items);
-          if (response.status !== 400 && !response.data.endOfList) {
+          gatheredPlayers.push(...response.response.items);
+          if (response.status !== 400 && !response.response.endOfList) {
             searchCriteria.offset += searchCriteria.count;
             delay(100).then(() => getAllConceptPlayers());
           } else {

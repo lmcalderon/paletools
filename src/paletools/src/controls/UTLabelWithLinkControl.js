@@ -1,3 +1,4 @@
+import { remove } from "../utils/dom";
 import UTLabelControl from "./UTLabelControl";
 import UTLinkControl from "./UTLinkControl";
 
@@ -34,7 +35,7 @@ UTLabelWithLinkControl.prototype.setLinkUrl = function(url){
 }
 
 UTLabelWithLinkControl.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
-    $(this.__root).remove();
+    remove(this.__root);
     this.__root = null;
 }
 

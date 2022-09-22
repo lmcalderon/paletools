@@ -44,8 +44,8 @@ function run() {
                 this._minBuyNowPrice = Number.MAX_VALUE;
                 this._maxBuyNowPrice = 0;
 
-                on("appEnabled", () => $(this._minMaxPriceContainer).show());
-                on("appDisabled", () => $(this._minMaxPriceContainer).show());
+                on("appEnabled", () => show(this._minMaxPriceContainer));
+                on("appDisabled", () => hide(this._minMaxPriceContainer));
             }
 
             this._generateCompareMinMaxPrices = true;

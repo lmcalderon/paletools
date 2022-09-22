@@ -1,7 +1,7 @@
 let plugin;
 
-import { addLabelWithToggle } from "../../controls";
 // #if process.env.KEEP_PLAYER_SELL_VALUES
+import { addLabelWithToggle } from "../../controls";
 import settings, { saveConfiguration } from "../../settings";
 
 const cfg = settings.plugins.keepPlayerSellValues;

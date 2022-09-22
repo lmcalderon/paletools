@@ -44,7 +44,7 @@ function run() {
     }
 
     addActionsToActionPanel(UTDefaultActionPanelView, instance => instance.__itemActions);
-    addActionsToActionPanel(UTAuctionActionPanelView, instance => $(".ut-button-group", instance.getRootElement())[0]);
+    addActionsToActionPanel(UTAuctionActionPanelView, instance => instance.getRootElement().querySelector(".ut-button-group"));
 
     const ItemDetails__getPanelViewInstanceFromData = controllers.items.ItemDetails.prototype._getPanelViewInstanceFromData;
     controllers.items.ItemDetails.prototype._getPanelViewInstanceFromData = function _getPanelViewInstanceFromData(e, t) {

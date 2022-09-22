@@ -9,35 +9,40 @@ import localize from "../../localization";
 import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
 import { hide, show } from "../../utils/visibility";
+import { append, detach, insertBefore, select, selectAll } from "../../utils/dom";
 
 const cfg = settings.plugins.filterSbcs;
 
 function run() {
 
     function searchSbcs(text) {
-        $(".ut-sbc-set-tile-view").each(function () {
-            show(this);
-            if (text.length > 0 && $(".tileHeader", this).text().toLowerCase().indexOf(text.toLowerCase()) === -1) {
-                hide(this);
+        for (let sbcTile of selectAll(".ut-sbc-set-tile-view")) {
+            show(sbcTile);
+            if (text.length > 0 && select(".tileHeader", this).textContent.toLowerCase().indexOf(text.toLowerCase()) === -1) {
+                hide(sbcTile);
             }
-        });
+        };
     }
 
     function sortSbcs(sortBy) {
         if (sortBy === "") return;
 
-        const parent = $(".SBCHub .layout-hub");
-        let sbcs = $(".ut-sbc-set-tile-view", parent);
+        const parent = select(".SBCHub .layout-hub");
+        let sbcs = selectAll(".ut-sbc-set-tile-view", parent);
 
-        sbcs = sbcs.detach().sort((a, b) => {
-            const valueA = parseInt($(a).attr(sortBy));
-            const valueB = parseInt($(b).attr(sortBy));
+        detach(sbcs);
+
+        sbcs = sbcs.sort((a, b) => {
+            const valueA = parseInt(a.getAttribute(sortBy));
+            const valueB = parseInt(b.getAttribute(sortBy));
             return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
         });
 
-        const completed = sbcs.filter(".complete").detach();
+        append(parent, sbcs);
 
-        parent.append(sbcs).append(completed);
+        const completedSbcs = selectAll(".complete", parent);
+        detach(completedSbcs);
+        append(parent, completedSbcs);
     }
 
     const UTSBCHubView_generate = UTSBCHubView.prototype._generate;
@@ -63,7 +68,7 @@ function run() {
             this._searchInput.init();
             this._searchInput.setPlaceholder(localize("plugins.filterSbcs.label"));
             this._searchInput.getRootElement().id = "search-sbcs";
-            $(this._searchInput.getRootElement()).keyup(ev => {
+            on(this._searchInput.getRootElement(), "keyup", ev => {
                 searchSbcs(ev.target.value);
             });
 
@@ -84,9 +89,9 @@ function run() {
             this._filterContainer.append(this._searchInput.getRootElement());
             this._filterContainer.append(this._sortDropDown.getRootElement());
 
+            const menuContainer = select(".menu-container", this._SBCCategoriesTM.getRootElement());
 
-            $(".menu-container", this._SBCCategoriesTM.getRootElement())
-                .prepend(this._filterContainer);
+            insertBefore(this._filterContainer, menuContainer);
 
             on(EVENTS.APP_DISABLED, () => disable());
             on(EVENTS.APP_ENABLED, () => enable());
@@ -129,11 +134,10 @@ function run() {
     UTSBCSetTileView.prototype.render = function () {
         UTSBCSetTileView_render.call(this);
         if (cfg.enabled) {
-            $(this.getRootElement())
-                .attr("data-id", this.data.id)
-                .attr("data-challenges-completed-count", this.data.challengesCompletedCount)
-                .attr("data-end-time", this.data.endTime === 0 ? Number.MIN_SAFE_INTEGER : this.data.endTime * -1)
-                .attr("data-times-completed", this.data.timesCompleted);
+            this.getRootElement().setAttribute("data-id", this.data.id);
+            this.getRootElement().setAttribute("data-challenges-completed-count", this.data.challengesCompletedCount);
+            this.getRootElement().setAttribute("data-end-time", this.data.endTime === 0 ? Number.MIN_SAFE_INTEGER : this.data.endTime * -1);
+            this.getRootElement().setAttribute("data-times-completed", this.data.timesCompleted);
         }
     }
 }

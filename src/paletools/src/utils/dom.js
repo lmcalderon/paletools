@@ -1,5 +1,11 @@
-export function select(query) {
-    return document.querySelector(query);
+import { isIterable } from "./iterable";
+
+export function select(query, parent = document) {
+    return parent.querySelector(query);
+}
+
+export function selectAll(query, parent = document) {
+    return parent.querySelectorAll(query);
 }
 
 export function append(parent, ...children) {
@@ -7,9 +13,20 @@ export function append(parent, ...children) {
         if (typeof child === "string") {
             parent.appendChild(document.createTextNode(child));
         }
-        else {
+        else if(child) {
             parent.appendChild(child);
         }
+    }
+}
+
+export function remove(elem){
+    if(isIterable(elem)){
+        for(let el in elem){
+            el.parentNode.removeChild(el);
+        }
+    }
+    else {
+        elem.parentNode.removeChild(elem);
     }
 }
 
@@ -43,16 +60,37 @@ export function isHidden(elem) {
 }
 
 export function addClass(elem, ...className) {
-    elem.classList.add(...className);
+    if (isIterable(elem)) {
+        for (let e of elem) {
+            e.classList.add(...className);
+        }
+    }
+    else {
+        elem.classList.add(...className);
+    }
 }
 
 export function removeClass(elem, ...className) {
-    elem.classList.remove(className);
+    if (isIterable(elem)) {
+        for (let e of elem) {
+            e.classList.remove(...className);
+        }
+    }
+    else {
+        elem.classList.remove(...className);
+    }
 }
 
 export function css(elem, css) {
-    for (let key of Object.keys(css)) {
-        elem.style[key] = css[key];
+    if (isIterable(elem)) {
+        for (let el of elem) {
+            elem.style[key] = css[key];
+        }
+    }
+    else {
+        for (let key of Object.keys(css)) {
+            elem.style[key] = css[key];
+        }
     }
 }
 
@@ -63,4 +101,10 @@ export function insertBefore(newNode, existingNode) {
 
 export function insertAfter(newNode, existingNode) {
     existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
+
+export function detach(...nodes) {
+    for (let node of nodes) {
+        node.parentElement.removeChild(node);
+    }
 }

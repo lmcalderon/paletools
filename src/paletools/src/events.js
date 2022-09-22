@@ -1,3 +1,5 @@
+import { isIterable } from "./utils/iterable";
+
 export function on(target, eventName, callback) {
     if(typeof target === "string"){
         callback = eventName;
@@ -5,7 +7,14 @@ export function on(target, eventName, callback) {
         target = window;
     }
 
-    target.addEventListener(eventName, callback);
+    if(isIterable(target)){
+        for(let t of target){
+            t.addEventListener(eventName, callback);
+        }
+    }
+    else {
+        target.addEventListener(eventName, callback);
+    }
 }
 
 export function triggerEvent(eventName, data) {

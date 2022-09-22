@@ -8,9 +8,8 @@ import { addStyle, removeStyle } from "../../utils/styles";
 import { EVENTS, on } from "../../events";
 import { addLabelWithToggle } from "../../controls";
 import getCurrentController from "../../utils/controller";
-import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
 import { loadClubPlayers } from "../../services/ui/club";
-import localize from "../../localization";
+import { addClass } from "../../utils/dom";
 const cfg = settings.plugins.markDuplicated;
 
 function run() {
@@ -38,12 +37,12 @@ function run() {
 
         if (settings.enabled && cfg.enabled) {
             if (this.data.duplicateId) {
-                $(this.__entityContainer).addClass("club-duplicated");
+                addClass(this.__entityContainer, "club-duplicated");
             } else {
                 const controller = getCurrentController();
                 if (controller instanceof UTMarketSearchResultsSplitViewController) {
                     if (club && club[this.data.definitionId]) {
-                        $(this.__entityContainer).addClass("club-duplicated");
+                        addClass(this.__entityContainer, "club-duplicated");
                     }
                 }
             }

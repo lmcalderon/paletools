@@ -1,6 +1,7 @@
 import { on } from "../../events";
 import localize from "../../localization";
 import settings from "../../settings";
+import { append } from "../../utils/dom";
 
 const cfg = settings.plugins.playerActions;
 
@@ -13,9 +14,9 @@ const futBinSearchAction = {
             instance._futbinSearchButton.addTarget(instance, () => instance.onFutbinSearch.notify(), EventType.TAP);
             instance._futbinSearchButton.getRootElement().classList.add("palesnipe-element");
             instance.onFutbinSearch = new EAObservable();
-            buttonsContainerFunc(instance).appendChild(instance._futbinSearchButton.getRootElement());
-            on("appEnabled", () => $(instance._futbinSearchButton.getRootElement()).show());
-            on("appDisabled", () => $(instance._futbinSearchButton.getRootElement()).hide());
+            append(buttonsContainerFunc(instance), instance._futbinSearchButton.getRootElement());
+            on("appEnabled", () => show(instance._futbinSearchButton.getRootElement()));
+            on("appDisabled", () => hide(instance._futbinSearchButton.getRootElement()));
         }
     },
     destroyGeneratedElements: (instance) => {

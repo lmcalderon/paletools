@@ -16,6 +16,7 @@ import { notifyFailure } from "../../utils/notifications";
 import { listItemOnTransferMarket } from "../../services/transferMarket";
 import { displayLoader, hideLoader } from "../../utils/loader";
 import delay from "../../utils/delay";
+import { addClass, append, css, select } from "../../utils/dom";
 const cfg = settings.plugins.sellMultiple;
 
 const SELL_MULTIPLE_MAX_PLAYERS = 25;
@@ -29,13 +30,8 @@ function addSellMultiple(output) {
 
     const sellMultipleButton = new UTStandardButtonControl();
     const sellMultipleButtonEl = sellMultipleButton.getRootElement();
-    $(sellMultipleButtonEl)
-        .css("marginLeft", "8px")
-        .addClass("sell-multiple")
-        .addClass("sell-multiple")
-        .addClass("section-header-btn")
-        .addClass("mini")
-        .addClass("call-to-action");
+    css(sellMultipleButtonEl, { marginLeft: "8px" });
+    addClass(sellMultipleButtonEl, "sell-multiple", "section-header-btn", "mini", "call-to-action");
 
     sellMultipleButton.init();
     sellMultipleButton.setInteractionState(false);
@@ -63,7 +59,8 @@ function addSellMultiple(output) {
             sellMultipleButton.setInteractionState(Object.keys(selectedCards).length > 0);
             ev.stopPropagation();
         });
-        $(".player", item.getRootElement()).append(checkbox);
+
+        append(select(".player", item.getRootElement()), checkbox);
     }
 
 
@@ -91,8 +88,8 @@ function addSellMultiple(output) {
             <label>${localize("plugins.sellMultiple.label.ignoredCards")}</label>
             `,
             async text => {
-                const startPrice = parseInt($("#sell-multiple-start-price").val());
-                const buyNowPrice = parseInt($("#sell-multiple-buy-now-price").val());
+                const startPrice = parseInt(select("#sell-multiple-start-price").value);
+                const buyNowPrice = parseInt(select("#sell-multiple-buy-now-price").value);
                 if (text !== 2) return;
 
                 if (isNaN(startPrice) || !startPrice) {

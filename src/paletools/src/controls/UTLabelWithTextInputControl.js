@@ -1,3 +1,5 @@
+import { on } from "../events";
+import { remove } from "../utils/dom";
 import UTLabelControl from "./UTLabelControl";
 
 const UTLabelWithTextInputControl = function (t) {
@@ -30,7 +32,7 @@ UTLabelWithTextInputControl.prototype.addTarget = function(caller, callback, eve
 }
 
 UTLabelWithTextInputControl.prototype.onKeyDown = function (callback) {
-    $(this._input.getRootElement()).keydown(function (e) {
+    on(this._input.getRootElement(), "keydown", function (e) {
         (callback)(this);
     });
 }
@@ -53,7 +55,7 @@ UTLabelWithTextInputControl.prototype.getInputValue = function(){
 }
 
 UTLabelWithTextInputControl.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
-    $(this.__root).remove();
+    remove(this.__root);
     this.__root = null;
 }
 

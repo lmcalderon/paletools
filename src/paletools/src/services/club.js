@@ -80,15 +80,15 @@ function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback
         let gatheredSquad = [];
 
         const getAllSquadMembers = () => {
-            services.Item.searchClub(searchCriteria).observe(
+            services.Club.search(searchCriteria).observe(
                 this,
                 async function (sender, response) {
                     gatheredSquad = [
-                        ...response.data.items.filter(
+                        ...response.response.items.filter(
                             (item) => !filterLoaned || item.loans < 0
                         ),
                     ];
-                    if (response.status !== 400 && !response.data.retrievedAll) {
+                    if (response.status !== 400 && !response.response.retrievedAll) {
                         searchCriteria.offset += searchCriteria.count;
                         if (onBatchLoadedCallback) {
                             (onBatchLoadedCallback)(searchCriteria.offset);
@@ -112,7 +112,7 @@ export function getUnnasignedPlayers() {
     sendPinEvents("Unassigned Items - List View");
     return new Promise((resolve) => {
         services.Item.requestUnassignedItems().observe(this, (sender, response) => {
-            resolve(response.data.items);
+            resolve(response.response.items);
         });
     });
 

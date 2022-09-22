@@ -3,6 +3,7 @@ let plugin;
 // #if process.env.SBC_TIMES_COMPLETED
 import settings, { saveConfiguration } from "../../settings";
 import { addLabelWithToggle } from "../../controls";
+import { createElem, insertAfter } from "../../utils/dom";
 
 const cfg = settings.plugins.sbcTimesCompleted;
 
@@ -11,7 +12,7 @@ function run() {
     UTSBCSetTileView.prototype.render = function render() {
         UTSBCSetTileView_render.call(this);
         if(cfg.enabled && this.data){
-            $(`<span>&nbsp;(Completed ${this.data.timesCompleted} times)</span>`).insertAfter($(this.__rewardsHeader));
+            insertAfter(createElem("span", `&nbsp;(Completed ${this.data.timesCompleted} times)`), this.__rewardsHeader);
         }
     }
 }

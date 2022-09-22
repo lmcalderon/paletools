@@ -3,6 +3,8 @@ import { copyToClipboard } from "../../utils/clipboard";
 import localize from "../../localization";
 import { on } from "../../events";
 import { notifySuccess } from "../../utils/notifications";
+import { append } from "../../utils/dom";
+import { show } from "../../utils/visibility";
 
 const cfg = settings.plugins.playerActions;
 
@@ -15,9 +17,9 @@ const copyPlayerIdAction = {
             instance._copyPlayerIdButton.addTarget(instance, () => instance.onCopyPlayerId.notify(), EventType.TAP);
             instance._copyPlayerIdButton.getRootElement().classList.add("palesnipe-element");
             instance.onCopyPlayerId = new EAObservable();
-            buttonsContainerFunc(instance).appendChild(instance._copyPlayerIdButton.getRootElement());
-            on("appEnabled", () => $(instance._copyPlayerIdButton.getRootElement()).show());
-            on("appDisabled", () => $(instance._copyPlayerIdButton.getRootElement()).hide());
+            append(buttonsContainerFunc(instance),instance._copyPlayerIdButton.getRootElement());
+            on("appEnabled", () => show(instance._copyPlayerIdButton.getRootElement()));
+            on("appDisabled", () => hide(instance._copyPlayerIdButton.getRootElement()));
         }
     },
     destroyGeneratedElements: (instance) => {

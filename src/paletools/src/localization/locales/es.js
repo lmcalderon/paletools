@@ -3,6 +3,8 @@ export default {
     "valid": "válido",
     "invalid": "inválido",
     "ui.loadingPlayers": "Cargando club: {count} jugadores cargados",
+    "plugins.dangerous": "CUIDADO: Habilitar este plugin puede llevar eventualmente a un BAN por parte de EA de tu cuenta, ¿ESTAS SEGURO DE QUERER CONTINUAR?",
+    "page.restart": "Por favor recarga la página y re ejecuta Paletools para que los cambios tomen efecto",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Modo grilla",
@@ -26,6 +28,8 @@ export default {
     "plugins.playerActions.settings.title": "Acciones del Jugador",
     "plugins.playerActions.settings.copyPlayerId": "Habilitar copiar Id del jugador",
     "plugins.playerActions.settings.futbinSearch": "Habilitar búsqueda en FUTBIN",
+    "plugins.playerActions.settings.findLowestPrice": "Buscar el valor más barato",
+
     "plugins.playerActions.copyPlayerId": "Copiar Id del jugador al portapapeles",
     "plugins.playerActions.futbinSearch": "Buscar en FUTBIN",
     "plugins.playerActions.findLowestPrice.button": "Buscar el valor más barato",
@@ -191,6 +195,10 @@ export default {
     "plugins.sellMultiple.warning": "Esto es una función de automatización, tu cuenta puede ser banneada si haces abuso de la misma, ¿estas seguro que quieres habilitarla?",
     "plugins.sellMultiple.notifications.maxPlayersReached": "Has alcanzado el límite de {PLAYERS} jugadores que puedes listar",
     "plugins.sellMultiple.notifications.wait": "Por favor espera {SECONDS} segundos antes de realizar otro listado",
+    /// #endif
+
+    /// #if process.env.INCREASE_ALLOWED_AUCTIONS
+    "plugins.increaseAllowedAuctions.settings.title": "Incrementar Ventas Permitidas",
     /// #endif
 
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"

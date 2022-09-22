@@ -1,5 +1,6 @@
 import VERSION from "./version";
 import { EVENTS, triggerEvent } from "./events";
+import extend from "./utils/extend";
 
 const buttons = {
     back: 'Digit1',
@@ -133,13 +134,16 @@ let settings = {
         },
         disablePackAnimations: {
             enabled: false
+        },
+        increaseAllowedAuctions: {
+            enabled: false
         }
     }
 };
 
 if (localStorage.getItem("paletools:settings")) {
     const savedSettings = JSON.parse(atob(localStorage.getItem("paletools:settings")));
-    settings = { ...savedSettings };
+    extend(true, settings, savedSettings);
     triggerEvent(EVENTS.CONFIGURATION_LOADED, settings);
 }
 

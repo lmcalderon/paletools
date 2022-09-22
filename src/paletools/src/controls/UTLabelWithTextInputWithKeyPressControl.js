@@ -1,4 +1,5 @@
 import { on } from "../events";
+import { remove } from "../utils/dom";
 import UTLabelControl from "./UTLabelControl";
 
 const UTLabelWithTextInputWithKeyPressControl = function (t) {
@@ -74,7 +75,7 @@ UTLabelWithTextInputWithKeyPressControl.prototype.onInputChange = function (call
 }
 
 UTLabelWithTextInputWithKeyPressControl.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
-    $(this.__root).remove();
+    remove(this.__root);
     this.__root = null;
 }
 

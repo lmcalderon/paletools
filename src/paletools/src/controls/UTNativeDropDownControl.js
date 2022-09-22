@@ -1,3 +1,5 @@
+import { remove } from "../utils/dom";
+
 const UTNativeDropDownControl = function(t){
     UTControl.call(this);
 } 
@@ -18,7 +20,7 @@ UTNativeDropDownControl.prototype._generate = function _generate() {
 }
 
 UTNativeDropDownControl.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
-    $(this.__root).remove();
+    remove(this.__root);
     this.__root = null;
 }
 

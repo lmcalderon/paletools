@@ -4,6 +4,8 @@ import { on, triggerEvent } from "../../events";
 import { notifyFailure, notifySuccess } from "../../utils/notifications";
 import { findLowestMarketPrice } from "../../services/transferMarket";
 import tryAndCatch from "../../try";
+import { append } from "../../utils/dom";
+import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.playerActions;
 
@@ -17,9 +19,9 @@ const findLowestPriceAction = {
             instance._findLowestPriceButton.getRootElement().classList.add("palesnipe-element");
             instance._findLowestPriceButton.displayCurrencyIcon();
             instance.onFindLowestPrice = new EAObservable();
-            buttonsContainerFunc(instance).appendChild(instance._findLowestPriceButton.getRootElement());
-            on("appEnabled", () => $(instance._findLowestPriceButton.getRootElement()).show());
-            on("appDisabled", () => $(instance._findLowestPriceButton.getRootElement()).hide());
+            append(buttonsContainerFunc(instance), instance._findLowestPriceButton.getRootElement());
+            on("appEnabled", () => show(instance._findLowestPriceButton.getRootElement()));
+            on("appDisabled", () => hide(instance._findLowestPriceButton.getRootElement()));
             on("findLowestPriceAction:searchstart", () => {
                 tryAndCatch(() => {
                     instance._findLowestPriceButton.setText(localize("plugins.playerActions.findLowestPrice.searching"));

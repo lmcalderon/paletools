@@ -6,18 +6,19 @@ import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
 import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
+import { addClass, append, createElem, detach, select } from "../../utils/dom";
+import { nodeListToArray } from "../../utils/array";
+import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.groupMyPacks;
 
 function run() {
 
     function addStyles() {
-        $(document.body).addClass("paletools-gridmode");
         addStyle('paletools-groupmypacks', styles);
     }
 
     function removeStyles() {
-        $(document.body).removeClass("paletools-gridmode");
         removeStyle('paletools-groupmypacks');
     }
 
@@ -30,15 +31,17 @@ function run() {
 
         if (!this.viewmodel.hasMyPacks) return;
 
-        const parent = $(".ut-store-hub-view--content");
+        const parent = select(".ut-store-hub-view--content");
 
-        const packs = $(".ut-store-pack-details-view");
+        const packs = select(".ut-store-pack-details-view");
 
-        packs.detach().sort((a, b) => {
-            const aTradeable = $(a).hasClass("is-tradeable");
-            const bTradeable = $(b).hasClass("is-tradeable");
-            const aTitle = $(".ut-store-pack-details-view--title", a).text();
-            const bTitle = $(".ut-store-pack-details-view--title", b).text();
+        detach(packs);
+
+        packs.sort((a, b) => {
+            const aTradeable = a.classList.contains("is-tradeable");
+            const bTradeable = b.classList.contains("is-tradeable");
+            const aTitle = select(".ut-store-pack-details-view--title", a).textContent;
+            const bTitle = select(".ut-store-pack-details-view--title", b).textContent;
 
             if (aTitle === bTitle) {
                 return aTradeable ? -1 : bTradeable ? 1 : 0;
@@ -50,33 +53,34 @@ function run() {
         let prevTitle = null;
         let prevTradeable = null;
 
-        for (let packIndex = 0; packIndex < packs.length; packIndex++) {
-            const pack = $(packs[packIndex]);
-            pack.attr("data-title", $(".ut-store-pack-details-view--title", pack).text());
-            pack.attr("data-tradeable", $(pack).hasClass("is-tradeable"));
+        for (let pack of packs) {
+            pack.setAttribute("data-title", select(".ut-store-pack-details-view--title", pack).textContent);
+            pack.setAttribute("data-tradeable", pack.classList.contains("is-tradeable"));
         }
 
-        for (let packIndex = 0; packIndex < packs.length; packIndex++) {
-            const pack = $(packs[packIndex]);
-            let title = pack.attr("data-title");
-            let tradeable = pack.attr("data-tradeable");
+        for (let pack of packs) {
+            let title = pack.getAttribute("data-title");
+            let tradeable = pack.getAttribute("data-tradeable");
 
             const appendCounter = () => {
-                const packCounter = $(document.createElement("div"));
-                packCounter.addClass("pack-counter");
-                const filteredPacks = packs.filter(`[data-title="${title}"]`).filter(`[data-tradeable="${tradeable}"]`);
+                const packCounter = createElem("div", { className: "pack-counter" });
+                const filteredPacks = nodeListToArray(packs)
+                    .filter(elem => elem.getAttribute("data-title") === title)
+                    .filter(elem => elem.getAttribute("data-tradeable") === tradeable);
+
                 let samePacksCount = filteredPacks.length;
-                packCounter.text(samePacksCount);
-                pack.append(packCounter);
-                $(packCounter).click(() => {
-                    filteredPacks.filter(".duplicated").each((idx, elem) => {
-                        if (elem.style.display === "none") {
-                            $(elem).removeAttr("style");
+                packCounter.textContent = samePacksCount;
+                append(pack, packCounter);
+
+                on(packCounter, "click", () => {
+                    for(let pack of filteredPacks.filter(x => x.classList.contains("duplicated"))) {
+                        if (pack.style.display === "none") {
+                            elem.removeAttribute("style");
                         }
                         else {
-                            $(elem).hide();
+                            hide(elem);
                         }
-                    });
+                    };
                 });
             }
 
@@ -90,22 +94,23 @@ function run() {
                 appendCounter();
             }
             else {
-                pack.addClass("duplicated");
-                pack.hide();
+                addClass(pack, "duplicated");
+                hide(pack);
             }
         }
 
-        parent.append(packs);
+        append(parent, packs);
         addStyles();
 
         on(EVENTS.APP_DISABLED, () => {
-            packs.show();
-            $(".pack-counter", parent).hide();
+            show(packs);
+            hide(select(".pack-counter", parent));
             removeStyles();
         });
+
         on(EVENTS.APP_ENABLED, () => {
-            packs.filter(".duplicated").hide();
-            $(".pack-counter", parent).removeAttr("style");
+            hide(nodeListToArray(packs).filter(x => x.classList.contains("duplicated")));
+            select(".pack-counter", parent).removeAttribute("style");
             addStyles();
         });
     }

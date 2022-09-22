@@ -1,3 +1,5 @@
+import { remove } from "../utils/dom";
+
 const UTLinkControl = function (t) {
     UTControl.call(this);
 }
@@ -19,7 +21,7 @@ UTLinkControl.prototype.setUrl = function(url){
 }
 
 UTLinkControl.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
-    $(this.__root).remove();
+    remove(this.__root);
     this.__root = null;
 }
 

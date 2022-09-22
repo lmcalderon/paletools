@@ -1,3 +1,4 @@
+import { remove } from "../utils/dom";
 import UTLabelControl from "./UTLabelControl";
 
 const UTLabelWithToggleControl = function (t) {
@@ -53,7 +54,7 @@ UTLabelWithToggleControl.prototype.getToggleState = function () {
 }
 
 UTLabelWithToggleControl.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
-    $(this.__root).remove();
+    remove(this.__root);
     this.__root = null;
 }
 
