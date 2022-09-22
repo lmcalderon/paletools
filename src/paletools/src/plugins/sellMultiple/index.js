@@ -60,7 +60,7 @@ function addSellMultiple(output) {
             ev.stopPropagation();
         });
 
-        append(select(".player", item.getRootElement()), checkbox);
+        append(select(".item", item.getRootElement()), checkbox);
     }
 
 

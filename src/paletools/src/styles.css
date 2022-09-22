@@ -24,3 +24,8 @@ input[type="number"] {
 .listFUTItem.selected .rowContent {
     background-color: #394754 !important;
 }
+
+.ut-transfer-list-view .sectioned-item-list .itemList {
+    background-color: #2b3540;
+    border-bottom: 1px solid #556c95;
+}

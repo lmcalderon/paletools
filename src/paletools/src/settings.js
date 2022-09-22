@@ -137,6 +137,9 @@ let settings = {
         },
         increaseAllowedAuctions: {
             enabled: false
+        },
+        pristinePlayers: {
+            enabled: false
         }
     }
 };

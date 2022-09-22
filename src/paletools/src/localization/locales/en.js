@@ -205,6 +205,10 @@ export default {
     "plugins.increaseAllowedAuctions.settings.title": "Increase Allowed Auctions",
     /// #endif
 
+    /// #if process.env.PRISTINE_PLAYERS
+    "plugins.pristinePlayers.title": "Highlight Pristine Players (1 owner, 7 contracts)",
+    /// #endif
+
     "plugins.eaBugFixer.settings.title": "Fix EA mistakes",
 };
 

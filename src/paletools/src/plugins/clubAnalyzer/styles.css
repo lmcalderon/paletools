@@ -52,6 +52,14 @@
     color: white;
 }
 
+.club-analyzer .player .position::before {
+    content:"(";
+}
+
+.club-analyzer .player .position::after {
+    content:")";
+}
+
 .club-analyzer .player .rating {
     order: 4;
 }

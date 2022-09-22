@@ -1,4 +1,7 @@
 .pristine-player::before {
     font-family:"UltimateTeam-Icons";
-    content: "\E06C"
+    content: "\E00C";
+    margin-right: 4px;
+    color: #b9f2ff;
+    font-size: 11px;
 }

@@ -24,7 +24,7 @@ ClubAnalyzerView.prototype.dealloc = function dealloc() {
 }
 
 ClubAnalyzerView.prototype._appendMainMenu = function (container) {
-    append(container, createElem("div", { className: "ea-filter-bar-view"}, `
+    append(container, createElem("div", { className: "ea-filter-bar-view" }, `
     <div class="menu-container">
             <button id="clubanalyzer-players-dashboard" class="ea-filter-bar-item-view selected">Dashboard</button>
             <button id="clubanalyzer-players-by-rating" class="ea-filter-bar-item-view">Rating</button>
@@ -40,7 +40,7 @@ ClubAnalyzerView.prototype._appendMainMenu = function (container) {
 
     on(allButtons, "mouseover", ev => {
         removeClass(allButtons, "hover");
-        addClass(ev.currentTarget, "hover"); 
+        addClass(ev.currentTarget, "hover");
     });
 
     on(allButtons, "click", ev => {
@@ -62,9 +62,9 @@ ClubAnalyzerView.prototype._appendBody = function (container) {
     append(content, pinnedList);
     append(contentContainer, content);
 
-    append(container, 
-            contentContainer,
-            createElem("div", { className: "button-container"}, `
+    append(container,
+        contentContainer,
+        createElem("div", { className: "button-container" }, `
             <button id="reload-club-analyzer" class="btn-standard call-to-action" data-loading="Reloading...">${localize("plugins.clubAnalyzer.view.buttons.reload")}</button>
             <button id="export-csv-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${localize("plugins.clubAnalyzer.view.buttons.exportCsv")}</button>
             <button id="export-html-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${localize("plugins.clubAnalyzer.view.buttons.exportHtml")}</button>
@@ -89,7 +89,7 @@ ClubAnalyzerView.prototype._appendBody = function (container) {
 ClubAnalyzerView.prototype._createDashboard = function (viewmodel) {
     const counters = viewmodel.counters;
     return createElem("div", { id: "clubanalyzer-report-dashboard", className: "club-analyzer-report" },
-                `<h3 class="tile">
+        `<h3 class="tile">
                 ${localize("plugins.clubAnalyzer.view.dashboard.description")}
                 </h3>
                 <div>
@@ -120,6 +120,7 @@ ClubAnalyzerView.prototype._renderPlayer = function (player, addAuctionInfo) {
                 <a class="fullname" href="https://www.futbin.com/players?page=1&search=${player.data.f}%20${player.data.l}" target="_blank">
                     <span class="firstname">${player.data.f}</span> 
                     <span class="lastname">${player.data.l}</span>
+                    <span class="position">${PlayerPosition[player.preferredPosition]}</span>
                 </a>
                 <span class="rating">${player.rating}</span>
                 ${player.untradeable ? '<span class="fut_icon icon_untradeable untradeable"></span>' : ''}
@@ -131,7 +132,7 @@ ClubAnalyzerView.prototype._renderPlayer = function (player, addAuctionInfo) {
 }
 
 ClubAnalyzerView.prototype._createCountReport = function (id, data) {
-    return createElem("div", { id: id, className: "club-analyzer-report"}, this._createCountReportTree(data, 0));
+    return createElem("div", { id: id, className: "club-analyzer-report" }, this._createCountReportTree(data, 0));
 }
 
 ClubAnalyzerView.prototype._createCountReportTree = function (data, level) {
@@ -167,7 +168,7 @@ ClubAnalyzerView.prototype._createAuctionReport = function (id, data, caption, c
     }
 
     className = className || "";
-    
+
     let html = caption ? `<h2>${caption}</h2>` : "";
     html += `<ul>`;
     for (let player of keys.map(x => data[x]).sort((p1, p2) => {
@@ -196,17 +197,17 @@ ClubAnalyzerView.prototype._generate = function _generate() {
     }
 }
 
-ClubAnalyzerView.prototype.showLoading = function(msg){
+ClubAnalyzerView.prototype.showLoading = function (msg) {
     this._loadingMessage.textContent = msg;
     show(this._loadingMessage);
 }
 
-ClubAnalyzerView.prototype.hideLoading = function(){
+ClubAnalyzerView.prototype.hideLoading = function () {
     this._loadingMessage.textContent = "";
     hide(this._loadingMessage);
 }
 
-ClubAnalyzerView.prototype.prepareForUpdate = function(){
+ClubAnalyzerView.prototype.prepareForUpdate = function () {
     this._body.innerHTML = "";
     const buttons = selectAll(".menu-container > button", this.__root);
     removeClass(buttons, "selected");
@@ -221,18 +222,18 @@ ClubAnalyzerView.prototype.update = function (viewmodel) {
     this._body.innerHTML = "";
 
     append(this._body,
-    this._createDashboard(viewmodel),
-    this._createCountReport("clubanalyzer-report-by-rating", viewmodel.players.byRating),
-    this._createCountReport("clubanalyzer-report-by-rarity", viewmodel.players.byRarity),
-    this._createCountReport("clubanalyzer-report-by-league", viewmodel.players.byLeague),
-    this._createCountReport("clubanalyzer-report-by-nation", viewmodel.players.byNation),
-    this._createAuctionReport("clubanalyzer-report-by-unnasigned", viewmodel.players.unnasigned.tradeable, "Tradeable", "clubanalyzer-report-by-unnasigned"),
-    this._createAuctionReport("clubanalyzer-report-by-unnasigned2", viewmodel.players.unnasigned.untradeable, "Untradeable", "clubanalyzer-report-by-unnasigned"),
-    this._createAuctionReport("clubanalyzer-report-by-transferlist", viewmodel.players.tradepile),
-    this._createAuctionReport("clubanalyzer-report-by-transfertargets", viewmodel.players.watchlistWon, localize("watchlist.dock.categories.won")),
-    this._createAuctionReport("clubanalyzer-report-by-transfertargets2", viewmodel.players.watchlistWinning, localize("wdock.label.winning"), "clubanalyzer-report-by-transfertargets"),
-    this._createAuctionReport("clubanalyzer-report-by-transfertargets3", viewmodel.players.watchlistLoosing, localize("dock.label.outbid"), "clubanalyzer-report-by-transfertargets"),
-    this._createAuctionReport("clubanalyzer-report-by-transfertargets4", viewmodel.players.watchlistLost, localize("watchlist.dock.categories.expired"), "clubanalyzer-report-by-transfertargets"));
+        this._createDashboard(viewmodel),
+        this._createCountReport("clubanalyzer-report-by-rating", viewmodel.players.byRating),
+        this._createCountReport("clubanalyzer-report-by-rarity", viewmodel.players.byRarity),
+        this._createCountReport("clubanalyzer-report-by-league", viewmodel.players.byLeague),
+        this._createCountReport("clubanalyzer-report-by-nation", viewmodel.players.byNation),
+        this._createAuctionReport("clubanalyzer-report-by-unnasigned", viewmodel.players.unnasigned.tradeable, "Tradeable", "clubanalyzer-report-by-unnasigned"),
+        this._createAuctionReport("clubanalyzer-report-by-unnasigned2", viewmodel.players.unnasigned.untradeable, "Untradeable", "clubanalyzer-report-by-unnasigned"),
+        this._createAuctionReport("clubanalyzer-report-by-transferlist", viewmodel.players.tradepile),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets", viewmodel.players.watchlistWon, localize("watchlist.dock.categories.won")),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets2", viewmodel.players.watchlistWinning, localize("wdock.label.winning"), "clubanalyzer-report-by-transfertargets"),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets3", viewmodel.players.watchlistLoosing, localize("dock.label.outbid"), "clubanalyzer-report-by-transfertargets"),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets4", viewmodel.players.watchlistLost, localize("watchlist.dock.categories.expired"), "clubanalyzer-report-by-transfertargets"));
 
     const reports = selectAll(".club-analyzer-report");
     hide(reports);
@@ -241,8 +242,8 @@ ClubAnalyzerView.prototype.update = function (viewmodel) {
     on(selectAll("li", this._body), "click", ev => {
         const elem = ev.currentTarget;
         const childUl = select("ul", elem);
-        
-        if(isVisible(childUl)){
+
+        if (isVisible(childUl)) {
             hide(childUl);
             addClass(elem, "expanded");
         }

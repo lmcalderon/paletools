@@ -6,8 +6,7 @@ import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
 import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
-import { addClass, append, createElem, detach, select } from "../../utils/dom";
-import { nodeListToArray } from "../../utils/array";
+import { addClass, append, createElem, detach, select, selectAll } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.groupMyPacks;
@@ -33,7 +32,7 @@ function run() {
 
         const parent = select(".ut-store-hub-view--content");
 
-        const packs = select(".ut-store-pack-details-view");
+        const packs = selectAll(".ut-store-pack-details-view");
 
         detach(packs);
 
@@ -64,7 +63,7 @@ function run() {
 
             const appendCounter = () => {
                 const packCounter = createElem("div", { className: "pack-counter" });
-                const filteredPacks = nodeListToArray(packs)
+                const filteredPacks = packs
                     .filter(elem => elem.getAttribute("data-title") === title)
                     .filter(elem => elem.getAttribute("data-tradeable") === tradeable);
 
@@ -99,7 +98,7 @@ function run() {
             }
         }
 
-        append(parent, packs);
+        append(parent, ...packs);
         addStyles();
 
         on(EVENTS.APP_DISABLED, () => {
@@ -109,7 +108,7 @@ function run() {
         });
 
         on(EVENTS.APP_ENABLED, () => {
-            hide(nodeListToArray(packs).filter(x => x.classList.contains("duplicated")));
+            hide(packs.filter(x => x.classList.contains("duplicated")));
             select(".pack-counter", parent).removeAttribute("style");
             addStyles();
         });

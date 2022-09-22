@@ -11,6 +11,7 @@
 	float: none;
 	padding: 0;
 	display: block;
+	width: 100%;
 }
 
 .listFUTItem .auction {
@@ -28,12 +29,12 @@
     text-overflow: ellipsis !important;
 }
 
-.ut-transfer-list-view .listFUTItem .entityContainer .name,
+/* .ut-transfer-list-view .listFUTItem .entityContainer .name,
 .ut-navigation-container-view--content .listFUTItem .entityContainer .name {
 	max-width: 100% !important;
 	width: 100%;
 	position: absolute;
-}
+} */
 
 .ui-layout-left .listFUTItem .auction .auctionValue {
 	float: left;
@@ -93,10 +94,9 @@
 
 .ut-club-search-results-view .player-stats-data-component {
 	display: block;
-	position: absolute;
-	width: 50%;
+	/* position: absolute;
 	top: 30px;
-	right: 0;
+	right: 0; */
 }
 
 .ut-club-search-results-view .player-stats-data-component ul li:first-child {
@@ -169,6 +169,11 @@ section.ui-layout-right .listFUTItem .entityContainer .name.untradeable::before 
 	display: none;
 }
 
+.listFUTItem .entityContainer>.name.untradeable::before {
+	position: relative;
+	margin-right: 2px;
+}
+
 section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-component {
 	display: none;
 }
@@ -176,6 +181,7 @@ section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-compone
 .ut-transfer-list-view .sectioned-item-list:nth-child(3) .listFUTItem {
 	display: inline-block;
     width: 90px;
+	margin-top: -4px;
 }
 
 .listFUTItem .entityContainer .name {
@@ -269,6 +275,10 @@ section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-compone
 
 .ut-sbc-set-tile-view .tileHeader {
 	font-size: 24px;
+}
+
+.ut-transfer-list-view.ui-layout-left .listFUTItem .entityContainer .name {
+	display: none;
 }
 
 

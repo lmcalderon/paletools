@@ -9,7 +9,7 @@ import localize from "../../localization";
 import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
 import { hide, show } from "../../utils/visibility";
-import { append, detach, insertBefore, select, selectAll } from "../../utils/dom";
+import { append, detach, insertBefore, prepend, select, selectAll } from "../../utils/dom";
 
 const cfg = settings.plugins.filterSbcs;
 
@@ -18,7 +18,7 @@ function run() {
     function searchSbcs(text) {
         for (let sbcTile of selectAll(".ut-sbc-set-tile-view")) {
             show(sbcTile);
-            if (text.length > 0 && select(".tileHeader", this).textContent.toLowerCase().indexOf(text.toLowerCase()) === -1) {
+            if (text.length > 0 && select(".tileHeader", sbcTile).textContent.toLowerCase().indexOf(text.toLowerCase()) === -1) {
                 hide(sbcTile);
             }
         };
@@ -38,11 +38,11 @@ function run() {
             return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
         });
 
-        append(parent, sbcs);
+        append(parent, ...sbcs);
 
         const completedSbcs = selectAll(".complete", parent);
         detach(completedSbcs);
-        append(parent, completedSbcs);
+        append(parent, ...completedSbcs);
     }
 
     const UTSBCHubView_generate = UTSBCHubView.prototype._generate;
@@ -91,7 +91,7 @@ function run() {
 
             const menuContainer = select(".menu-container", this._SBCCategoriesTM.getRootElement());
 
-            insertBefore(this._filterContainer, menuContainer);
+            prepend(menuContainer, this._filterContainer);
 
             on(EVENTS.APP_DISABLED, () => disable());
             on(EVENTS.APP_ENABLED, () => enable());

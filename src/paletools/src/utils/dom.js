@@ -1,27 +1,45 @@
+import { nodeListToArray } from "./array";
 import { isIterable } from "./iterable";
 
 export function select(query, parent = document) {
+    if (!query) return;
+
     return parent.querySelector(query);
 }
 
 export function selectAll(query, parent = document) {
-    return parent.querySelectorAll(query);
+    if (!query) return;
+
+    return nodeListToArray(parent.querySelectorAll(query));
 }
 
 export function append(parent, ...children) {
+    if (!parent) return;
+
     for (let child of children) {
-        if (typeof child === "string") {
-            parent.appendChild(document.createTextNode(child));
-        }
-        else if(child) {
-            parent.appendChild(child);
-        }
+        if(!child) continue;
+
+        parent.append(child);
     }
 }
 
-export function remove(elem){
-    if(isIterable(elem)){
-        for(let el in elem){
+export function prepend(parent, ...children) {
+    if (!parent) return;
+
+    for (let child of children) {
+        if(!child) continue;
+
+        parent.prepend(child);
+    }
+}
+
+export function remove(elem) {
+    if (!elem) return;
+
+    if (isIterable(elem)) {
+        for (let el in elem) {
+            if (!el) continue;
+
             el.parentNode.removeChild(el);
         }
     }
@@ -60,8 +78,11 @@ export function isHidden(elem) {
 }
 
 export function addClass(elem, ...className) {
+    if (!elem) return;
+
     if (isIterable(elem)) {
         for (let e of elem) {
+            if (!e) continue;
             e.classList.add(...className);
         }
     }
@@ -71,8 +92,11 @@ export function addClass(elem, ...className) {
 }
 
 export function removeClass(elem, ...className) {
+    if (!elem) return;
+
     if (isIterable(elem)) {
         for (let e of elem) {
+            if (!e) continue;
             e.classList.remove(...className);
         }
     }
@@ -82,9 +106,13 @@ export function removeClass(elem, ...className) {
 }
 
 export function css(elem, css) {
+    if (!elem) return;
+
     if (isIterable(elem)) {
         for (let el of elem) {
-            elem.style[key] = css[key];
+            if (!el) continue;
+
+            el.style[key] = css[key];
         }
     }
     else {
@@ -95,16 +123,30 @@ export function css(elem, css) {
 }
 
 export function insertBefore(newNode, existingNode) {
+    if (!newNode) return;
     if (!existingNode) return;
+
     existingNode.parentNode.insertBefore(newNode, existingNode);
 }
 
 export function insertAfter(newNode, existingNode) {
+    if (!newNode) return;
+    if (!existingNode) return;
+
     existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 }
 
-export function detach(...nodes) {
-    for (let node of nodes) {
-        node.parentElement.removeChild(node);
+export function detach(nodes) {
+    if(!nodes) return;
+
+    if (isIterable(nodes)) {
+        for (let node of nodes) {
+            if (!node) continue;
+
+            node.parentElement.removeChild(node);
+        }
+    }
+    else {
+        nodes.parentElement.removeChild(nodes);
     }
 }

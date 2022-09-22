@@ -30,6 +30,7 @@ import keepPlayerSellValues from "./keepPlayerSellValues";
 import sellMultiple from "./sellMultiple";
 import xmlHttpRequest from "./xmlHttpRequest";
 import increaseAllowedAuctions from "./increaseAllowedAuctions";
+import pristinePlayers from "./pristinePlayers";
 
 const plugins = [
     minMaxPrices,
@@ -62,7 +63,8 @@ const plugins = [
     keepPlayerSellValues,
     sellMultiple,
     xmlHttpRequest,
-    increaseAllowedAuctions
+    increaseAllowedAuctions,
+    pristinePlayers
 ].filter(x => x);
 
 const menus = [];

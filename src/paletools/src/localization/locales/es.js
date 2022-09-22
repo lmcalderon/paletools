@@ -201,6 +201,10 @@ export default {
     "plugins.increaseAllowedAuctions.settings.title": "Incrementar Ventas Permitidas",
     /// #endif
 
+    /// #if process.env.PRISTINE_PLAYERS
+    "plugins.pristinePlayers.title": "Remarcar jugadores pristinos (1 dueño y 7 contratos)",
+    /// #endif
+
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"
 };
 

@@ -63,7 +63,8 @@ function run() {
             }
         },
         buyNow = () => {
-            if (cfg.legacyMode) {
+            // Legacy Mode prevents from temporary bans, this will be the default from now on
+            if(true) { //if (cfg.legacyMode) {
                 if (mouseClick(buyBtn())) {
                     tryPressOkBtn();
                 }

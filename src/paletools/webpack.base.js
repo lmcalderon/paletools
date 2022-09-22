@@ -26,8 +26,9 @@ module.exports = {
     DISABLE_PACK_ANIMATIONS: true,
     XML_HTTP_REQUESTS: true,
     INCREASE_ALLOWED_AUCTIONS: true,
+    SELL_MULTIPLE: true,
+    PRISTINE_PLAYERS: true,
 
-    SELL_MULTIPLE: false,
     SBC_SMART_BUILDER: false,
     CLUB_SEARCH_ENHACER: false,
     EA_BUG_FIXER: false
