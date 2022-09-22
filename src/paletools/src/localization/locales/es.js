@@ -205,6 +205,10 @@ export default {
     "plugins.pristinePlayers.title": "Remarcar jugadores pristinos (1 dueño y 7 contratos)",
     /// #endif
 
+     /// #if process.env.SHOW_PLAYER_CONTRACTS
+     "plugins.showPlayerContracts.title": "Mostrar contratos de jugadores en el mercado",
+     /// #endif
+
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"
 };
 

@@ -140,6 +140,9 @@ let settings = {
         },
         pristinePlayers: {
             enabled: false
+        },
+        showPlayerContracts: {
+            enabled: false
         }
     }
 };

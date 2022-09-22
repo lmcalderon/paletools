@@ -209,6 +209,10 @@ export default {
     "plugins.pristinePlayers.title": "Highlight Pristine Players (1 owner, 7 contracts)",
     /// #endif
 
+    /// #if process.env.SHOW_PLAYER_CONTRACTS
+    "plugins.showPlayerContracts.title": "Show Player Contracts on Transfer Market",
+    /// #endif
+
     "plugins.eaBugFixer.settings.title": "Fix EA mistakes",
 };
 

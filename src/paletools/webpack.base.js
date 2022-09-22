@@ -28,6 +28,7 @@ module.exports = {
     INCREASE_ALLOWED_AUCTIONS: true,
     SELL_MULTIPLE: true,
     PRISTINE_PLAYERS: true,
+    SHOW_PLAYER_CONTRACTS: true,
 
     SBC_SMART_BUILDER: false,
     CLUB_SEARCH_ENHACER: false,

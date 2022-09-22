@@ -1,0 +1,5 @@
+.SearchResults.ui-layout-left .player .ut-item-player-status--loan, .phone .SearchResults .player .ut-item-player-status--loan {
+    display: block;
+    background: #0099CC;
+    border: 2px solid white;
+}

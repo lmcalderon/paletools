@@ -6,7 +6,7 @@ import settings, { saveConfiguration } from "../../settings";
 import { addClass } from "../../utils/dom";
 import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
-import { addStyle } from "../../utils/styles";
+import { addStyle, removeStyle } from "../../utils/styles";
 
 let cfg = settings.plugins.pristinePlayers;
 
@@ -39,6 +39,14 @@ function menu() {
     addLabelWithToggle(container, "enabled", cfg.enabled, toggleState => {
         cfg.enabled = toggleState;
         saveConfiguration();
+
+        if(toggleState){
+            addStyle("paletools-pristinePlayers", styles);
+        }
+        else {
+            removeStyle("paletools-pristinePlayers");
+        }
+        
     });
     return container;
 }
