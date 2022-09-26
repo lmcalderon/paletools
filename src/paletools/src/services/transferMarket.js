@@ -148,7 +148,7 @@ async function getPriceLimits(item) {
 	});
 }
 
-function getSellBidPrice(bin) {
+export function getSellBidPrice(bin) {
 	if (bin <= 1000) return bin - 50;
 	if (bin > 1000 && bin <= 10000) return bin - 100;
 	if (bin > 10000 && bin <= 50000) return bin - 250;
