@@ -42,6 +42,9 @@ export function enableMarketSnipe(shouldSnipeFunc, onBack = null, onSnipeSuccess
                             onSnipeFailure();
                         }
                     }
+                }).catch(() => {
+                    onSnipeFailure();
+                }).finally(() => {
                     goBack();
                 });
             }

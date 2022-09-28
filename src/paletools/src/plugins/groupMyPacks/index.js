@@ -74,10 +74,10 @@ function run() {
                 on(packCounter, "click", () => {
                     for(let pack of filteredPacks.filter(x => x.classList.contains("duplicated"))) {
                         if (pack.style.display === "none") {
-                            elem.removeAttribute("style");
+                            pack.removeAttribute("style");
                         }
                         else {
-                            hide(elem);
+                            hide(pack);
                         }
                     };
                 });
