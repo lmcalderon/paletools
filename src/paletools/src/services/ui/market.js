@@ -1,7 +1,6 @@
 import { addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
 import localize from "../../localization";
-import delay from "../../utils/delay";
-import { select } from "../../utils/dom";
+import { selectAll } from "../../utils/dom";
 import { notifySuccess } from "../../utils/notifications";
 import { tryBuyItem } from "../market";
 import { navigateBack } from "./navigation";
