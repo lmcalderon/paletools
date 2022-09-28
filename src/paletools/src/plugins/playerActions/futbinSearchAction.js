@@ -12,7 +12,7 @@ const futBinSearchAction = {
             instance._futbinSearchButton.init();
             instance._futbinSearchButton.setText(localize("plugins.playerActions.futbinSearch"));
             instance._futbinSearchButton.addTarget(instance, () => instance.onFutbinSearch.notify(), EventType.TAP);
-            instance._futbinSearchButton.getRootElement().classList.add("palesnipe-element");
+            instance._futbinSearchButton.getRootElement().classList.add("paletools-element");
             instance.onFutbinSearch = new EAObservable();
             append(buttonsContainerFunc(instance), instance._futbinSearchButton.getRootElement());
             on("appEnabled", () => show(instance._futbinSearchButton.getRootElement()));

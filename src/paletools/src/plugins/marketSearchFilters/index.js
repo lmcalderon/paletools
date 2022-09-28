@@ -48,7 +48,7 @@ function run() {
 
         if (!this._generateMarketSearchFilters) {
             const container = document.createElement("div");
-            addClass(container, "ut-item-search-view", "palesnipe-element");
+            addClass(container, "ut-item-search-view", "paletools-element");
 
             if (cfg.savedFilters) {
 

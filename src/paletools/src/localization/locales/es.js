@@ -5,6 +5,7 @@ export default {
     "ui.loadingPlayers": "Cargando club: {count} jugadores cargados",
     "plugins.dangerous": "CUIDADO: Habilitar este plugin puede llevar eventualmente a un BAN por parte de EA de tu cuenta, ¿ESTAS SEGURO DE QUERER CONTINUAR?",
     "page.restart": "Por favor recarga la página y re ejecuta Paletools para que los cambios tomen efecto",
+    "market.itemBuy.success": "¡Compra realizada correctamente!",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Modo grilla",
@@ -80,8 +81,10 @@ export default {
     "plugins.snipe.settings.search.incMinBuy": "Aumentar comprar ahora mínimo",
     "plugins.snipe.settings.search.decMaxBuy": "Disminuir comprar ahora máximo",
     "plugins.snipe.settings.search.incMaxBuy": "Aumentar comprar ahora máximo",
-    "plugins.snipe.settings.search.botModeMinBid": "Modo bot, +Puja",
-    "plugins.snipe.settings.search.botModeMinBuy": "Modo bot, +Comprar Ahora",
+    "plugins.snipe.settings.search.botModeMinBid": "Modo Bot +Puja",
+    "plugins.snipe.settings.search.botModeMinBuy": "Modo Bot +Comprar Ahora",
+    "plugins.snipe.settings.search.displayBotModeMinBid": "Mostrar boton Modo Bot +Bid",
+    "plugins.snipe.settings.search.displayBotModeMinBuy": "Mostrar boton Modo Bot +Buy",
     "plugins.snipe.settings.legacyMode": "Usar modo legacy para comprar (palesnipe 3.1)",
     /// #endif
 

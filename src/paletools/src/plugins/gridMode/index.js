@@ -7,7 +7,7 @@ import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
 import localize from "../../localization";
 import { EVENTS, on } from "../../events";
-import { addClass, css, insertBefore, removeClass } from "../../utils/dom";
+import { addClass, css, insertBefore, prepend, removeClass, select } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.gridMode;
@@ -45,14 +45,34 @@ function run(){
             if(cfg.enabled){
                 this._gridModeToggle.toggle();
             }
-            
+
             css(this._gridModeToggle.getRootElement(), {
                 borderRight: "1px solid white",
                     marginRight: "10px",
                     paddingRight: "10px"
             });
 
-            insertBefore(this._gridModeToggle.getRootElement(), this.__currencies);
+            if(isPhone()){
+                css(this._gridModeToggle.getRootElement(), {
+                    position: "relative",
+                });
+
+                css(select("label", this._gridModeToggle.getRootElement()), {
+                    position: "absolute",
+                    right: "75px",
+                    width: "250px",
+                    top: "4px"
+                });
+
+                css(select(".ut-toggle-control", this._gridModeToggle.getRootElement()), {
+                    display: "inline-block"
+                });
+
+                prepend(this.__currencies, this._gridModeToggle.getRootElement());
+            }
+            else {
+                insertBefore(this._gridModeToggle.getRootElement(), this.__currencies);
+            }
             
             on(EVENTS.APP_ENABLED, () => {
                 show(this._gridModeToggle);

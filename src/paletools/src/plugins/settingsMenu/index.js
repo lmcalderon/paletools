@@ -1,7 +1,7 @@
 let plugin;
 
 /// #if process.env.SETTINGS_MENU
-import PalesnipeSettingsController from "./PalesnipeSettingsController";
+import SettingsController from "./SettingsController";
 import styles from "./styles.css";
 import { addStyle } from "../../utils/styles";
 import localize from "../../localization";
@@ -10,20 +10,20 @@ plugin = {
     run: (menus) => {
         const UTGameTabBarController_initWithViewControllers = UTGameTabBarController.prototype.initWithViewControllers;
         UTGameTabBarController.prototype.initWithViewControllers = function (tabs) {
-            const palesnipeNav = new UTGameFlowNavigationController();
-            palesnipeNav.initWithRootController(new PalesnipeSettingsController(menus));
-            palesnipeNav.tabBarItem = generatePalesnipeSettingsTab();
-            tabs.push(palesnipeNav);
+            const paletoolsNav = new UTGameFlowNavigationController();
+            paletoolsNav.initWithRootController(new SettingsController(menus));
+            paletoolsNav.tabBarItem = generatePaletoolsSettingsTab();
+            tabs.push(paletoolsNav);
             UTGameTabBarController_initWithViewControllers.call(this, tabs);
         }
 
-        function generatePalesnipeSettingsTab() {
+        function generatePaletoolsSettingsTab() {
             const tab = new UTTabBarItemView();
             tab.init();
             tab.setTag(6);
-            tab.__buttonText.innerHTML = localize("plugins.settings.title");
+            tab.setText(localize("plugins.settings.title"));
             tab.addClass("icon-transfer");
-            tab.getRootElement().classList.add("palesnipe-element");
+            tab.getRootElement().classList.add("paletools-element");
             return tab;
         }
 

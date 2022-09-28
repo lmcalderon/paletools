@@ -1,33 +1,25 @@
-.palesnipe-settings-wrapper {
-    flex-flow: column;
-}
-
-.palesnipe-settings-wrapper .tile {
-    margin-bottom: 20px;
-}
-
-.palesnipe-settings-wrapper .tile > div {
+.paletools-settings-wrapper .tile > div {
     display: table;
     width: 300px;
     padding-left: 10px;
     
 }
 
-.palesnipe-settings-wrapper .tile > div > div {
+.paletools-settings-wrapper .tile > div > div {
     display: table-row;
     height: 40px;
 }
 
-.palesnipe-settings-wrapper .tile > div > div > label {
+.paletools-settings-wrapper .tile > div > div > label {
     display: table-cell;
     width: 80%;
 }
 
-.palesnipe-settings-wrapper .tile > div > div > input {
+.paletools-settings-wrapper .tile > div > div > input {
     display: table-cell;
 }
 
-.palesnipe-settings-wrapper .tile > div > div > .ut-toggle-control {
+.paletools-settings-wrapper .tile > div > div > .ut-toggle-control {
     display: table-cell;
 }
 

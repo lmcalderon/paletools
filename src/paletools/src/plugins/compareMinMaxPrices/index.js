@@ -8,15 +8,17 @@ import localize from "../../localization";
 import { on } from "../../events";
 import { addClass, append, createElem, insertBefore } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
+import { getSellBidPrice } from "../../services/transferMarket"
 
 const cfg = settings.plugins.compareMinMaxPrices;
 
 function run() {
+    const playerSellValues = {};
     const UTMarketSearchView__generate = UTMarketSearchView.prototype._generate;
     UTMarketSearchView.prototype._generate = function _generate() {
         UTMarketSearchView__generate.call(this);
         if (!this._generateCompareMinMaxPrices) {
-            if (cfg.enabled) {
+            if (settings.enabled && cfg.enabled) {
                 this._minMaxPriceContainer = document.createElement("div");
                 this._minPriceText = document.createElement("span");
                 this._minPriceText.classList.add("min-price-value");
@@ -36,7 +38,7 @@ function run() {
                     this._maxPriceText
                 );
 
-                addClass(this._minMaxPriceContainer, "min-max-prices", "palesnipe-element");
+                addClass(this._minMaxPriceContainer, "min-max-prices", "paletools-element");
                 hide(this._minMaxPriceContainer);
                 append(this._minMaxPriceContainer, minPriceContainer, maxPriceContainer);
                 insertBefore(this._minMaxPriceContainer, this._list.getRootElement());
@@ -60,8 +62,9 @@ function run() {
 
     const UTMarketSearchView_setItems = UTMarketSearchView.prototype.setItems;
     UTMarketSearchView.prototype.setItems = function setItems(e, t) {
-        if (cfg.enabled) {
+        if (settings.enabled && cfg.enabled) {
             if (this._hasCompareItem) {
+                let definitionId = null;
                 for (let entity of e) {
                     if (entity._auction.buyNowPrice > this._maxBuyNowPrice) {
                         this._maxBuyNowPrice = entity._auction.buyNowPrice;
@@ -69,9 +72,13 @@ function run() {
                     if (entity._auction.buyNowPrice < this._minBuyNowPrice) {
                         this._minBuyNowPrice = entity._auction.buyNowPrice;
                     }
+
+                    definitionId ||= entity.definitionId;
                 }
                 this._minPriceText.textContent = this._minBuyNowPrice;
                 this._maxPriceText.textContent = this._maxBuyNowPrice;
+
+                playerSellValues[definitionId] = this._minBuyNowPrice;
                 show(this._minMaxPriceContainer);
             }
             else {
@@ -80,6 +87,18 @@ function run() {
         }
 
         UTMarketSearchView_setItems.call(this, e, t);
+    }
+
+    const UTQuickListPanelViewController_renderView = UTQuickListPanelViewController.prototype.renderView;
+    UTQuickListPanelViewController.prototype.renderView = function () {
+        UTQuickListPanelViewController_renderView.call(this);
+
+        if (settings.enabled && cfg.enabled && playerSellValues[this.item.definitionId]) {
+            let buyAmount = playerSellValues[this.item.definitionId];
+            let bidAmount = getSellBidPrice(buyAmount);
+            this.getView().setBuyNowValue(buyAmount);
+            this.getView().setBidValue(bidAmount);
+        }
     }
 
     addStyle('paletools-compare-min-max-prices', styles);

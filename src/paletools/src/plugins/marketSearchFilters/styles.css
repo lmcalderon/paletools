@@ -3,3 +3,4 @@
 .saved-filters > input {display: inline-block; width: auto; }
 .saved-filters > button { display: inline-block; margin-left: 8px;}
 .saved-filters > div { float: right; margin-left: 8px;}
+.phone .saved-filters > div { float: none; margin-left: 0; margin-top: 4px;}

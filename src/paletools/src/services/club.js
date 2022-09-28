@@ -109,11 +109,13 @@ function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback
 
 export function getUnnasignedPlayers() {
     //return http('purchased/items');
+    repositories.Item.setDirty(ItemPile.PURCHASED);
     sendPinEvents("Unassigned Items - List View");
     return new Promise((resolve) => {
         services.Item.requestUnassignedItems().observe(this, (sender, response) => {
             resolve(response.response.items);
         });
     });
-
 }
+
+

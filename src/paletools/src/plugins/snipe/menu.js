@@ -58,6 +58,9 @@ export default function menu(){
     input(bidContainer, "buttons.search.incMaxBuy");
     input(bidContainer, "buttons.search.botModeMinBid");
     input(bidContainer, "buttons.search.botModeMinBuy");
+    toggle(bidContainer, "buttons.search.displayBotModeMinBid");
+    toggle(bidContainer, "buttons.search.displayBotModeMinBuy");
+
 
     container.appendChild(generalContainer);
     container.appendChild(searchContainer);

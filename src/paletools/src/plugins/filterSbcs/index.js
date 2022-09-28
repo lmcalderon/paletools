@@ -89,10 +89,14 @@ function run() {
             this._filterContainer.append(this._searchInput.getRootElement());
             this._filterContainer.append(this._sortDropDown.getRootElement());
 
-            const menuContainer = select(".menu-container", this._SBCCategoriesTM.getRootElement());
-
-            prepend(menuContainer, this._filterContainer);
-
+            if (isPhone()) {
+                const container = select(".container", this.getRootElement());
+                insertBefore(this._filterContainer, container);
+            }
+            else {
+                const menuContainer = select(".menu-container", this._SBCCategoriesTM.getRootElement());
+                prepend(menuContainer, this._filterContainer);
+            }
             on(EVENTS.APP_DISABLED, () => disable());
             on(EVENTS.APP_ENABLED, () => enable());
 

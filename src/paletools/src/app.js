@@ -13,12 +13,12 @@ export default function enableDisableApp() {
 
 function enableApp() {
     settings.enabled = true;
-    notifySuccess("Palesnipe Enabled");
+    notifySuccess("Paletools Enabled");
     triggerEvent("appEnabled");
 }
 
 function disableApp() {
     settings.enabled = false;
-    notifyNeutral("Palesnipe Disabled");
+    notifyNeutral("Paletools Disabled");
     triggerEvent("appDisabled");
 }

@@ -2,9 +2,18 @@
     display: inline-block;
 }
 
+.phone #filter-sbcs {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
 #search-sbcs {
     margin-left: 16px;
     width: auto;
+}
+
+.phone #search-sbcs {
+    width: 45%;
 }
 
 #sort-sbcs {
@@ -17,6 +26,11 @@
     color: #4ee6eb;
     font-weight: bold;
     width: 180px;
+}
+
+.phone #sort-sbcs {
+    padding: 12px;
+    width: 40%;
 }
 
 .SBCHub .ea-filter-bar-view {

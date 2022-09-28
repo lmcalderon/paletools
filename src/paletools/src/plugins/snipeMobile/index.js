@@ -2,7 +2,9 @@
 let plugin;
 
 /// #if process.env.SNIPE_MOBILE
+import { getUnnasignedPlayers } from "../../services/club";
 import { enableMarketSnipe } from "../../services/ui/market";
+import { incrementPriceRow } from "../../services/ui/search";
 import { append, select } from "../../utils/dom";
 
 function run(){
@@ -18,8 +20,8 @@ function run(){
         this._snipeButton.setText("SNIPE");
         this._snipeButton.addTarget(this, () => {
             _tryToSnipe = true;
-            this._minBidPriceRow._currencyInput.beginIncrease();
-            this._minBidPriceRow._currencyInput.endIncrease();
+
+            incrementPriceRow(this._minBidPriceRow, this._maxBuyNowPriceRow);
             this._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
         }, EventType.TAP);
         this._snipeButton.getRootElement().classList.add("call-to-action");
@@ -39,6 +41,8 @@ function run(){
         () => _tryToSnipe,
         () => {
             _tryToSnipe = false;
+        }, ()=> {
+            getUnnasignedPlayers();
         });
 }
 

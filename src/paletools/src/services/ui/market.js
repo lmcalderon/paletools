@@ -1,5 +1,9 @@
 import { addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
+import localize from "../../localization";
+import delay from "../../utils/delay";
+import { notifySuccess } from "../../utils/notifications";
 import { tryBuyItem } from "../market";
+import { navigateBack } from "./navigation";
 
 export function enableMarketSnipe(shouldSnipeFunc, onBack = null, onSnipeSuccess = null, onSnipeFailure = null) {
     addMarketSearchPreRender((items, controller) => {
@@ -9,7 +13,7 @@ export function enableMarketSnipe(shouldSnipeFunc, onBack = null, onSnipeSuccess
             if (onBack) {
                 onBack();
             }
-            controller.getNavigationController()._eBackButtonTapped();
+            navigateBack(controller);
             delay(10).then(() => {
                 document.querySelectorAll(".ut-numeric-input-spinner-control")[3].scrollIntoView()
             });
@@ -31,7 +35,7 @@ export function enableMarketSnipe(shouldSnipeFunc, onBack = null, onSnipeSuccess
                         if (onSnipeSuccess) {
                             onSnipeSuccess();
                         }
-                        notifySuccess("SUCCESS!");
+                        notifySuccess(localize("market.itemBuy.success"));
                     }
                     else {
                         if (onSnipeFailure) {

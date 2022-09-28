@@ -24,7 +24,9 @@ const buttons = {
         search: 'Digit2',
         botModeMinBid: 'BracketRight',
         botModeMinBuy: 'BracketLeft',
-        enableBotMode: false
+        enableBotMode: false,
+        displayBotModeMinBid: true,
+        displayBotModeMinBuy: true
     },
     results: {
         bid: 'Digit4',

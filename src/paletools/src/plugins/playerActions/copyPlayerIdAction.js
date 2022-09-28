@@ -15,7 +15,7 @@ const copyPlayerIdAction = {
             instance._copyPlayerIdButton.init();
             instance._copyPlayerIdButton.setText(localize("plugins.playerActions.copyPlayerId"));
             instance._copyPlayerIdButton.addTarget(instance, () => instance.onCopyPlayerId.notify(), EventType.TAP);
-            instance._copyPlayerIdButton.getRootElement().classList.add("palesnipe-element");
+            instance._copyPlayerIdButton.getRootElement().classList.add("paletools-element");
             instance.onCopyPlayerId = new EAObservable();
             append(buttonsContainerFunc(instance),instance._copyPlayerIdButton.getRootElement());
             on("appEnabled", () => show(instance._copyPlayerIdButton.getRootElement()));

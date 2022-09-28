@@ -5,6 +5,7 @@ export default {
     "ui.loadingPlayers": "Loading club players: {count} loaded",
     "plugins.dangerous": "WARNING: Enabling this plugin could eventually lead to a potential BAN from EA, are you sure you want to continue?",
     "page.restart": "Please reload the page and re-execute Paletools for the changes to take effect",
+    "market.itemBuy.success": "Item bought succesfully!",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Grid Mode",
@@ -80,8 +81,10 @@ export default {
     "plugins.snipe.settings.search.incMinBuy": "Increase min buy now value",
     "plugins.snipe.settings.search.decMaxBuy": "Decrease max buy now value",
     "plugins.snipe.settings.search.incMaxBuy": "Increase max buy now value",
-    "plugins.snipe.settings.search.botModeMinBid": "Bot mode, +Bid",
-    "plugins.snipe.settings.search.botModeMinBuy": "Bot mode, +Buy Now",
+    "plugins.snipe.settings.search.botModeMinBid": "Bot Mode +Bid",
+    "plugins.snipe.settings.search.botModeMinBuy": "Bot Mode +Buy Now",
+    "plugins.snipe.settings.search.displayBotModeMinBid": "Display Bot Mode +Bid button",
+    "plugins.snipe.settings.search.displayBotModeMinBuy": "Display Bot Mode +Buy button",
     "plugins.snipe.settings.legacyMode": "Use legacy mode for buying cards (palesnipe 3.1)",
     /// #endif
 

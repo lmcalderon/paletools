@@ -21,6 +21,8 @@ export function append(parent, ...children) {
 
         parent.append(child);
     }
+
+    return children;
 }
 
 export function prepend(parent, ...children) {
@@ -31,6 +33,8 @@ export function prepend(parent, ...children) {
 
         parent.prepend(child);
     }
+
+    return children;
 }
 
 export function remove(elem) {
@@ -46,6 +50,8 @@ export function remove(elem) {
     else {
         elem.parentNode.removeChild(elem);
     }
+
+    return elem;
 }
 
 export function createElem(tag, attrs, html) {
@@ -89,6 +95,8 @@ export function addClass(elem, ...className) {
     else {
         elem.classList.add(...className);
     }
+
+    return elem;
 }
 
 export function removeClass(elem, ...className) {
@@ -103,6 +111,8 @@ export function removeClass(elem, ...className) {
     else {
         elem.classList.remove(...className);
     }
+
+    return elem;
 }
 
 export function css(elem, css) {
@@ -120,6 +130,8 @@ export function css(elem, css) {
             elem.style[key] = css[key];
         }
     }
+
+    return elem;
 }
 
 export function insertBefore(newNode, existingNode) {
@@ -127,6 +139,8 @@ export function insertBefore(newNode, existingNode) {
     if (!existingNode) return;
 
     existingNode.parentNode.insertBefore(newNode, existingNode);
+
+    return newNode;
 }
 
 export function insertAfter(newNode, existingNode) {
@@ -134,6 +148,8 @@ export function insertAfter(newNode, existingNode) {
     if (!existingNode) return;
 
     existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+
+    return newNode;
 }
 
 export function detach(nodes) {
@@ -149,4 +165,6 @@ export function detach(nodes) {
     else {
         nodes.parentElement.removeChild(nodes);
     }
+
+    return nodes;
 }

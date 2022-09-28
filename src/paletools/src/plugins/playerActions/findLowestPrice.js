@@ -16,7 +16,7 @@ const findLowestPriceAction = {
             instance._findLowestPriceButton.init();
             instance._findLowestPriceButton.setText(localize("plugins.playerActions.findLowestPrice.button"));
             instance._findLowestPriceButton.addTarget(instance, () => instance.onFindLowestPrice.notify(), EventType.TAP);
-            instance._findLowestPriceButton.getRootElement().classList.add("palesnipe-element");
+            instance._findLowestPriceButton.getRootElement().classList.add("paletools-element");
             instance._findLowestPriceButton.displayCurrencyIcon();
             instance.onFindLowestPrice = new EAObservable();
             append(buttonsContainerFunc(instance), instance._findLowestPriceButton.getRootElement());

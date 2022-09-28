@@ -9,6 +9,7 @@ import settings from "../../settings";
 import { EVENTS, on } from "../../events";
 import { hide, show } from "../../utils/visibility";
 import { getPlayerAlternativePositions, getPlayerSecondaryAlternativePositions } from "../../services/players";
+import { navigateBack } from "../../services/ui/navigation";
 
 const cfg = settings.plugins.duplicatedToSbc;
 
@@ -24,14 +25,21 @@ function run() {
             this._useUnnasignedPlayersButton.getRootElement().classList.add("call-to-action");
             this._useUnnasignedPlayersButton.init();
             this._useUnnasignedPlayersButton.setText(localize('plugins.duplicatedToSbc.button.text'));
-            this._useUnnasignedPlayersButton.addTarget(this, () => {
-                fillSbcWithUnnasignedPlayers(count => {
-                    this._useUnnasignedPlayersButton.setInteractionState(false);
-                    this._useUnnasignedPlayersButton.setText(localize('plugins.duplicatedToSbc.button.textLoading').replace("{count}", count));
-                }).then(() => {
+            this._useUnnasignedPlayersButton.addTarget(this, async () => {
+                try {
+                    await fillSbcWithUnnasignedPlayers(count => {
+                        this._useUnnasignedPlayersButton.setInteractionState(false);
+                        this._useUnnasignedPlayersButton.setText(localize('plugins.duplicatedToSbc.button.textLoading').replace("{count}", count));
+                    });
+                }
+                finally {
                     this._useUnnasignedPlayersButton.setInteractionState(true);
                     this._useUnnasignedPlayersButton.setText(localize('plugins.duplicatedToSbc.button.text'));
-                });
+
+                    if (isPhone()) {
+                        navigateBack(getCurrentController());
+                    }
+                }
             }, EventType.TAP);
             this.__content.appendChild(this._useUnnasignedPlayersButton.getRootElement());
 
@@ -65,8 +73,17 @@ function run() {
                 const playerIds = Object.keys(distinctItemIds).map(x => parseInt(x)).slice(0, 23);
 
                 getAllClubPlayers(false, null, onClubBatchLoadedCallback).then(club => {
-                    const { _squad, _challenge } = getCurrentController()._leftController;
-                    const positionIndexes = _squad.getSBCSlots().reduce((acc, curr) => {
+                    const controller = getCurrentController();
+                    let challenge = null;
+                    if(controller._challengeDetailsController){
+                        challenge = controller._challengeDetailsController._currentController._challenge;
+                    }
+                    else {
+                        challenge = controller._challenge;
+                    }
+
+                    const squad = challenge.squad;
+                    const positionIndexes = squad.getSBCSlots().reduce((acc, curr) => {
                         if (!curr.position) return acc;
 
                         if (!acc[curr.position.typeName]) {
@@ -149,8 +166,8 @@ function run() {
                     }
 
 
-                    _squad.setPlayers(players, true);
-                    services.SBC.saveChallenge(_challenge);
+                    squad.setPlayers(players, true);
+                    services.SBC.saveChallenge(challenge);
                     repositories.Item.unassigned.expiryTimestamp = 0;
                     repositories.Item.transfer.expiryTimestamp = 0;
                     resolve();

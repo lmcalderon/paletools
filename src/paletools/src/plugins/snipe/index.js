@@ -5,7 +5,10 @@ import enableDisableApp from "../../app";
 import { EVENTS, on } from "../../events";
 import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
 import localize from "../../localization";
+import { getUnnasignedPlayers } from "../../services/club";
+import sendPinEvents from "../../services/pinEvents";
 import { enableMarketSnipe } from "../../services/ui/market";
+import { incrementPriceRow } from "../../services/ui/search";
 import settings from "../../settings";
 import getCurrentController from "../../utils/controller";
 import { append, isVisible, select } from "../../utils/dom";
@@ -53,27 +56,31 @@ function run() {
 
     UTMarketSearchFiltersView.prototype._generate = function _generate() {
         UTMarketSearchFiltersView__generate.call(this);
-
-        function addButton(container, button, buttonText, priceRow, className) {
+        const self = this;
+        function addButton(button, buttonText, priceRow, className) {
             button.init();
             button.setText(buttonText);
             button.addTarget(this, () => {
                 _isBotMode = true;
-                priceRow._currencyInput.beginIncrease();
-                priceRow._currencyInput.endIncrease();
-                this._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
+                incrementPriceRow(priceRow, self._maxBuyNowPriceRow);
+                self._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
             }, EventType.TAP);
             button.getRootElement().classList.add("call-to-action");
             button.getRootElement().classList.add(className)
 
-            append(select(".button-container", container), button.getRootElement());
+            append(select(".button-container", self.__searchContainer), button.getRootElement());
         }
 
         this._botModeIncMinBid = new UTStandardButtonControl();
         this._botModeIncMinBuyNow = new UTStandardButtonControl();
 
-        addButton(this.__searchContainer, this._botModeIncMinBid, localize("plugins.snipe.settings.search.botModeMinBid"), this._minBidPriceRow, "snipe-min-bid");
-        addButton(this.__searchContainer, this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowRow, "snipe-min-buy-now");
+        if (cfg.buttons.search.displayBotModeMinBid) {
+            addButton(this._botModeIncMinBid, localize("plugins.snipe.settings.search.botModeMinBid"), this._minBidPriceRow, "snipe-min-bid");
+        }
+
+        if (cfg.buttons.search.displayBotModeMinBuy) {
+            addButton(this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowRow, "snipe-min-buy-now");
+        }
     }
 
     const UTMarketSearchFiltersView_destroyGeneratedElements = UTMarketSearchFiltersView.prototype.destroyGeneratedElements;
@@ -146,36 +153,28 @@ function run() {
             if (!(controller instanceof UTMarketSearchFiltersViewController)) return;
 
             keys[buttons.search.decMinBid] = () => {
-                controller.getView()._minBidPriceRow._currencyInput.beginDecrease();
-                controller.getView()._minBidPriceRow._currencyInput.endDecrease();
+                controller.getView()._minBidPriceRow._currencyInput._currencyInput.decrease();
             };
             keys[buttons.search.incMinBid] = () => {
-                controller.getView()._minBidPriceRow._currencyInput.beginIncrease();
-                controller.getView()._minBidPriceRow._currencyInput.endIncrease();
+                incrementPriceRow(controller.getView()._minBidPriceRow, controller.getView()._maxBuyNowPriceRow);
             };
             keys[buttons.search.decMaxBid] = () => {
-                controller.getView()._maxBidPriceRow._currencyInput.beginDecrease();
-                controller.getView()._maxBidPriceRow._currencyInput.endDecrease();
+                controller.getView()._maxBidPriceRow._currencyInput._currencyInput.decrease();
             };
             keys[buttons.search.incMaxBid] = () => {
-                controller.getView()._maxBidPriceRow._currencyInput.beginIncrease();
-                controller.getView()._maxBidPriceRow._currencyInput.endIncrease();
+                controller.getView()._maxBidPriceRow._currencyInput._currencyInput.increase();
             };
             keys[buttons.search.decMinBuy] = () => {
-                controller.getView()._minBuyNowPriceRow._currencyInput.beginDecrease();
-                controller.getView()._minBuyNowPriceRow._currencyInput.endDecrease();
+                controller.getView()._minBuyNowPriceRow._currencyInput._currencyInput.decrease();
             };
             keys[buttons.search.incMinBuy] = () => {
-                controller.getView()._minBuyNowPriceRow._currencyInput.beginIncrease();
-                controller.getView()._minBuyNowPriceRow._currencyInput.endIncrease();
+                incrementPriceRow(controller.getView()._minBuyNowPriceRow, controller.getView()._maxBuyNowPriceRow);
             };
             keys[buttons.search.decMaxBuy] = () => {
-                controller.getView()._maxBuyNowPriceRow._currencyInput.beginDecrease();
-                controller.getView()._maxBuyNowPriceRow._currencyInput.endDecrease();
+                controller.getView()._maxBuyNowPriceRow._currencyInput._currencyInput.decrease();
             };
             keys[buttons.search.incMaxBuy] = () => {
-                controller.getView()._maxBuyNowPriceRow._currencyInput.beginIncrease();
-                controller.getView()._maxBuyNowPriceRow._currencyInput.endIncrease();
+                controller.getView()._maxBuyNowPriceRow._currencyInput._currencyInput.increase();
             };
             keys[buttons.search.search] = () => search();
             keys[buttons.search.resetBid] = () => {
@@ -186,7 +185,7 @@ function run() {
                 if (buttons.search.enableBotMode) {
                     keys[buttons.search.incMinBid]();
                     //search();
-                    isBotMode = true;
+                    _isBotMode = true;
                     search();
                 }
             };
@@ -194,7 +193,7 @@ function run() {
                 if (buttons.search.enableBotMode) {
                     keys[buttons.search.incMinBuy]()
                     //search();
-                    isBotMode = true;
+                    _isBotMode = true;
                     search();
                 }
             }
@@ -346,16 +345,18 @@ function run() {
         .compare-price .btn-text:after { content: ' [ ${p.results.compare} ]' }
         `;
 
-            addStyle('palesnipe-styles', css);
+            addStyle('paletools-snipe-styles', css);
         },
         resetCss = () => {
-            removeStyle('palesnipe-styles');
+            removeStyle('paletools-snipe-styles');
             addCss(cfg.buttons);
         };
 
     enableMarketSnipe(() => _isBotMode,
         () => {
             _isBotMode = false;
+        }, () => {
+            getUnnasignedPlayers();
         });
 
     on(EVENTS.APP_ENABLED, () => {
@@ -363,8 +364,8 @@ function run() {
     });
 
     on(EVENTS.APP_DISABLED, () => {
-        removeStyle('palesnipe-styles');
-        addStyle('palesnipe-styles', '.palesnipe-element { display: none !important; }');
+        removeStyle('paletools-snipe-styles');
+        addStyle('paletools-snipe-styles', '.paletools-element { display: none !important; }');
     })
 
     on(EVENTS.CONFIGURATION_SAVED, () => {

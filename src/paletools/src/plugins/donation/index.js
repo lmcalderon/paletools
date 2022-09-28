@@ -16,7 +16,7 @@ function run() {
         <div><a href="https://ceneka.net/mp/d/paletaeaa" target="_blank">${localize('plugins.donation.mercadopago')}</a></div>
         <div>Follow me at&nbsp;<a href="https://twitter.com/paleta" target="_blank">@paleta</a></div>`;
 
-    var donationDiv = createElem("div", { id: "palesnipe-donation-ui", className: "palesnipe-element" }, html);
+    var donationDiv = createElem("div", { id: "paletools-donation-ui", className: "paletools-element" }, html);
 
     document.querySelector(".ut-fifa-header-view").appendChild(donationDiv);
 
