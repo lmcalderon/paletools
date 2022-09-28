@@ -80,8 +80,8 @@ export default {
     "plugins.snipe.settings.search.incMinBuy": "Aumentar comprar ahora mínimo",
     "plugins.snipe.settings.search.decMaxBuy": "Disminuir comprar ahora máximo",
     "plugins.snipe.settings.search.incMaxBuy": "Aumentar comprar ahora máximo",
-    "plugins.snipe.settings.search.botModeMinBid": "Modo bot, aumentar puja mínima",
-    "plugins.snipe.settings.search.botModeMinBuy": "Modo bot, aumentar comprar ahora mínimo",
+    "plugins.snipe.settings.search.botModeMinBid": "Modo bot, +Puja",
+    "plugins.snipe.settings.search.botModeMinBuy": "Modo bot, +Comprar Ahora",
     "plugins.snipe.settings.legacyMode": "Usar modo legacy para comprar (palesnipe 3.1)",
     /// #endif
 

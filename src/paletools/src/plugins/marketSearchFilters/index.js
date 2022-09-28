@@ -12,6 +12,7 @@ import { on } from "../../events";
 import { show, hide } from "../../utils/visibility";
 import { loadClubPlayers } from "../../services/ui/club";
 import { addClass, append, createElem, insertBefore, select } from "../../utils/dom";
+import { addMarketSearchFilter } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
 
 
 const cfg = settings.plugins.marketSearchFilters;
@@ -284,164 +285,95 @@ function run() {
 
     const UTMarketSearchResultsViewController_requestItems = UTMarketSearchResultsViewController.prototype._requestItems;
 
-    UTMarketSearchResultsViewController.prototype._requestItems = function _requestItems(_) {
-        if (!settings.enabled || (!cfg.playerRating && !cfg.hideDuplicates)) {
-            UTMarketSearchResultsViewController_requestItems.call(this, _);
-            return;
+
+    addMarketSearchFilter((items, controller) => {
+        if (cfg.playerRating) {
+            items = items.filter(x => shouldRenderItem(x, controller._searchCriteria)); // added .filter;
         }
 
-        services.Module.set(3355443200);
-        this._paginationViewModel.stopAuctionUpdates();
-
-        services.Item.searchTransferMarket(this._searchCriteria, _).observe(this, function _onRequestItemsComplete(e, t) {
-                if (e.unobserve(this), !t.success) 
-                    return NetworkErrorManager.checkCriticalStatus(t.status) 
-                            ? void NetworkErrorManager.handleStatus(t.status) 
-                            : (services.Notification.queue([services.Localization.localize("popup.error.searcherror"), UINotificationType.NEGATIVE]), void this.getNavigationController().popViewController());
-                if (0 < this._searchCriteria.offset && 0 === t.data.items.length){
-                    this._requestItems(_ - 1);
-                }
-                else {
-                    let i = this._paginationViewModel.getNumItemsPerPage();
-                    let o = t.data.items.slice();
-
-                    if (cfg.playerRating) {
-                        o = o.filter(x => shouldRenderItem(x, this._searchCriteria)); // added .filter;
-                    }
-
-                    if (cfg.hideDuplicates
-                        && Object.keys(club).length
-                        && getCurrentController() instanceof UTMarketSearchResultsSplitViewController) {
-                        o = o.filter(item => !club[item.definitionId]);
-                    }
-
-                    if (this.onDataChange.notify({
-                        items: o
-                    }), o.length > i && (o = o.slice(0, i)), this._paginationViewModel.setPageItems(o), this._paginationViewModel.setPageIndex(_), this._selectedItem && 0 < o.length) {
-                        var n = this._paginationViewModel.getIndexByItemId(this._selectedItem.id);
-                        0 < n && this._paginationViewModel.setIndex(n),
-                            this._selectedItem = null
-                    }
-                    var r = this.getView(),
-                        s = null;
-                    if (!this._stadiumViewmodel || this._searchCriteria.type !== SearchType.VANITY && this._searchCriteria.type !== SearchType.CLUB_INFO && this._searchCriteria.type !== SearchType.BALL || (s = this._stadiumViewmodel.getStadiumProgression(this._searchCriteria.subtypes)), this._squadContext && this._squadContext.getSquad() && (this._squadContext.getCurrentSlot().index < UTSquadEntity.FIELD_PLAYERS || this._squadContext.getCurrentSlot().item.isManager()) && this._compareItem) {
-                        var l = [],
-                            c = [],
-                            d = [],
-                            u = [],
-                            h = this._squadContext.getSquad(),
-                            p = this._squadContext.getCurrentSlot();
-                        this._paginationViewModel.getCurrentPageItems().forEach(function (t) {
-                            var e = h.getPlayers().map(function (e) {
-                                return e.index === p.index ? t : e.item
-                            }, this),
-                                i = p.item.isManager() ? t : h.getManager().item,
-                                o = h.getFormation(),
-                                n = 0;
-                            if (o) {
-                                var r = this._chemCalculator.calculate(o, e, i);
-                                if (n = r.chemistry, !t.isManager()) {
-                                    var s = r.getSlotChemistry(p.index).points;
-                                    d.push(s),
-                                        u.push(s - this._squadContext.getCurrentSlot().chemistry)
-                                }
-                            } else if (!t.isManager()) {
-                                var a = this._squadContext.getCurrentSlot().chemistry;
-                                d.push(0),
-                                    u.push(0 - a)
-                            }
-                            l.push(n),
-                                c.push(n - h.getChemistry())
-                        }, this),
-                            r.setItemsWithChemDiff(this._paginationViewModel.getCurrentPageItems(), l, c, d, u)
-                    } else
-                        r.setItems(this._paginationViewModel.getCurrentPageItems(), s);
-                    if (r.setPaginationState(1 < _, t.data.items.length > i), JSUtils.isValid(this._compareItem) && !this._squadContext) {
-                        var a = JSUtils.find(o, function (e) {
-                            return e.getAuctionData().tradeId === this._compareItem.getAuctionData().tradeId
-                        }
-                            .bind(this));
-                        JSUtils.isValid(a) ? this._pinnedListItem.setItem(a) : this._paginationViewModel.setPinnedItem(this._compareItem)
-                    } else !isPhone() && 0 < o.length && r.selectListRow(this._paginationViewModel.getCurrentItem().id)
-                }
-                this._paginationViewModel.startAuctionUpdates()
-            });
+        if (cfg.hideDuplicates
+            && Object.keys(club).length
+            && getCurrentController() instanceof UTMarketSearchResultsSplitViewController) {
+            items = items.filter(item => !club[item.definitionId]);
         }
 
-        const UTItemTableCellView_render = UTItemTableCellView.prototype.render;
-        UTItemTableCellView.prototype.render = function (e) {
-            UTItemTableCellView_render.call(this, e);
-            if (settings.enabled && this.data.isPlayer() && cfg.playerId) {
-                append(
-                    select(".ut-item-view--main", this.__entityContainer),
-                    createElem("span", { className: "player-definition-id" }, this.data.definitionId));
-            }
+        return items;
+    });
+
+    const UTItemTableCellView_render = UTItemTableCellView.prototype.render;
+    UTItemTableCellView.prototype.render = function (e) {
+        UTItemTableCellView_render.call(this, e);
+        if (settings.enabled && this.data.isPlayer() && cfg.playerId) {
+            append(
+                select(".ut-item-view--main", this.__entityContainer),
+                createElem("span", { className: "player-definition-id" }, this.data.definitionId));
         }
-
-        function shouldRenderItem(item, searchCriteria) {
-            let rating = searchCriteria.rating;
-
-            if (!settings.enabled || !rating || !cfg.playerRating) return true;
-
-            if (rating.charAt(0) === "+") {
-                rating = parseInt(rating.substr(1));
-                return item.rating >= rating;
-            }
-            else if (rating.charAt(0) === "-") {
-                rating = parseInt(rating.substr(1));
-                return item.rating <= rating;
-            }
-            else {
-                rating = parseInt(rating);
-                return item.rating == rating;
-            }
-        }
-
-        addStyle('paletools-marketsearch-filters', styles);
     }
 
-    function menu() {
-        var container = document.createElement("div");
-        function add(id) {
-            addLabelWithToggle(container, `plugins.marketSearchFilters.settings.${id}`, cfg[id], toggleState => {
-                if (toggleState) {
-                    if (id === "playerId") {
-                        if (confirm(localize("plugins.marketSearchFilters.playerIdWarning"))) {
-                            cfg[id] = toggleState;
-                            saveConfiguration();
-                        }
-                        else {
-                            return false;
-                        }
-                    } else {
+    function shouldRenderItem(item, searchCriteria) {
+        let rating = searchCriteria.rating;
+
+        if (!settings.enabled || !rating || !cfg.playerRating) return true;
+
+        if (rating.charAt(0) === "+") {
+            rating = parseInt(rating.substr(1));
+            return item.rating >= rating;
+        }
+        else if (rating.charAt(0) === "-") {
+            rating = parseInt(rating.substr(1));
+            return item.rating <= rating;
+        }
+        else {
+            rating = parseInt(rating);
+            return item.rating == rating;
+        }
+    }
+
+    addStyle('paletools-marketsearch-filters', styles);
+}
+
+function menu() {
+    var container = document.createElement("div");
+    function add(id) {
+        addLabelWithToggle(container, `plugins.marketSearchFilters.settings.${id}`, cfg[id], toggleState => {
+            if (toggleState) {
+                if (id === "playerId") {
+                    if (confirm(localize("plugins.marketSearchFilters.playerIdWarning"))) {
                         cfg[id] = toggleState;
                         saveConfiguration();
                     }
-                }
-                else {
+                    else {
+                        return false;
+                    }
+                } else {
                     cfg[id] = toggleState;
                     saveConfiguration();
                 }
-            });
-        }
-
-        add('savedFilters');
-        add('playerId');
-        add('playerRating');
-        add('hideDuplicates');
-
-        return container;
+            }
+            else {
+                cfg[id] = toggleState;
+                saveConfiguration();
+            }
+        });
     }
 
-    plugin = {
-        run: run,
-        order: 5,
-        settings: {
-            name: 'market-search-filters',
-            title: 'plugins.marketSearchFilters.settings.title',
-            menu: menu
-        }
-    }
-    // #endif
+    add('savedFilters');
+    add('playerId');
+    add('playerRating');
+    add('hideDuplicates');
 
-    export default plugin;
+    return container;
+}
+
+plugin = {
+    run: run,
+    order: 5,
+    settings: {
+        name: 'market-search-filters',
+        title: 'plugins.marketSearchFilters.settings.title',
+        menu: menu
+    }
+}
+// #endif
+
+export default plugin;

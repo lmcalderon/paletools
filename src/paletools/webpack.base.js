@@ -1,4 +1,5 @@
 module.exports = {
+    DONATION: true,
     COMPARE_MIN_MAX_PRICES: true,
     DUPLICATED_TO_SBC: true,
     FILL_SBC_FROM_FUTBIN: true,

@@ -5,9 +5,15 @@ import styles from "./styles.css";
 import getCurrentController from "./utils/controller";
 import VERSION from "./version";
 import playAudio from "./utils/fx";
+import runOverrides from "./core-overrides";
 
 let initialized = false;
 function init() {
+    if (!services && !services.Localization) {
+        setTimeout(init, 1000);
+        return;
+    }
+
     const app = getAppMain();
     if (!app._ptVersion) {
         app._ptVersion = VERSION;
@@ -22,14 +28,11 @@ function init() {
     document.body.appendChild(iframe);
     window.console = iframe.contentWindow.console;
 
-    if (!services.Localization) {
-        setTimeout(init, 1000);
-        return;
-    }
-
+    
+    runOverrides();
     runPlugins();
     //let currentController = getCurrentController();
-    getAppMain().getRootViewController().showGameView();
+    app.getRootViewController().showGameView();
     // setTimeout(() => {
     //     getCurrentController().getNavigationController()._showController(currentController);
     // }, 1000);
@@ -38,13 +41,13 @@ function init() {
     initialized = true;
 
 /// #if process.env.FX
-    app._ptVersion += "fx";
+    // app._ptVersion += "fx";
 
-    playAudio("castigo");
+    // playAudio("castigo");
 
-    document.addEventListener("click", ev => {
-        playAudio("tuki");
-    });
+    // document.addEventListener("click", ev => {
+    //     playAudio("tuki");
+    // });
 /// #endif
 }
 

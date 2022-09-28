@@ -24,14 +24,14 @@ function run() {
                 this._maxPriceText.classList.add("max-price-value");
                 const minPriceContainer = document.createElement("span");
                 minPriceContainer.classList.add("min-price");
-                append(minPriceContainer, 
+                append(minPriceContainer,
                     createElem("span", { className: "min-price-label" }, localize("plugins.compareMinMaxPrices.minPriceLabel")),
                     this._minPriceText
                 );
 
                 const maxPriceContainer = document.createElement("span");
                 maxPriceContainer.classList.add("max-price");
-                append(maxPriceContainer, 
+                append(maxPriceContainer,
                     createElem("span", { className: "max-price-label" }, localize("plugins.compareMinMaxPrices.maxPriceLabel")),
                     this._maxPriceText
                 );
@@ -52,12 +52,16 @@ function run() {
         }
     }
 
+    const UTMarketSearchResultsViewController_setPinnedItem = UTMarketSearchResultsViewController.prototype.setPinnedItem;
+    UTMarketSearchResultsViewController.prototype.setPinnedItem = function setPinnedItem(e) {
+        UTMarketSearchResultsViewController_setPinnedItem.call(this, e);
+        this.getView()._hasCompareItem = !!e;
+    }
+
     const UTMarketSearchView_setItems = UTMarketSearchView.prototype.setItems;
     UTMarketSearchView.prototype.setItems = function setItems(e, t) {
         if (cfg.enabled) {
-            if (this._superview
-                && this._superview._superview
-                && this._superview._superview._rView instanceof UTNavigationContainerView) {
+            if (this._hasCompareItem) {
                 for (let entity of e) {
                     if (entity._auction.buyNowPrice > this._maxBuyNowPrice) {
                         this._maxBuyNowPrice = entity._auction.buyNowPrice;

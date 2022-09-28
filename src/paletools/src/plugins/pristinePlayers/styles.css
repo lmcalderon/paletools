@@ -4,4 +4,10 @@
     margin-right: 4px;
     color: #b9f2ff;
     font-size: 11px;
+    display: none;
 }
+
+.SearchResults .pristine-player::before {
+    display: inline-block;
+}
+

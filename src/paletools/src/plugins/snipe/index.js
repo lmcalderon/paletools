@@ -1,48 +1,89 @@
 let plugin;
 
 /// #if process.env.SNIPE
-import mouseClick from "../../utils/mouse";
-import localize from "../../localization";
-import settings from "../../settings";
-import { EVENTS, on } from "../../events";
 import enableDisableApp from "../../app";
+import { EVENTS, on } from "../../events";
+import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
+import localize from "../../localization";
+import { enableMarketSnipe } from "../../services/ui/market";
+import settings from "../../settings";
+import getCurrentController from "../../utils/controller";
+import { append, isVisible, select } from "../../utils/dom";
+import mouseClick from "../../utils/mouse";
 import { addStyle, removeStyle } from "../../utils/styles";
 import menu from "./menu";
-import getCurrentController from "../../utils/controller";
-import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
-import { isVisible, select } from "../../utils/dom";
 
 const cfg = settings.plugins.snipe;
 
-const utils_PopupManager_showConfirmation = utils.PopupManager.showConfirmation;
-utils.PopupManager.showConfirmation = function showConfirmation(e, t, i, o) {
-    if (!cfg.buttons.results.pressEnter) {
-        utils_PopupManager_showConfirmation(this, e, t, i, o);
-    }
-    else {
-        if (e !== utils.PopupManager.Confirmations.CONFIRM_BUY_NOW) {
+
+
+function run() {
+
+    let _isBotMode = false;
+
+    const utils_PopupManager_showConfirmation = utils.PopupManager.showConfirmation;
+    utils.PopupManager.showConfirmation = function showConfirmation(e, t, i, o) {
+        if (!cfg.buttons.results.pressEnter) {
             utils_PopupManager_showConfirmation.call(this, e, t, i, o);
         }
         else {
-            i();
+            if (e !== utils.PopupManager.Confirmations.CONFIRM_BUY_NOW) {
+                utils_PopupManager_showConfirmation.call(this, e, t, i, o);
+            }
+            else {
+                i();
+            }
         }
     }
-}
 
-const UTDefaultActionPanelView_render = UTDefaultActionPanelView.prototype.render;
-UTDefaultActionPanelView.prototype.render = function (e, t, i, o, n, r, s) {
-    UTDefaultActionPanelView_render.call(this, e, t, i, o, n, r, s);
-    if (!this.snipeGenerated) {
+    const UTDefaultActionPanelView_render = UTDefaultActionPanelView.prototype.render;
+    UTDefaultActionPanelView.prototype.render = function (e, t, i, o, n, r, s) {
+        UTDefaultActionPanelView_render.call(this, e, t, i, o, n, r, s);
+        if (!this.snipeGenerated) {
 
-        this._sendClubButton.getRootElement().classList.add("send-to-club");
-        this._sendTransferButton.getRootElement().classList.add("send-to-transfer-list");
-        this._discardButton.getRootElement().classList.add("quick-sell");
-        this._comparePriceButton.getRootElement().classList.add("compare-price");
-        this.snipeGenerated = true;
+            this._sendClubButton.getRootElement().classList.add("send-to-club");
+            this._sendTransferButton.getRootElement().classList.add("send-to-transfer-list");
+            this._discardButton.getRootElement().classList.add("quick-sell");
+            this._comparePriceButton.getRootElement().classList.add("compare-price");
+            this.snipeGenerated = true;
+        }
     }
-}
 
-function run() {
+    const UTMarketSearchFiltersView__generate = UTMarketSearchFiltersView.prototype._generate;
+
+    UTMarketSearchFiltersView.prototype._generate = function _generate() {
+        UTMarketSearchFiltersView__generate.call(this);
+
+        function addButton(container, button, buttonText, priceRow, className) {
+            button.init();
+            button.setText(buttonText);
+            button.addTarget(this, () => {
+                _isBotMode = true;
+                priceRow._currencyInput.beginIncrease();
+                priceRow._currencyInput.endIncrease();
+                this._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
+            }, EventType.TAP);
+            button.getRootElement().classList.add("call-to-action");
+            button.getRootElement().classList.add(className)
+
+            append(select(".button-container", container), button.getRootElement());
+        }
+
+        this._botModeIncMinBid = new UTStandardButtonControl();
+        this._botModeIncMinBuyNow = new UTStandardButtonControl();
+
+        addButton(this.__searchContainer, this._botModeIncMinBid, localize("plugins.snipe.settings.search.botModeMinBid"), this._minBidPriceRow, "snipe-min-bid");
+        addButton(this.__searchContainer, this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowRow, "snipe-min-buy-now");
+    }
+
+    const UTMarketSearchFiltersView_destroyGeneratedElements = UTMarketSearchFiltersView.prototype.destroyGeneratedElements;
+    UTMarketSearchFiltersView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
+        UTMarketSearchFiltersView_destroyGeneratedElements.call(this);
+
+        this._botModeIncMinBid.destroy();
+        this._botModeIncMinBuyNow.destroy();
+    }
+
 
     const
         enterBtn = () => select('.ea-dialog-view .ut-button-group button:nth-child(1)'),
@@ -64,7 +105,7 @@ function run() {
         },
         buyNow = () => {
             // Legacy Mode prevents from temporary bans, this will be the default from now on
-            if(true) { //if (cfg.legacyMode) {
+            if (true) { //if (cfg.legacyMode) {
                 if (mouseClick(buyBtn())) {
                     tryPressOkBtn();
                 }
@@ -144,12 +185,16 @@ function run() {
             keys[buttons.search.botModeMinBid] = () => {
                 if (buttons.search.enableBotMode) {
                     keys[buttons.search.incMinBid]();
+                    //search();
+                    isBotMode = true;
                     search();
                 }
             };
             keys[buttons.search.botModeMinBuy] = () => {
                 if (buttons.search.enableBotMode) {
                     keys[buttons.search.incMinBuy]()
+                    //search();
+                    isBotMode = true;
                     search();
                 }
             }
@@ -287,6 +332,8 @@ function run() {
         ${btn('.DetailPanel > .bidOptions', 'results', 'decBid', false)}
         ${btn('.DetailPanel > .bidOptions', 'results', 'incBid', true)}
         .ut-market-search-filters-view .call-to-action:after { content: '[ ${p.search.search}]'}
+        .ut-market-search-filters-view .call-to-action.snipe-min-bid:after { content: '[ ${p.search.botModeMinBid}]'}
+        .ut-market-search-filters-view .call-to-action.snipe-min-buy-now:after { content: '[ ${p.search.botModeMinBuy}]'}
         .ut-market-search-filters-view .search-price-header:first-child > button:after { content: '[ ${p.search.resetBid}]';  font-size: 10px; display: block  }
         .ut-navigation-button-control:after { font-size:10px; float:right; margin-right:12px; content: '[ ${p.back} ]' }
         .pagingContainer .prev:after { font-size: 10px; display:block; content: '[ ${p.lists.prev} ]' }
@@ -305,6 +352,11 @@ function run() {
             removeStyle('palesnipe-styles');
             addCss(cfg.buttons);
         };
+
+    enableMarketSnipe(() => _isBotMode,
+        () => {
+            _isBotMode = false;
+        });
 
     on(EVENTS.APP_ENABLED, () => {
         resetCss();

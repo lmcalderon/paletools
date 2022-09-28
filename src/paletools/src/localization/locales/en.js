@@ -80,8 +80,8 @@ export default {
     "plugins.snipe.settings.search.incMinBuy": "Increase min buy now value",
     "plugins.snipe.settings.search.decMaxBuy": "Decrease max buy now value",
     "plugins.snipe.settings.search.incMaxBuy": "Increase max buy now value",
-    "plugins.snipe.settings.search.botModeMinBid": "Bot mode, increment min bid",
-    "plugins.snipe.settings.search.botModeMinBuy": "Bot mode, increment min buy now",
+    "plugins.snipe.settings.search.botModeMinBid": "Bot mode, +Bid",
+    "plugins.snipe.settings.search.botModeMinBuy": "Bot mode, +Buy Now",
     "plugins.snipe.settings.legacyMode": "Use legacy mode for buying cards (palesnipe 3.1)",
     /// #endif
 

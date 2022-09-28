@@ -1,3 +1,6 @@
+let plugin;
+
+/// #if process.env.DONATION
 import VERSION from "../../version";
 import { addStyle } from "../../utils/styles";
 import styles from "./styles.css";
@@ -5,10 +8,6 @@ import localize from "../../localization";
 import { createElem } from "../../utils/dom";
 
 let version = VERSION;
-
-/// #if process.env.FX
-version += "-fx";
-/// #endif
 
 function run() {
 
@@ -24,7 +23,11 @@ function run() {
     addStyle('paletools-donation', styles);
 }
 
-export default {
+plugin =  {
     run: run,
     order: 2
 };
+
+
+/// #endif
+export default plugin;
