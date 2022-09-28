@@ -38,7 +38,7 @@ function init() {
         && !services.Localization 
         && !services.Authentication.sessionUtas 
         && !services.Authentication.sessionUtas.url)) {
-        setTimeout(init, 1000);
+        setTimeout(init, 100);
         return;
     }
 
@@ -74,7 +74,7 @@ function initHomePage() {
         getAppMain().getRootViewController().showGameView();
         triggerEvent(EVENTS.HOME_PAGE_LOADED);
     } else {
-        setTimeout(initHomePage, 1000);
+        setTimeout(initHomePage, 100);
     }
 }
 

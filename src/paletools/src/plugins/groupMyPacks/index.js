@@ -6,7 +6,7 @@ import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
 import settings, { saveConfiguration } from "../../settings";
 import { addStyle, removeStyle } from "../../utils/styles";
-import { addClass, append, createElem, detach, select, selectAll } from "../../utils/dom";
+import { addClass, append, createElem, detach, isVisible, select, selectAll } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 
 const cfg = settings.plugins.groupMyPacks;
@@ -73,8 +73,8 @@ function run() {
 
                 on(packCounter, "click", () => {
                     for(let pack of filteredPacks.filter(x => x.classList.contains("duplicated"))) {
-                        if (pack.style.display === "none") {
-                            pack.removeAttribute("style");
+                        if (isVisible(pack)) {
+                            show(pack);
                         }
                         else {
                             hide(pack);

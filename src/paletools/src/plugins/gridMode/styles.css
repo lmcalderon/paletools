@@ -182,6 +182,10 @@ section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-compone
 	display: none !important;
 }
 
+section.ui-layout-right .listFUTItem .auction {
+	display: none !important;
+}
+
 .ut-transfer-list-view .sectioned-item-list:nth-child(3) .listFUTItem {
 	display: inline-block !important;
     width: 90px !important;
@@ -189,6 +193,10 @@ section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-compone
 }
 
 .ut-transfer-list-view .sectioned-item-list:nth-child(3) .listFUTItem .name {
+	display: none !important;
+}
+
+.ut-transfer-list-view .sectioned-item-list:nth-child(3) .listFUTItem .auction {
 	display: none !important;
 }
 
@@ -202,7 +210,7 @@ section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-compone
 }
 
 .ut-store-hub-view--content .ut-store-pack-details-view {
-	display: inline-block !important;
+	display: inline-block;
 	margin-left:0 !important;
 	margin-right:10px !important;
 	width: 16% !important;
