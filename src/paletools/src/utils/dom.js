@@ -17,7 +17,7 @@ export function append(parent, ...children) {
     if (!parent) return;
 
     for (let child of children) {
-        if(!child) continue;
+        if (!child) continue;
 
         parent.append(child);
     }
@@ -29,7 +29,7 @@ export function prepend(parent, ...children) {
     if (!parent) return;
 
     for (let child of children) {
-        if(!child) continue;
+        if (!child) continue;
 
         parent.prepend(child);
     }
@@ -99,10 +99,14 @@ export function addClass(elem, ...className) {
     return elem;
 }
 
-export function hasClass(elem, className){
-    if(!elem) return;
+export function hasClass(elem, className) {
+    if (!elem) return false;
 
-    return elem.classList.contains(className);
+    if (elem.classList) {
+        return elem.classList.contains(className);
+    }
+
+    return false;
 }
 
 export function removeClass(elem, ...className) {
@@ -159,7 +163,7 @@ export function insertAfter(newNode, existingNode) {
 }
 
 export function detach(nodes) {
-    if(!nodes) return;
+    if (!nodes) return;
 
     if (isIterable(nodes)) {
         for (let node of nodes) {

@@ -1,9 +1,24 @@
 const gulp = require('gulp');
 const through = require('through2');
 const path = require('path');
-
+const fs = require("fs");
 
 const VERSION = "23.3.0";
+
+function stringSrc(filename, content) {
+    let src = require("stream").Readable({ objectMode: true });
+    src._read = function() {
+        this.push(new Vinyl({
+            cwd: "",
+            base: "",
+            path: filename,
+            contents: Buffer.from(content, "utf-8")
+        }));
+        this.push(null);
+    };
+
+    return src;
+}
 
 function getJsCode(filePath, vinylFile){
     return vinylFile.contents;
@@ -26,8 +41,16 @@ function base64Encode(getCode){
       });
 }
 
+gulp.task('deploymobile', function() {
+    fs.writeFileSync("d:\\code\\eallegretta.github.io\\fifa\\mobile-version.txt", VERSION);
+
+    return gulp.src(["./dist/paletools-mobile.*.js"])
+                .pipe(gulp.dest(`d:\\code\\eallegretta.github.io\\fifa\\dist\\paletools-mobile\\v${VERSION}\\`))
+});
+
 gulp.task('deploy', function () {
-    return gulp.src(['./dist/*.js'])
+    fs.writeFileSync("d:\\code\\eallegretta.github.io\\fifa\\version.txt", VERSION);
+    return gulp.src(['./dist/paletools.*.js'])
             .pipe(base64Encode(getJsCode))
             .pipe(gulp.dest(`d:\\code\\eallegretta.github.io\\fifa\\paletools-v${VERSION}\\`));
 });

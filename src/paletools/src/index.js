@@ -20,7 +20,10 @@ function setupPhoneView() {
 
 function removeOrientationWarning() {
     // Remove orientation warning
-    select(".ui-orientation-warning").style.display = "none";
+    const orientationWarning = select(".ui-orientation-warning");
+    if (orientationWarning) {
+        orientationWarning.style.display = "none";
+    }
 }
 
 function resetConsole() {
@@ -41,7 +44,7 @@ function init() {
         && !services.Localization
         && !services.Authentication.sessionUtas
         && !services.Authentication.sessionUtas.url)) {
-        setTimeout(init, 100);
+        setTimeout(init, 1000);
         return;
     }
 
@@ -75,7 +78,7 @@ function initHomePage() {
         getAppMain().getRootViewController().showGameView();
         triggerEvent(EVENTS.HOME_PAGE_LOADED);
     } else {
-        setTimeout(initHomePage, 100);
+        setTimeout(initHomePage, 1000);
     }
 }
 
