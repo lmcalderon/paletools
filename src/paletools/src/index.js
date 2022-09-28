@@ -6,14 +6,15 @@ import getCurrentController from "./utils/controller";
 import VERSION from "./version";
 import playAudio from "./utils/fx";
 import runOverrides from "./core-overrides";
-import { addClass, removeClass, select } from "./utils/dom";
+import { addClass, hasClass, removeClass, select } from "./utils/dom";
 import localize from "./localization";
 
-
 function setupPhoneView() {
-    if (isPhone()) {
+    if (isPhone && isPhone()) {
         const body = select("body");
-        addClass(removeClass(body, "landscape"), "phone");
+        if (!hasClass("phone")) {
+            addClass(removeClass(body, "landscape"), "phone");
+        }
     }
 }
 
@@ -33,10 +34,12 @@ function resetConsole() {
 let initialized = false;
 let isHomePageLoaded = false;
 function init() {
+    setupPhoneView();
+    removeOrientationWarning();
     const login = select(".ut-login");
-    if (login || (!services 
-        && !services.Localization 
-        && !services.Authentication.sessionUtas 
+    if (login || (!services
+        && !services.Localization
+        && !services.Authentication.sessionUtas
         && !services.Authentication.sessionUtas.url)) {
         setTimeout(init, 100);
         return;
@@ -51,8 +54,6 @@ function init() {
         return;
     }
 
-    setupPhoneView();
-    removeOrientationWarning();
     resetConsole();
     runOverrides();
     initHomePage();

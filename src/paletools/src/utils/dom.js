@@ -99,6 +99,12 @@ export function addClass(elem, ...className) {
     return elem;
 }
 
+export function hasClass(elem, className){
+    if(!elem) return;
+
+    return elem.classList.contains(className);
+}
+
 export function removeClass(elem, ...className) {
     if (!elem) return;
 
