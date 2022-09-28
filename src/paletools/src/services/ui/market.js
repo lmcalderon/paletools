@@ -8,11 +8,9 @@ import { navigateBack } from "./navigation";
 
 let scrollToBuyNow = false;
 
-const UTMarketSearchFiltersViewController_viewDidAppear = UTMarketSearchFiltersViewController.prototype.viewDidAppear;
-UTMarketSearchFiltersViewController.prototype.viewDidAppear = async function viewDidAppear() {
-    UTMarketSearchFiltersViewController_viewDidAppear.call(this);
-
-    await delay(10);
+const UTMarketSearchFiltersView_generate = UTMarketSearchFiltersView.prototype._generate;
+UTMarketSearchFiltersView.prototype._generate = function _generate() {
+    UTMarketSearchFiltersView_generate.call(this);
     const inputs = selectAll(".ut-numeric-input-spinner-control");
     if(inputs.length > 3){
         inputs[0].scrollIntoView();
