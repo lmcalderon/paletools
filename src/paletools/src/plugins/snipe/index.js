@@ -185,7 +185,9 @@ function run() {
                 if (buttons.search.enableBotMode) {
                     keys[buttons.search.incMinBid]();
                     //search();
-                    _isBotMode = true;
+                    if (cfg.buttons.search.botModeFullAuto) {
+                        _isBotMode = true;
+                    }
                     search();
                 }
             };
@@ -193,7 +195,9 @@ function run() {
                 if (buttons.search.enableBotMode) {
                     keys[buttons.search.incMinBuy]()
                     //search();
-                    _isBotMode = true;
+                    if (cfg.buttons.search.botModeFullAuto) {
+                        _isBotMode = true;
+                    }
                     search();
                 }
             }

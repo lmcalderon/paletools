@@ -26,7 +26,8 @@ const buttons = {
         botModeMinBuy: 'BracketLeft',
         enableBotMode: false,
         displayBotModeMinBid: true,
-        displayBotModeMinBuy: true
+        displayBotModeMinBuy: true,
+        botModeFullAuto: false,
     },
     results: {
         bid: 'Digit4',

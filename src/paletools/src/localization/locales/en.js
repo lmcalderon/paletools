@@ -85,6 +85,7 @@ export default {
     "plugins.snipe.settings.search.botModeMinBuy": "Bot Mode +Buy Now",
     "plugins.snipe.settings.search.displayBotModeMinBid": "Display Bot Mode +Bid button",
     "plugins.snipe.settings.search.displayBotModeMinBuy": "Display Bot Mode +Buy button",
+    "plugins.snipe.settings.search.displayBotModeFullAuto": "Bot Mode Fully Automatic",
     "plugins.snipe.settings.legacyMode": "Use legacy mode for buying cards (palesnipe 3.1)",
     /// #endif
 

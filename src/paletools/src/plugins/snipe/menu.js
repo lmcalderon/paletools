@@ -60,6 +60,7 @@ export default function menu(){
     input(bidContainer, "buttons.search.botModeMinBuy");
     toggle(bidContainer, "buttons.search.displayBotModeMinBid");
     toggle(bidContainer, "buttons.search.displayBotModeMinBuy");
+    toggle(bidContainer, "buttons.search.botModeFullAuto");
 
 
     container.appendChild(generalContainer);
