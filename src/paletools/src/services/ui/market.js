@@ -30,20 +30,20 @@ export function enableMarketSnipe(shouldSnipeFunc, onBack = null, onSnipeSuccess
                     return auctionA - auctionB;
                 });
 
-                tryBuyItem(orderedItems).then(success => {
-                    if (success) {
+                tryBuyItem(orderedItems).then(response => {
+                    if (response.success) {
                         if (onSnipeSuccess) {
-                            onSnipeSuccess();
+                            onSnipeSuccess(response.item);
                         }
-                        notifySuccess(localize("market.itemBuy.success"));
+                        notifySuccess(localize("market.itemBuy.success").replace("{COINS}", response.item._auction.buyNowPrice.toLocaleString()));
                     }
                     else {
                         if (onSnipeFailure) {
-                            onSnipeFailure();
+                            onSnipeFailure(response.item);
                         }
                     }
                 }).catch(() => {
-                    onSnipeFailure();
+                    onSnipeFailure(response.item);
                 }).finally(() => {
                     goBack();
                 });

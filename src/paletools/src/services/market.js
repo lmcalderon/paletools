@@ -15,10 +15,10 @@ export function tryBuyItem(items) {
                 itemActionController.bid(item, auction.buyNowPrice).observe(this, function (e, t) {
                     e.unobserve(this);
                     if (t.success) {
-                        resolve(true);
+                        resolve({ success: true, item: item });
                     }
                     else {
-                        resolve(false);
+                        resolve({ success: false, item: item });
                     }
                 });
                 break;

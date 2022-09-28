@@ -5,7 +5,7 @@ export default {
     "ui.loadingPlayers": "Cargando club: {count} jugadores cargados",
     "plugins.dangerous": "CUIDADO: Habilitar este plugin puede llevar eventualmente a un BAN por parte de EA de tu cuenta, ¿ESTAS SEGURO DE QUERER CONTINUAR?",
     "page.restart": "Por favor recarga la página y re ejecuta Paletools para que los cambios tomen efecto",
-    "market.itemBuy.success": "¡Compra realizada correctamente!",
+    "market.itemBuy.success": "¡Compra realizada correctamente! - {COINS}",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Modo grilla",
