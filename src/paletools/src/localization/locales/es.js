@@ -85,7 +85,7 @@ export default {
     "plugins.snipe.settings.search.botModeMinBuy": "Modo Bot +Comprar Ahora",
     "plugins.snipe.settings.search.displayBotModeMinBid": "Mostrar boton Modo Bot +Bid",
     "plugins.snipe.settings.search.displayBotModeMinBuy": "Mostrar boton Modo Bot +Buy",
-    "plugins.snipe.settings.search.displayBotModeFullAuto": "Modo Bot Totalmente Automatico",
+    "plugins.snipe.settings.search.botModeFullAuto": "Modo Bot Totalmente Automatico",
     "plugins.snipe.settings.legacyMode": "Usar modo legacy para comprar (palesnipe 3.1)",
     /// #endif
 
