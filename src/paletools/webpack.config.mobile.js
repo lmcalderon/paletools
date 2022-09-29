@@ -15,7 +15,6 @@ module.exports = (env) => {
         SNIPE_MOBILE: true,
         CLUB_ANALYZER: false,
         SBC_BUILDER_ENHACER: false,
-        SELL_MULTIPLE: false,
     
         SBC_SMART_BUILDER: false,
         CLUB_SEARCH_ENHACER: false,

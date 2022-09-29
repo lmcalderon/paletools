@@ -13,7 +13,11 @@ function setupPhoneView() {
     if (isPhone && isPhone()) {
         const body = select("body");
         if (!hasClass("phone")) {
-            addClass(removeClass(body, "landscape"), "phone");
+            addClass(
+                removeClass(
+                    removeClass(body, "landscape"), 
+                    "web"), 
+                "phone");
         }
     }
 }

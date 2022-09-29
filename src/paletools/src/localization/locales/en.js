@@ -137,7 +137,7 @@ export default {
     // #endif
 
     /// #if process.env.SETTINGS_MENU
-    "plugins.settings.title": "Paletools Settings",
+    "plugins.settings.title": "Paletools",
     /// #endif
 
     /// #if process.env.CLUB_ANALYZER

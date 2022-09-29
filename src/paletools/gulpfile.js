@@ -3,7 +3,7 @@ const through = require('through2');
 const path = require('path');
 const fs = require("fs");
 
-const VERSION = "23.3.3";
+const VERSION = "23.3.4";
 
 function stringSrc(filename, content) {
     let src = require("stream").Readable({ objectMode: true });
@@ -50,7 +50,7 @@ gulp.task('deploymobile', function() {
 
 gulp.task('deploy', function () {
     fs.writeFileSync("d:\\code\\eallegretta.github.io\\fifa\\version.txt", VERSION);
-    return gulp.src(['./dist/paletools.*.js'])
+    return gulp.src(['./dist/*.js'])
             .pipe(base64Encode(getJsCode))
             .pipe(gulp.dest(`d:\\code\\eallegretta.github.io\\fifa\\paletools-v${VERSION}\\`));
 });

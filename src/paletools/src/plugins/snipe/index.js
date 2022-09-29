@@ -12,11 +12,17 @@ import { incrementPriceRow } from "../../services/ui/search";
 import settings from "../../settings";
 import getCurrentController from "../../utils/controller";
 import { append, isVisible, select } from "../../utils/dom";
+import { displayLoader } from "../../utils/loader";
 import mouseClick from "../../utils/mouse";
 import { addStyle, removeStyle } from "../../utils/styles";
 import menu from "./menu";
 
 const cfg = settings.plugins.snipe;
+
+function requestSnipe(){
+    displayLoader();
+    addSnipeRequest();
+}
 
 function run() {
     enableMarketSnipe();
@@ -58,7 +64,7 @@ function run() {
             button.init();
             button.setText(buttonText);
             button.addTarget(this, () => {
-                addSnipeRequest();
+                requestSnipe();
                 incrementPriceRow(priceRow, self._maxBuyNowPriceRow);
                 self._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
             }, EventType.TAP);
@@ -183,7 +189,7 @@ function run() {
                     keys[buttons.search.incMinBid]();
                     //search();
                     if (cfg.buttons.search.botModeFullAuto) {
-                        addSnipeRequest();
+                        requestSnipe();
                     }
                     search();
                 }
@@ -193,7 +199,7 @@ function run() {
                     keys[buttons.search.incMinBuy]()
                     //search();
                     if (cfg.buttons.search.botModeFullAuto) {
-                        addSnipeRequest();
+                        requestSnipe();
                     }
                     search();
                 }

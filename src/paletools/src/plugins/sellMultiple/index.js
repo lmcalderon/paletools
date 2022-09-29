@@ -17,6 +17,7 @@ import { listItemOnTransferMarket } from "../../services/transferMarket";
 import { displayLoader, hideLoader } from "../../utils/loader";
 import delay from "../../utils/delay";
 import { addClass, append, css, select } from "../../utils/dom";
+import SwipeEventDispatcher from "../../utils/swipe";
 const cfg = settings.plugins.sellMultiple;
 
 const SELL_MULTIPLE_MAX_PLAYERS = 25;
@@ -37,8 +38,23 @@ function addSellMultiple(output) {
     sellMultipleButton.setInteractionState(false);
     sellMultipleButton.setText(localize("plugins.sellMultiple.button.text"));
 
+    const chkClassName = "sell-multiple-checkbox";
+
+    function verifyCheckboxState(chk, item){
+        if (chk) {
+            output.selectedCardsCount++;
+            selectedCards[item.data.id] = item.data;
+        } else {
+            output.selectedCardsCount--;
+            delete selectedCards[item.data.id];
+        }
+
+        sellMultipleButton.setInteractionState(Object.keys(selectedCards).length > 0);
+    }
+
     for (let item of output.listRows) {
         var checkbox = document.createElement("input");
+        checkbox.classList.add(chkClassName);
         checkbox.type = "checkbox";
         checkbox.addEventListener("change", ev => {
             if (ev.target.checked && output.selectedCardsCount === SELL_MULTIPLE_MAX_PLAYERS) {
@@ -48,19 +64,20 @@ function addSellMultiple(output) {
                 return false;
             }
 
-            if (ev.target.checked) {
-                output.selectedCardsCount++;
-                selectedCards[item.data.id] = item.data;
-            } else {
-                output.selectedCardsCount--;
-                delete selectedCards[item.data.id];
-            }
-
-            sellMultipleButton.setInteractionState(Object.keys(selectedCards).length > 0);
+            verifyCheckboxState(ev.target, item);
             ev.stopPropagation();
         });
 
         append(select(".item", item.getRootElement()), checkbox);
+
+        if(isPhone()){
+            const swipeEvent = new SwipeEventDispatcher(item.getRootElement());
+            swipeEvent.on("SWIPE_LEFT", () => {
+                const chk = select(`.${chkClassName}`, item.getRootElement());
+                chk.checked = chk.checked;
+                verifyCheckboxState(chk, item);
+            });
+        }
     }
 
 

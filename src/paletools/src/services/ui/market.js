@@ -29,12 +29,10 @@ export function enableMarketSnipe() {
 
         if (_snipeRequests.length === 0) return true;
 
-        displayLoader();
         let request = _snipeRequests.shift();
 
         function goBack() {
             delay(50).then(() => {
-                hideLoader();
                 navigateBack(controller);
             });
         }
