@@ -1,6 +1,8 @@
 import { addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
 import localize from "../../localization";
+import delay from "../../utils/delay";
 import { selectAll } from "../../utils/dom";
+import { displayLoader, hideLoader } from "../../utils/loader";
 import { notifySuccess } from "../../utils/notifications";
 import { getUnassignedPlayers } from "../club";
 import { tryBuyItem } from "../market";
@@ -8,7 +10,7 @@ import { navigateBack } from "./navigation";
 
 const _snipeRequests = [];
 
-export function addSnipeRequest(request = () => {}){
+export function addSnipeRequest(request = () => { }) {
     _snipeRequests.push(request);
 }
 
@@ -16,7 +18,7 @@ const UTMarketSearchFiltersView_generate = UTMarketSearchFiltersView.prototype._
 UTMarketSearchFiltersView.prototype._generate = function _generate() {
     UTMarketSearchFiltersView_generate.call(this);
     const inputs = selectAll(".ut-numeric-input-spinner-control");
-    if(inputs.length > 3){
+    if (inputs.length > 3) {
         inputs[0].scrollIntoView();
     }
 }
@@ -24,13 +26,17 @@ UTMarketSearchFiltersView.prototype._generate = function _generate() {
 
 export function enableMarketSnipe() {
     addMarketSearchPreRender((items, controller) => {
-        
-        if(_snipeRequests.length === 0) return true;
-        
+
+        if (_snipeRequests.length === 0) return true;
+
+        displayLoader();
         let request = _snipeRequests.shift();
 
         function goBack() {
-            navigateBack(controller, 50);
+            delay(50).then(() => {
+                hideLoader();
+                navigateBack(controller);
+            });
         }
 
         setTimeout(() => {
@@ -49,15 +55,21 @@ export function enableMarketSnipe() {
                         request({ success: true, item: response.item });
 
                         // this refreshes the unassigned players at the home page
-                        getUnassignedPlayers(); 
+                        getUnassignedPlayers();
 
                         notifySuccess(localize("market.itemBuy.success").replace("{COINS}", response.item._auction.buyNowPrice.toLocaleString()));
                     }
                     else {
-                        request({ success: false, item: response.item });
+                        try {
+                            request({ success: false, item: response.item });
+                        }
+                        catch { }
                     }
                 }).catch(err => {
-                    request({ success: false, item: response.item, error: err});
+                    try {
+                        request({ success: false, item: response.item, error: err });
+                    }
+                    catch { }
                 }).finally(() => {
                     goBack();
                 });

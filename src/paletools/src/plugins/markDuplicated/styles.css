@@ -4,7 +4,7 @@
     opacity: 1 !important;
 }
 
-.playerResultsList .club-duplicated:after {
+.playerResultsList .club-duplicated > span:first-child:after {
     content: "\E009";
     font-family: UltimateTeam-Icons,sans-serif;
     color: #00ff00;
@@ -13,7 +13,7 @@
     margin-left: 0;
 } 
 
-.playerResultsList .club-untradeable:before {
+.playerResultsList .club-untradeable > span:first-child::before {
     content: "\E06F";
     font-family: UltimateTeam-Icons,sans-serif;
     color: #ffd100;

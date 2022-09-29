@@ -1,16 +1,24 @@
 import getCurrentController from "../../utils/controller";
 import delay from "../../utils/delay";
+import { select } from "../../utils/dom";
+import pointerClick from "../../utils/pointer";
 
-export function navigateBack(controller, delayMs){
+export function navigateBack(controller, delayMs) {
     function back() {
-        (controller || getCurrentController()).getNavigationController()._eBackButtonTapped();
+        try {
+            (controller || getCurrentController()).getNavigationController()._eBackButtonTapped();
+        }
+        catch {
+            pointerClick(select(".ut-navigation-button-control"));
+        }
     }
 
-    if(delay){
+    if (delay) {
         delay(delayMs).then(() => {
             back();
         });
     }
-
-    back();
+    else {
+        back();
+    }
 }

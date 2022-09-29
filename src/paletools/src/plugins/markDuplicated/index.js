@@ -59,9 +59,9 @@ function run() {
                     if (!t[index]) continue;
                     const player = t[index];
                     if (club[player.id]) {
-                        this.__playerResultsList.children[index].children[0].classList.add('club-duplicated');
+                        this.__playerResultsList.children[index].classList.add('club-duplicated');
                         if(club[player.id].untradeable){
-                            this.__playerResultsList.children[index].children[0].classList.add('club-untradeable');
+                            this.__playerResultsList.children[index].classList.add('club-untradeable');
                         }
                     }
                 }
