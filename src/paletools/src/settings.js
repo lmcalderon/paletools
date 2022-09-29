@@ -25,8 +25,8 @@ const buttons = {
         botModeMinBid: 'BracketRight',
         botModeMinBuy: 'BracketLeft',
         enableBotMode: false,
-        displayBotModeMinBid: true,
-        displayBotModeMinBuy: true,
+        displayBotModeMinBid: false,
+        displayBotModeMinBuy: false,
         botModeFullAuto: false,
     },
     results: {
