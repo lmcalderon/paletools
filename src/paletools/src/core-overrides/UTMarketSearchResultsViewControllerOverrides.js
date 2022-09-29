@@ -39,16 +39,16 @@ export default function executeMarketSearchResultsViewControllerOverrides() {
                 let itemsPerPage = this._paginationViewModel.getNumItemsPerPage();
                 let items = t.data.items.slice();
 
+                if(marketSearchFilters.length > 0){
+                    for(let filter of marketSearchFilters){
+                        items = filter(items, this);
+                    }
+                }
+
                 for(let onPreRender of marketSearchPreRender){
                     let shouldContinue = onPreRender(items, this);
                     if(!shouldContinue){
                         return;
-                    }
-                }
-
-                if(marketSearchFilters.length > 0){
-                    for(let filter of marketSearchFilters){
-                        items = filter(items, this);
                     }
                 }
 

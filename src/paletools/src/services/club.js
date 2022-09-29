@@ -107,7 +107,7 @@ function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback
     });
 }
 
-export function getUnnasignedPlayers() {
+export function getUnassignedPlayers() {
     //return http('purchased/items');
     repositories.Item.setDirty(ItemPile.PURCHASED);
     sendPinEvents("Unassigned Items - List View");

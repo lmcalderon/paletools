@@ -2,8 +2,15 @@ import { addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchRes
 import localize from "../../localization";
 import { selectAll } from "../../utils/dom";
 import { notifySuccess } from "../../utils/notifications";
+import { getUnassignedPlayers } from "../club";
 import { tryBuyItem } from "../market";
 import { navigateBack } from "./navigation";
+
+const _snipeRequests = [];
+
+export function addSnipeRequest(request = () => {}){
+    _snipeRequests.push(request);
+}
 
 let scrollToBuyNow = false;
 
@@ -18,16 +25,15 @@ UTMarketSearchFiltersView.prototype._generate = function _generate() {
     scrollToBuyNow = true;
 }
 
-export function enableMarketSnipe(shouldSnipeFunc, onBack = null, onSnipeSuccess = null, onSnipeFailure = null) {
 
-
+export function enableMarketSnipe() {
     addMarketSearchPreRender((items, controller) => {
-        if (!shouldSnipeFunc()) return true;
+        
+        if(_snipeRequests.length === 0) return true;
+        
+        let request = _snipeRequests.shift();
 
         function goBack() {
-            if (onBack) {
-                onBack();
-            }
             navigateBack(controller);
             scrollToBuyNow = true;
         }
@@ -45,18 +51,18 @@ export function enableMarketSnipe(shouldSnipeFunc, onBack = null, onSnipeSuccess
 
                 tryBuyItem(orderedItems).then(response => {
                     if (response.success) {
-                        if (onSnipeSuccess) {
-                            onSnipeSuccess(response.item);
-                        }
+                        request({ success: true, item: response.item });
+
+                        // this refreshes the unassigned players at the home page
+                        getUnassignedPlayers(); 
+                        
                         notifySuccess(localize("market.itemBuy.success").replace("{COINS}", response.item._auction.buyNowPrice.toLocaleString()));
                     }
                     else {
-                        if (onSnipeFailure) {
-                            onSnipeFailure(response.item);
-                        }
+                        request({ success: false, item: response.item });
                     }
-                }).catch(() => {
-                    onSnipeFailure(response.item);
+                }).catch(err => {
+                    request({ success: false, item: response.item, error: err});
                 }).finally(() => {
                     goBack();
                 });

@@ -4,8 +4,8 @@ let plugin;
 
 /// #if process.env.SNIPE_MOBILE
 import { addLabelWithToggle } from "../../controls";
-import { getUnnasignedPlayers } from "../../services/club";
-import { enableMarketSnipe } from "../../services/ui/market";
+import { getUnassignedPlayers } from "../../services/club";
+import { addSnipeRequest, enableMarketSnipe } from "../../services/ui/market";
 import { incrementPriceRow } from "../../services/ui/search";
 import { append, select } from "../../utils/dom";
 import settings, { saveConfiguration } from "../../settings";
@@ -14,7 +14,8 @@ const cfg = settings.plugins.snipe;
 
 function run() {
 
-    let _tryToSnipe = false;
+    enableMarketSnipe();
+
     const UTMarketSearchFiltersView__generate = UTMarketSearchFiltersView.prototype._generate;
 
     UTMarketSearchFiltersView.prototype._generate = function _generate() {
@@ -26,7 +27,7 @@ function run() {
         this._snipeButton.init();
         this._snipeButton.setText("SNIPE");
         this._snipeButton.addTarget(this, () => {
-            _tryToSnipe = true;
+            addSnipeRequest();
 
             incrementPriceRow(this._minBidPriceRow, this._maxBuyNowPriceRow);
             this._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
@@ -43,14 +44,6 @@ function run() {
         if (!cfg.enabled) return;
         this._snipeButton.destroy();
     }
-
-    enableMarketSnipe(
-        () => _tryToSnipe,
-        () => {
-            _tryToSnipe = false;
-        }, () => {
-            getUnnasignedPlayers();
-        });
 }
 
 function menu() {

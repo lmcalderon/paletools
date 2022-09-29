@@ -5,9 +5,9 @@ import enableDisableApp from "../../app";
 import { EVENTS, on } from "../../events";
 import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
 import localize from "../../localization";
-import { getUnnasignedPlayers } from "../../services/club";
+import { getUnassignedPlayers } from "../../services/club";
 import sendPinEvents from "../../services/pinEvents";
-import { enableMarketSnipe } from "../../services/ui/market";
+import { addSnipeRequest, enableMarketSnipe } from "../../services/ui/market";
 import { incrementPriceRow } from "../../services/ui/search";
 import settings from "../../settings";
 import getCurrentController from "../../utils/controller";
@@ -18,11 +18,8 @@ import menu from "./menu";
 
 const cfg = settings.plugins.snipe;
 
-
-
 function run() {
-
-    let _isBotMode = false;
+    enableMarketSnipe();
 
     const utils_PopupManager_showConfirmation = utils.PopupManager.showConfirmation;
     utils.PopupManager.showConfirmation = function showConfirmation(e, t, i, o) {
@@ -57,14 +54,11 @@ function run() {
     UTMarketSearchFiltersView.prototype._generate = function _generate() {
         UTMarketSearchFiltersView__generate.call(this);
         const self = this;
-        function addButton(button, buttonText, priceRow, className) {
+        function addBotModeButton(button, buttonText, priceRow, className) {
             button.init();
             button.setText(buttonText);
             button.addTarget(this, () => {
-                if (cfg.buttons.search.botModeFullAuto) {
-                    _isBotMode = true;
-                }
-
+                addSnipeRequest();
                 incrementPriceRow(priceRow, self._maxBuyNowPriceRow);
                 self._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
             }, EventType.TAP);
@@ -78,11 +72,11 @@ function run() {
         this._botModeIncMinBuyNow = new UTStandardButtonControl();
 
         if (cfg.buttons.search.displayBotModeMinBid) {
-            addButton(this._botModeIncMinBid, localize("plugins.snipe.settings.search.botModeMinBid"), this._minBidPriceRow, "snipe-min-bid");
+            addBotModeButton(this._botModeIncMinBid, localize("plugins.snipe.settings.search.botModeMinBid"), this._minBidPriceRow, "snipe-min-bid");
         }
 
         if (cfg.buttons.search.displayBotModeMinBuy) {
-            addButton(this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowRow, "snipe-min-buy-now");
+            addBotModeButton(this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowRow, "snipe-min-buy-now");
         }
     }
 
@@ -189,7 +183,7 @@ function run() {
                     keys[buttons.search.incMinBid]();
                     //search();
                     if (cfg.buttons.search.botModeFullAuto) {
-                        _isBotMode = true;
+                        addSnipeRequest();
                     }
                     search();
                 }
@@ -199,7 +193,7 @@ function run() {
                     keys[buttons.search.incMinBuy]()
                     //search();
                     if (cfg.buttons.search.botModeFullAuto) {
-                        _isBotMode = true;
+                        addSnipeRequest();
                     }
                     search();
                 }
@@ -358,13 +352,6 @@ function run() {
             removeStyle('paletools-snipe-styles');
             addCss(cfg.buttons);
         };
-
-    enableMarketSnipe(() => _isBotMode,
-        () => {
-            _isBotMode = false;
-        }, () => {
-            getUnnasignedPlayers();
-        });
 
     on(EVENTS.APP_ENABLED, () => {
         resetCss();

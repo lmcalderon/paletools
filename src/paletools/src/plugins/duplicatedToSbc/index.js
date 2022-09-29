@@ -3,7 +3,7 @@ let plugin;
 /// #if process.env.DUPLICATED_TO_SBC
 import { addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
-import { getAllClubPlayers, getUnnasignedPlayers } from "../../services/club";
+import { getAllClubPlayers, getUnassignedPlayers } from "../../services/club";
 import getCurrentController from "../../utils/controller";
 import settings from "../../settings";
 import { EVENTS, on } from "../../events";
@@ -61,7 +61,7 @@ function run() {
 
     function fillSbcWithUnnasignedPlayers(onClubBatchLoadedCallback) {
         return new Promise(resolve => {
-            getUnnasignedPlayers().then(unassignedPlayers => {
+            getUnassignedPlayers().then(unassignedPlayers => {
                 const distinctItemIds = {};
 
                 for (const unassignedPlayer of unassignedPlayers) {
