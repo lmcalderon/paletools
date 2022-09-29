@@ -20,15 +20,13 @@ function run() {
     UTMarketSearchFiltersView.prototype._generate = function _generate() {
         UTMarketSearchFiltersView__generate.call(this);
 
-        if(!cfg.enabled) return;
+        if (!cfg.enabled) return;
 
         this._snipeButton = new UTStandardButtonControl();
         this._snipeButton.init();
         this._snipeButton.setText("SNIPE");
         this._snipeButton.addTarget(this, () => {
-            if (cfg.buttons.search.botModeFullAuto) {
-                _tryToSnipe = true;
-            }
+            _tryToSnipe = true;
 
             incrementPriceRow(this._minBidPriceRow, this._maxBuyNowPriceRow);
             this._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
@@ -42,7 +40,7 @@ function run() {
     const UTMarketSearchFiltersView_destroyGeneratedElements = UTMarketSearchFiltersView.prototype.destroyGeneratedElements;
     UTMarketSearchFiltersView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
         UTMarketSearchFiltersView_destroyGeneratedElements.call(this);
-
+        if (!cfg.enabled) return;
         this._snipeButton.destroy();
     }
 
@@ -62,17 +60,16 @@ function menu() {
         saveConfiguration();
     });
 
-    addLabelWithToggle(container, "plugins.snipe.settings.search.botModeFullAuto", cfg.buttons.search.botModeFullAuto, toggleState => {
-        cfg.buttons.search.botModeFullAuto = toggleState;
-        saveConfiguration();
-    });
-
     return container;
 }
 
 plugin = {
     run: run,
-    menu: menu,
+    settings: {
+        name: "snipe",
+        title: 'plugins.snipe.settings.title',
+        menu: menu
+    },
     order: 0
 };
 ///#endif

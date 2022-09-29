@@ -73,7 +73,8 @@ let settings = {
         },
         snipe: {
             buttons: buttons,
-            legacyMode: false
+            legacyMode: false,
+            enabled: true
         },
         duplicatedToSbc: {
             enabled: true
