@@ -35,7 +35,7 @@ function resetConsole() {
 }
 
 let initialized = false;
-let isHomePageLoaded = false;
+let isAppLoaded = false;
 function init() {
     setupPhoneView();
     removeOrientationWarning();
@@ -59,26 +59,26 @@ function init() {
 
     resetConsole();
     runOverrides();
-    initHomePage();
+    initApp();
     triggerEvent(EVENTS.APP_STARTED);
     initialized = true;
 }
 
-function initHomePage() {
+function initApp() {
     if (services.Localization) {
-        const title = select("h1.title");
-        if (title && title.textContent === localize("navbar.label.home")) {
-            isHomePageLoaded = true;
+        const tabBar = select(".ut-tab-bar");
+        if (tabBar) {
+            isAppLoaded = true;
         }
     }
 
-    if (isHomePageLoaded) {
+    if (isAppLoaded) {
         addStyle("paletools", styles);
         runPlugins();
         getAppMain().getRootViewController().showGameView();
-        triggerEvent(EVENTS.HOME_PAGE_LOADED);
+        triggerEvent(EVENTS.APP_LOADED);
     } else {
-        setTimeout(initHomePage, 1000);
+        setTimeout(initApp, 1000);
     }
 }
 

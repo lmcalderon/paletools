@@ -27,5 +27,5 @@ export const EVENTS = {
     APP_STARTED: "appStarted",
     CONFIGURATION_SAVED: "configurationSaved",
     CONFIGURATION_LOADED: "configurationLoaded",
-    HOME_PAGE_LOADED: "homePageLoaded"
+    APP_LOADED: "appLoaded"
 }

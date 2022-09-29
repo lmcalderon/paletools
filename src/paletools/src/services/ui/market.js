@@ -12,8 +12,6 @@ export function addSnipeRequest(request = () => {}){
     _snipeRequests.push(request);
 }
 
-let scrollToBuyNow = false;
-
 const UTMarketSearchFiltersView_generate = UTMarketSearchFiltersView.prototype._generate;
 UTMarketSearchFiltersView.prototype._generate = function _generate() {
     UTMarketSearchFiltersView_generate.call(this);
@@ -21,8 +19,6 @@ UTMarketSearchFiltersView.prototype._generate = function _generate() {
     if(inputs.length > 3){
         inputs[0].scrollIntoView();
     }
-
-    scrollToBuyNow = true;
 }
 
 
@@ -34,8 +30,7 @@ export function enableMarketSnipe() {
         let request = _snipeRequests.shift();
 
         function goBack() {
-            navigateBack(controller);
-            scrollToBuyNow = true;
+            navigateBack(controller, 50);
         }
 
         setTimeout(() => {
@@ -55,7 +50,7 @@ export function enableMarketSnipe() {
 
                         // this refreshes the unassigned players at the home page
                         getUnassignedPlayers(); 
-                        
+
                         notifySuccess(localize("market.itemBuy.success").replace("{COINS}", response.item._auction.buyNowPrice.toLocaleString()));
                     }
                     else {

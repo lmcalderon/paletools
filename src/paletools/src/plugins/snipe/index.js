@@ -76,7 +76,7 @@ function run() {
         }
 
         if (cfg.buttons.search.displayBotModeMinBuy) {
-            addBotModeButton(this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowRow, "snipe-min-buy-now");
+            addBotModeButton(this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowPriceRow, "snipe-min-buy-now");
         }
     }
 
