@@ -5,7 +5,7 @@ export default function executeMarketSearchFiltersViewOverrides() {
 
         const maskedDefId = services.User.getUser().marketSearchCriteria.maskedDefId;
         if(maskedDefId){
-            this._searchFilters.getPlayerNameSearch.setPlayerData(repositories.Item.getStaticDataByDefId(maskedDefId))
+            this._searchFilters.getPlayerNameSearch().setPlayerData(repositories.Item.getStaticDataByDefId(maskedDefId))
         }
     }
 }
