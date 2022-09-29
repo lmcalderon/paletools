@@ -26,7 +26,7 @@ function run() {
 
     UTTransfersHubViewController.prototype._requestTransferTargetData = function () {
         if (settings.enabled && cfg.enabled) {
-            loadClubPlayers().then(currentClub => {club = currentClub; console.log(club)});
+            loadClubPlayers().then(currentClub => {club = currentClub});
         }
 
         UTTransfersHubViewController_requestTransferTargetData.call(this);
