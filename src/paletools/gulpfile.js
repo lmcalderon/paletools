@@ -3,7 +3,7 @@ const through = require('through2');
 const path = require('path');
 const fs = require("fs");
 
-const VERSION = "23.3.0";
+const VERSION = "23.3.1";
 
 function stringSrc(filename, content) {
     let src = require("stream").Readable({ objectMode: true });

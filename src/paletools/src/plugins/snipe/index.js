@@ -61,6 +61,10 @@ function run() {
             button.init();
             button.setText(buttonText);
             button.addTarget(this, () => {
+                if (cfg.buttons.search.botModeFullAuto) {
+                    _isBotMode = true;
+                }
+
                 incrementPriceRow(priceRow, self._maxBuyNowPriceRow);
                 self._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
             }, EventType.TAP);
