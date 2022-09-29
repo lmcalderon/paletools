@@ -89,6 +89,10 @@ export default {
     "plugins.snipe.settings.legacyMode": "Use legacy mode for buying cards (palesnipe 3.1)",
     /// #endif
 
+    /// #if process.env.SNIPE_MOBILE
+    "plugins.snipe.settings.title": "Sniping",
+    /// #endif
+
     // #if process.env.DUPLICATED_TO_SBC
     "plugins.duplicatedToSbc.button.text": "Use duplicated players",
     "plugins.duplicatedToSbc.settings.title": "Duplicated to SBC",
