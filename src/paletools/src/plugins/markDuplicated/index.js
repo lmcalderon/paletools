@@ -26,7 +26,7 @@ function run() {
 
     UTTransfersHubViewController.prototype._requestTransferTargetData = function () {
         if (settings.enabled && cfg.enabled) {
-            loadClubPlayers();
+            loadClubPlayers().then(currentClub => {club = currentClub; console.log(club)});
         }
 
         UTTransfersHubViewController_requestTransferTargetData.call(this);
@@ -35,7 +35,6 @@ function run() {
     const UTItemTableCellView_render = UTItemTableCellView.prototype.render;
     UTItemTableCellView.prototype.render = function (e) {
         UTItemTableCellView_render.call(this, e);
-
         if (settings.enabled && cfg.enabled) {
             if (this.data.duplicateId) {
                 $(this.__entityContainer).addClass("club-duplicated");
