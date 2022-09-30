@@ -43,7 +43,11 @@ function base64Encode(getCode){
 
 gulp.task('deploy', function () {
     fs.writeFileSync("d:\\code\\eallegretta.github.io\\fifa\\version.txt", VERSION);
-    return gulp.src(['./dist/*.js'])
+
+    return gulp.src(['./dist/paletools-mobile*.js'])
+            .pipe(gulp.dest(`d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\`));
+
+    return gulp.src(['./dist/paletools.prod.js'])
             .pipe(base64Encode(getJsCode))
             .pipe(gulp.dest(`d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\`));
 });
