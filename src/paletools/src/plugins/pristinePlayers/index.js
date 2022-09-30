@@ -22,7 +22,7 @@ function run() {
         if (!this.data.isPlayer()) return;
 
         if(this.data.contract === 7 && this.data.owners === 1 && this.data.loans === -1){
-            addClass(this.__name, "pristine-player");
+            addClass(this.getRootElement(), "pristine-player");
         }
     }
 

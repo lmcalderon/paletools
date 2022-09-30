@@ -1,13 +1,16 @@
-.pristine-player::before {
+.pristine-player .ut-item-view--main::after {
     font-family:"UltimateTeam-Icons";
     content: "\E00C";
     margin-right: 4px;
     color: #b9f2ff;
     font-size: 11px;
     display: none;
+    position: absolute;
+    width: 100%;
+    text-align: center;
 }
 
-.SearchResults .pristine-player::before {
+.SearchResults .pristine-player .ut-item-view--main::after {
     display: inline-block;
 }
 

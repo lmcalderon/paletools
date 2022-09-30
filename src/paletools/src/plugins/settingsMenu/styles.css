@@ -39,6 +39,13 @@
     height: 50px;
 }
 
+.reset-settings {
+    margin-right: 0;
+    margin-left: auto;
+    background-color: red;
+    color: white;
+}
+
 
 #paletools-settings-snipe-container > div > div > div > label {
     display: table-cell;

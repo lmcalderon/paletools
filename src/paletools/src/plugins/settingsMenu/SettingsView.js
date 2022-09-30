@@ -1,5 +1,6 @@
 import localize from "../../localization";
-import { createElem } from "../../utils/dom";
+import { resetConfiguration } from "../../settings";
+import { addClass, createElem } from "../../utils/dom";
 
 const SettingsView = function (menus) {
     this._menus = menus;
@@ -16,6 +17,14 @@ SettingsView.prototype._generate = function _generate() {
         content.classList.add("layout-hub");
         content.classList.add("grid");
         contentContainer.appendChild(content);
+
+        const resetSettingsButton = new UTStandardButtonControl();
+        resetSettingsButton.init();
+        resetSettingsButton.setText(localize("plugins.settings.reset"));
+        addClass(resetSettingsButton.getRootElement(), "reset-settings");
+        resetSettingsButton.addTarget(this, () => {
+            resetConfiguration();
+        }, EventType.TAP)
 
         for(let menu of this._menus){
             const menuContainer = createElem("div", { id: `paletools-settings-${menu.name}-container`, className: "tile col-1-1"})

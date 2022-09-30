@@ -77,11 +77,11 @@ function run() {
         this._botModeIncMinBid = new UTStandardButtonControl();
         this._botModeIncMinBuyNow = new UTStandardButtonControl();
 
-        if (cfg.buttons.search.displayBotModeMinBid) {
+        if (cfg.buttons.search.enableBotMode && cfg.buttons.search.displayBotModeMinBid) {
             addBotModeButton(this._botModeIncMinBid, localize("plugins.snipe.settings.search.botModeMinBid"), this._minBidPriceRow, "snipe-min-bid");
         }
 
-        if (cfg.buttons.search.displayBotModeMinBuy) {
+        if (cfg.buttons.search.enableBotMode && cfg.buttons.search.displayBotModeMinBuy) {
             addBotModeButton(this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowPriceRow, "snipe-min-buy-now");
         }
     }

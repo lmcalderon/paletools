@@ -19,10 +19,6 @@
 	left:45%  !important;
 }
 
-.player-stats-data-component {
-	display: none  !important;
-}
-
 .listFUTItem .entityContainer .name {
 	padding: 0  !important;
 	max-width: 35%  !important;
@@ -178,7 +174,9 @@ section.ui-layout-right .listFUTItem .entityContainer .name.untradeable::before 
 	margin-right: 2px !important;
 }
 
-section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-component {
+section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-component, 
+.ut-transfer-list-view  .listFUTItem .player-stats-data-component,
+.SearchResults .listFUTItem .player-stats-data-component{
 	display: none !important;
 }
 
@@ -199,6 +197,8 @@ section.ui-layout-right .listFUTItem .auction {
 .ut-transfer-list-view .sectioned-item-list:nth-child(3) .listFUTItem .auction {
 	display: none !important;
 }
+
+ 
 
 .ut-transfer-list-view .sectioned-item-list .listFUTItem .name {
 	display: block !important;

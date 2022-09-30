@@ -151,6 +151,14 @@ let settings = {
     }
 };
 
+const defaultSettings = JSON.parse(JSON.stringify(settings));
+
+export function resetConfiguration(){
+    localStorage.removeItem("paletools:settings");
+    extend(true, settings, defaultSettings);
+    saveConfiguration();
+}
+
 if (localStorage.getItem("paletools:settings")) {
     const savedSettings = JSON.parse(atob(localStorage.getItem("paletools:settings")));
     extend(true, settings, savedSettings);

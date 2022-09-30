@@ -138,6 +138,7 @@ export default {
 
     /// #if process.env.SETTINGS_MENU
     "plugins.settings.title": "Paletools",
+    "plugins.settings.reset": "Reset to Defaults",
     /// #endif
 
     /// #if process.env.CLUB_ANALYZER
