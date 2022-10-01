@@ -7,22 +7,7 @@ const webpackStream = require("webpack-stream");
 const webpackConfig = require("./webpack.config");
 const webpackMobileConfig = require("./webpack.config.mobile");
 
-const VERSION = "23.3.5";
-
-function stringSrc(filename, content) {
-    let src = require("stream").Readable({ objectMode: true });
-    src._read = function() {
-        this.push(new Vinyl({
-            cwd: "",
-            base: "",
-            path: filename,
-            contents: Buffer.from(content, "utf-8")
-        }));
-        this.push(null);
-    };
-
-    return src;
-}
+const VERSION = "23.4.0";
 
 function getJsCode(filePath, vinylFile){
     return vinylFile.contents;

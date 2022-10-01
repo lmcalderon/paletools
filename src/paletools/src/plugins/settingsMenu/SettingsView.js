@@ -1,6 +1,6 @@
 import localize from "../../localization";
 import { resetConfiguration } from "../../settings";
-import { addClass, append, createElem, select } from "../../utils/dom";
+import { addClass, createElem, prepend } from "../../utils/dom";
 
 const SettingsView = function (menus) {
     this._menus = menus;
@@ -28,7 +28,7 @@ SettingsView.prototype._generate = function _generate() {
         }, EventType.TAP)
 
 
-        append(content, addClass(resetSettingsButton, "reset-settings"));
+        prepend(contentContainer, addClass(resetSettingsButton, "reset-settings"));
 
 
         const self = this;
