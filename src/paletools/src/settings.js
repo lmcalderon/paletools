@@ -139,9 +139,6 @@ let settings = {
         disablePackAnimations: {
             enabled: false
         },
-        increaseAllowedAuctions: {
-            enabled: false
-        },
         pristinePlayers: {
             enabled: false
         },

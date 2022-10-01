@@ -5,13 +5,20 @@ import { selectAll } from "../../utils/dom";
 import { displayLoader, hideLoader } from "../../utils/loader";
 import { notifySuccess } from "../../utils/notifications";
 import { getUnassignedPlayers } from "../club";
+import debugSettings from "../debug";
 import { tryBuyItem } from "../market";
 import { navigateBack } from "./navigation";
 
 const _snipeRequests = [];
+const _goBackDelay = debugSettings.goBackDelay || 50;
+
 
 export function addSnipeRequest(request = () => { }) {
     _snipeRequests.push(request);
+}
+
+export function clearSnipeRequests(){
+    _snipeRequests.length = 0;
 }
 
 const UTMarketSearchFiltersView_generate = UTMarketSearchFiltersView.prototype._generate;
@@ -33,7 +40,7 @@ export function enableMarketSnipe() {
         let request = _snipeRequests.shift();
 
         function goBack() {
-            delay(50).then(() => {
+            delay(_goBackDelay).then(() => {
                 navigateBack(controller);
                 hideLoader();
             });

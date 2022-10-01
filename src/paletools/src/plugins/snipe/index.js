@@ -7,7 +7,7 @@ import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMar
 import localize from "../../localization";
 import { getUnassignedPlayers } from "../../services/club";
 import sendPinEvents from "../../services/pinEvents";
-import { addSnipeRequest, enableMarketSnipe } from "../../services/ui/market";
+import { addSnipeRequest, clearSnipeRequests, enableMarketSnipe } from "../../services/ui/market";
 import { incrementPriceRow } from "../../services/ui/search";
 import settings from "../../settings";
 import getCurrentController from "../../utils/controller";
@@ -73,6 +73,10 @@ function run() {
 
             append(select(".button-container", self.__searchContainer), button.getRootElement());
         }
+
+        this._searchButton.addTarget(this, () => {
+            clearSnipeRequests();
+        }, EventType.TAP);
 
         this._botModeIncMinBid = new UTStandardButtonControl();
         this._botModeIncMinBuyNow = new UTStandardButtonControl();
@@ -179,7 +183,10 @@ function run() {
             keys[buttons.search.incMaxBuy] = () => {
                 controller.getView()._maxBuyNowPriceRow._currencyInput._currencyInput.increase();
             };
-            keys[buttons.search.search] = () => search();
+            keys[buttons.search.search] = () => {
+                clearSnipeRequests();
+                search();
+            };
             keys[buttons.search.resetBid] = () => {
                 controller.getView()._minBidPriceRow.value = 0;
                 controller.getView()._maxBidPriceRow.value = 0;

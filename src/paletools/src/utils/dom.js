@@ -1,16 +1,24 @@
 import { nodeListToArray } from "./array";
 import { isIterable } from "./iterable";
 
+function getRealElement(elem) {
+    if (elem.getRootElement) {
+        return elem.getRootElement();
+    }
+
+    return elem;
+}
+
 export function select(query, parent = document) {
     if (!query) return;
 
-    return parent.querySelector(query);
+    return getRealElement(parent).querySelector(query);
 }
 
 export function selectAll(query, parent = document) {
     if (!query) return;
 
-    return nodeListToArray(parent.querySelectorAll(query));
+    return nodeListToArray(getRealElement(parent).querySelectorAll(query));
 }
 
 export function append(parent, ...children) {
@@ -19,7 +27,7 @@ export function append(parent, ...children) {
     for (let child of children) {
         if (!child) continue;
 
-        parent.append(child);
+        getRealElement(parent).append(getRealElement(child));
     }
 
     return children;
@@ -31,7 +39,7 @@ export function prepend(parent, ...children) {
     for (let child of children) {
         if (!child) continue;
 
-        parent.prepend(child);
+        getRealElement(parent).prepend(getRealElement(child));
     }
 
     return children;
@@ -44,10 +52,12 @@ export function remove(elem) {
         for (let el in elem) {
             if (!el) continue;
 
+            el = getRealElement(el);
             el.parentNode.removeChild(el);
         }
     }
     else {
+        elem = getRealElement(elem);
         elem.parentNode.removeChild(elem);
     }
 
@@ -80,6 +90,7 @@ export function isVisible(elem) {
 
 export function isHidden(elem) {
     if (!elem) return true;
+    elem = getRealElement(elem);
     return elem.offsetWidth === 0 && elem.offsetHeight === 0;
 }
 
@@ -89,11 +100,11 @@ export function addClass(elem, ...className) {
     if (isIterable(elem)) {
         for (let e of elem) {
             if (!e) continue;
-            e.classList.add(...className);
+            getRealElement(e).classList.add(...className);
         }
     }
     else {
-        elem.classList.add(...className);
+        getRealElement(elem).classList.add(...className);
     }
 
     return elem;
@@ -101,6 +112,8 @@ export function addClass(elem, ...className) {
 
 export function hasClass(elem, className) {
     if (!elem) return false;
+
+    elem = getRealElement(elem);
 
     if (elem.classList) {
         return elem.classList.contains(className);
@@ -115,11 +128,12 @@ export function removeClass(elem, ...className) {
     if (isIterable(elem)) {
         for (let e of elem) {
             if (!e) continue;
+            e = getRealElement(e);
             e.classList.remove(...className);
         }
     }
     else {
-        elem.classList.remove(...className);
+        getRealElement(elem).classList.remove(...className);
     }
 
     return elem;
@@ -132,12 +146,12 @@ export function css(elem, css) {
         for (let el of elem) {
             if (!el) continue;
 
-            el.style[key] = css[key];
+            getRealElement(el).style[key] = css[key];
         }
     }
     else {
         for (let key of Object.keys(css)) {
-            elem.style[key] = css[key];
+            getRealElement(elem).style[key] = css[key];
         }
     }
 
@@ -148,7 +162,9 @@ export function insertBefore(newNode, existingNode) {
     if (!newNode) return;
     if (!existingNode) return;
 
-    existingNode.parentNode.insertBefore(newNode, existingNode);
+    existingNode = getRealElement(existingNode);
+
+    existingNode.parentNode.insertBefore(getRealElement(newNode), existingNode);
 
     return newNode;
 }
@@ -157,7 +173,8 @@ export function insertAfter(newNode, existingNode) {
     if (!newNode) return;
     if (!existingNode) return;
 
-    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+    existingNode = getRealElement(existingNode);
+    existingNode.parentNode.insertBefore(getRealElement(newNode), existingNode.nextSibling);
 
     return newNode;
 }
@@ -169,10 +186,12 @@ export function detach(nodes) {
         for (let node of nodes) {
             if (!node) continue;
 
+            node = getRealElement(node);
             node.parentElement.removeChild(node);
         }
     }
     else {
+        nodes = getRealElement(nodes);
         nodes.parentElement.removeChild(nodes);
     }
 
