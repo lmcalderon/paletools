@@ -1,6 +1,6 @@
 import localize from "../../localization";
 import { resetConfiguration } from "../../settings";
-import { addClass, append, createElem } from "../../utils/dom";
+import { addClass, append, createElem, select } from "../../utils/dom";
 
 const SettingsView = function (menus) {
     this._menus = menus;
@@ -23,7 +23,7 @@ SettingsView.prototype._generate = function _generate() {
         resetSettingsButton.setText(localize("plugins.settings.reset"));
         resetSettingsButton.addTarget(this, () => {
             resetConfiguration();
-            menuContainer.innerHTML = "";
+            content.innerHTML = "";
             createPluginsMenues();
         }, EventType.TAP)
 
