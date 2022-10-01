@@ -1,3 +1,5 @@
+import { clearSnipeRequests } from "../services/ui/market";
+
 export default function executeMarketSearchFiltersViewOverrides() {
     const UTMarketSearchFiltersView__generate = UTMarketSearchFiltersView.prototype._generate;
     UTMarketSearchFiltersView.prototype._generate = function _generate() {
@@ -7,5 +9,9 @@ export default function executeMarketSearchFiltersViewOverrides() {
         if(maskedDefId){
             this._searchFilters.getPlayerNameSearch().setPlayerData(repositories.Item.getStaticDataByDefId(maskedDefId))
         }
+
+        this._searchButton.addTarget(this, () => {
+            clearSnipeRequests();
+        }, EventType.TAP);
     }
 }

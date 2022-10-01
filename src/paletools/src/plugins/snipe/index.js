@@ -278,7 +278,10 @@ function run() {
                 }
             }
 
-            keys[buttons.results.compare] = () => mouseClick(compareBtn());
+            keys[buttons.results.compare] = () => {
+                clearSnipeRequests();
+                mouseClick(compareBtn());
+            }
 
             // Bid won
             if (_tradeState === "closed" && (_bidState === "highest" || _bidState === "buyNow")) {
