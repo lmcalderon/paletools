@@ -318,6 +318,10 @@ div.ut-pinned-item .listFUTItem div.entityContainer div.player-stats-data-compon
 	font-size: 24px !important;
 }
 
+.ut-watch-list-view .player-stats-data-component {
+	display: none !important;
+}
+ 
 /* override fut-trade-enhacer */
 .SearchResults.ui-layout-left > .paginated-item-list>ul {
 	display: initial  !important;
