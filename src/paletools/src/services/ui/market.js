@@ -5,22 +5,23 @@ import { selectAll } from "../../utils/dom";
 import { displayLoader, hideLoader } from "../../utils/loader";
 import { notifySuccess } from "../../utils/notifications";
 import { getUnassignedPlayers } from "../club";
-import debugSettings from "../debug";
+import getDebugSettings from "../debug";
+import { logDebug } from "../log";
 import { tryBuyItem } from "../market";
 import { navigateBack } from "./navigation";
 
 const _snipeRequests = [];
-const _goBackDelay = debugSettings.goBackDelay || 50;
+const _goBackDelay = getDebugSettings().goBackDelay || 50;
 
 
 export function addSnipeRequest(request = () => { }) {
     _snipeRequests.push(request);
-    console.log("Snipe requested");
+    logDebug("Snipe requested");
 }
 
 export function clearSnipeRequests(){
     _snipeRequests.length = 0;
-    console.log("Snipe requests cleared");
+    logDebug("Snipe requests cleared");
 }
 
 const UTMarketSearchFiltersView_generate = UTMarketSearchFiltersView.prototype._generate;
@@ -37,7 +38,7 @@ export function enableMarketSnipe() {
     addMarketSearchPreRender((items, controller) => {
 
         if (_snipeRequests.length === 0) return true;
-        console.log(`Snipe Requests: ${_snipeRequests.length}`);
+        logDebug(`Snipe Requests: ${_snipeRequests.length}`);
 
         displayLoader();
         let request = _snipeRequests.shift();

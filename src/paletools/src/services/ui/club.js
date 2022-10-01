@@ -5,7 +5,6 @@ import localize from "../../localization";
 export function loadClubPlayers(){
     let club = {}
     function playersToDictionary(players){
-        console.log(players);
         if(!players) return {};
 
         const playersDict = {};

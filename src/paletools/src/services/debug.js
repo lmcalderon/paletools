@@ -1,7 +1,6 @@
 
 window.paletools ||= {};
 
-const debugSettings = window.paletools;
-
-
-export default debugSettings;
+export default function getDebugSettings(){
+    return window.paletools;
+};
