@@ -2,6 +2,10 @@ const gulp = require('gulp');
 const through = require('through2');
 const path = require('path');
 const fs = require("fs");
+const webpack = require("webpack");
+const webpackStream = require("webpack-stream");
+const webpackConfig = require("./webpack.config");
+const webpackMobileConfig = require("./webpack.config.mobile");
 
 const VERSION = "23.3.5";
 
@@ -44,7 +48,7 @@ function base64Encode(getCode){
 gulp.task('deploy', function () {
     fs.writeFileSync("d:\\code\\eallegretta.github.io\\fifa\\version.txt", VERSION);
 
-    return gulp.src(['./dist/paletools-mobile*.js'])
+    gulp.src(['./dist/paletools-mobile*.js'])
             .pipe(gulp.dest(`d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\`));
 
     return gulp.src(['./dist/paletools.prod.js'])
