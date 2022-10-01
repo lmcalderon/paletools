@@ -209,6 +209,26 @@ section.ui-layout-right .listFUTItem .auction {
     font-size: 14px !important;
 }
 
+.listFUTItem.has-auction-data.has-substring .rowContent .auction {
+    top: 30% !important;
+}
+
+div.ut-pinned-item .listFUTItem {
+	width: 100% !important;
+}
+
+div.ut-pinned-item .listFUTItem div.entityContainer div.player-stats-data-component {
+	display: block !important;
+}
+
+.listFUTItem.has-auction-data.has-substring .rowContent {
+    padding-bottom: 0 !important;
+}
+
+.listFUTItem:last-child {
+    border-bottom-width: 0 !important;
+}
+
 .ut-store-hub-view--content .ut-store-pack-details-view {
 	display: inline-block;
 	margin-left:0 !important;

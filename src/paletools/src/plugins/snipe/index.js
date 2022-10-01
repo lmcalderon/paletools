@@ -133,6 +133,7 @@ function run() {
             itemDetailsController._panel.onBid.notify(itemDetailsController._panel._bidNumericStepper.getValue());
         },
         back = () => {
+            clearSnipeRequests();
             getCurrentController().getNavigationController()._eBackButtonTapped();
         },
 
