@@ -15,10 +15,12 @@ const _goBackDelay = debugSettings.goBackDelay || 50;
 
 export function addSnipeRequest(request = () => { }) {
     _snipeRequests.push(request);
+    console.log("Snipe requested");
 }
 
 export function clearSnipeRequests(){
     _snipeRequests.length = 0;
+    console.log("Snipe requests cleared");
 }
 
 const UTMarketSearchFiltersView_generate = UTMarketSearchFiltersView.prototype._generate;
@@ -35,9 +37,11 @@ export function enableMarketSnipe() {
     addMarketSearchPreRender((items, controller) => {
 
         if (_snipeRequests.length === 0) return true;
+        console.log(`Snipe Requests: ${_snipeRequests.length}`);
 
         displayLoader();
         let request = _snipeRequests.shift();
+        clearSnipeRequests();
 
         function goBack() {
             delay(_goBackDelay).then(() => {
