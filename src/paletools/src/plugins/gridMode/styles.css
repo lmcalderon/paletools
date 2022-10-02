@@ -184,6 +184,16 @@ section.ui-layout-right .listFUTItem .auction {
 	display: none !important;
 }
 
+section.ui-layout-right .listFUTItem.untradeable::before {
+    font-family: UltimateTeam-Icons,sans-serif;
+    color: #f6b803;
+    margin-top: 2px;
+    position: absolute;
+    width: 1.1em;
+	content: "\E07F";
+	right: 0;
+}
+
 .ut-transfer-list-view .sectioned-item-list:nth-child(3) .listFUTItem {
 	display: inline-block !important;
     width: 90px !important;

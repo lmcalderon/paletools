@@ -8,7 +8,7 @@ import localize from "../../localization";
 import { on } from "../../events";
 import { addClass, append, createElem, insertBefore } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
-import { getSellBidPrice } from "../../services/transferMarket"
+import { getSellBidPrice } from "../../services/market"
 
 const cfg = settings.plugins.compareMinMaxPrices;
 
@@ -65,21 +65,29 @@ function run() {
         if (settings.enabled && cfg.enabled) {
             if (this._hasCompareItem) {
                 let definitionId = null;
-                for (let entity of e) {
-                    if (entity._auction.buyNowPrice > this._maxBuyNowPrice) {
-                        this._maxBuyNowPrice = entity._auction.buyNowPrice;
-                    }
-                    if (entity._auction.buyNowPrice < this._minBuyNowPrice) {
-                        this._minBuyNowPrice = entity._auction.buyNowPrice;
+                if (e.length > 0) {
+                    for (let entity of e) {
+                        if (entity._auction.buyNowPrice > this._maxBuyNowPrice) {
+                            this._maxBuyNowPrice = entity._auction.buyNowPrice;
+                        }
+
+                        if (entity._auction.buyNowPrice < this._minBuyNowPrice) {
+                            this._minBuyNowPrice = entity._auction.buyNowPrice;
+                        }
+
+                        definitionId ||= entity.definitionId;
                     }
 
-                    definitionId ||= entity.definitionId;
+                    this._minPriceText.textContent = this._minBuyNowPrice;
+                    this._maxPriceText.textContent = this._maxBuyNowPrice;
+
+                    playerSellValues[definitionId] = this._minBuyNowPrice;
+                    
+                    show(this._minMaxPriceContainer);
                 }
-                this._minPriceText.textContent = this._minBuyNowPrice;
-                this._maxPriceText.textContent = this._maxBuyNowPrice;
-
-                playerSellValues[definitionId] = this._minBuyNowPrice;
-                show(this._minMaxPriceContainer);
+                else {
+                    hide(this._minMaxPriceContainer);
+                }
             }
             else {
                 hide(this._minMaxPriceContainer);

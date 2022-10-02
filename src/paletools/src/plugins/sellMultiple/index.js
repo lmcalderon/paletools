@@ -3,21 +3,20 @@
 let plugin;
 
 /// #if process.env.SELL_MULTIPLE
-import styles from "./styles.css";
-import { addStyle, removeStyle } from "../../utils/styles";
 import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
 import localize from "../../localization";
-import settings, { saveConfiguration } from "../../settings";
-import getCurrentController from "../../utils/controller";
-import { hide, show } from "../../utils/visibility";
 import { openDialog } from "../../services/dialog";
-import { notifyFailure } from "../../utils/notifications";
-import { listItemOnTransferMarket } from "../../services/transferMarket";
-import { displayLoader, hideLoader } from "../../utils/loader";
+import { listItemOnTransferMarket } from "../../services/market";
+import settings, { saveConfiguration } from "../../settings";
 import delay from "../../utils/delay";
 import { addClass, append, css, select } from "../../utils/dom";
+import { displayLoader, hideLoader } from "../../utils/loader";
+import { notifyFailure } from "../../utils/notifications";
+import { addStyle } from "../../utils/styles";
 import SwipeEventDispatcher from "../../utils/swipe";
+import { hide, show } from "../../utils/visibility";
+import styles from "./styles.css";
 const cfg = settings.plugins.sellMultiple;
 
 const SELL_MULTIPLE_MAX_PLAYERS = 25;

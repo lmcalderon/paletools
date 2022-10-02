@@ -2,7 +2,7 @@ import settings from "../../settings";
 import localize from "../../localization";
 import { on, triggerEvent } from "../../events";
 import { notifyFailure, notifySuccess } from "../../utils/notifications";
-import { findLowestMarketPrice } from "../../services/transferMarket";
+import { findLowestMarketPrice } from "../../services/market";
 import tryAndCatch from "../../try";
 import { append } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
