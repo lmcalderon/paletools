@@ -89,6 +89,10 @@ export default {
     "plugins.snipe.settings.legacyMode": "Usar modo legacy para comprar (palesnipe 3.1)",
     /// #endif
 
+    /// #if process.env.SNIPE_MOBILE
+    "plugins.snipe.settings.title": "Sniping",
+    /// #endif
+
     // #if process.env.DUPLICATED_TO_SBC
     "plugins.duplicatedToSbc.button.text": "Usar jugadores duplicados",
     "plugins.duplicatedToSbc.settings.title": "Duplicados a SBC",
@@ -133,8 +137,8 @@ export default {
     // #endif
 
     /// #if process.env.SETTINGS_MENU
-    "plugins.snipe.settings.title": "Paletools",
-    "plugins.snipe.settings.reset": "Reset a los valores predeterminados",
+    "plugins.settings.title": "Paletools",
+    "plugins.settings.reset": "Reset a los valores predeterminados",
     /// #endif
 
     /// #if process.env.CLUB_ANALYZER

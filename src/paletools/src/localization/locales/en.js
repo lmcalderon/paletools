@@ -137,8 +137,8 @@ export default {
     // #endif
 
     /// #if process.env.SETTINGS_MENU
-    "plugins.snipe.settings.title": "Paletools",
-    "plugins.snipe.settings.reset": "Reset to Defaults",
+    "plugins.settings.title": "Paletools",
+    "plugins.settings.reset": "Reset to Defaults",
     /// #endif
 
     /// #if process.env.CLUB_ANALYZER
