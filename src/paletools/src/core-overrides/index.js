@@ -4,6 +4,7 @@ import executeItemTableCellViewOverrides from "./UTItemTableCellViewOverrides";
 import executeMarketSearchFiltersViewControllerOverrides from "./UTMarketSearchFiltersViewControllerOverrides";
 import executeMarketSearchFiltersViewOverrides from "./UTMarketSearchFiltersViewOverrides";
 import executeMarketSearchResultsViewControllerOverrides from "./UTMarketSearchResultsViewControllerOverrides";
+import executeSlotActionPanelViewOverrides from "./UTSlotActionPanelViewOverrides";
 
 export default function runOverrides(){
     executeMarketSearchFiltersViewControllerOverrides();
@@ -12,4 +13,5 @@ export default function runOverrides(){
     executeDefaultActionPanelViewOverrides();
     executeAuctionActionPanelViewOverrides();
     executeItemTableCellViewOverrides();
+    executeSlotActionPanelViewOverrides();
 }
