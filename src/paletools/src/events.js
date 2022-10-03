@@ -27,5 +27,8 @@ export const EVENTS = {
     APP_STARTED: "appStarted",
     CONFIGURATION_SAVED: "configurationSaved",
     CONFIGURATION_LOADED: "configurationLoaded",
-    APP_LOADED: "appLoaded"
+    APP_LOADED: "appLoaded",
+    SNIPE_SUCCESS: "snipeSuccess",
+    SNIPE_FAILED: "snipeFailed",
+    SNIPE_GOBACK: "snipeGoBack"
 }

@@ -1,4 +1,5 @@
 import { addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
+import { EVENTS, triggerEvent } from "../../events";
 import localize from "../../localization";
 import delay from "../../utils/delay";
 import { selectAll } from "../../utils/dom";
@@ -48,6 +49,7 @@ export function enableMarketSnipe() {
             delay(_goBackDelay).then(() => {
                 navigateBack(controller);
                 hideLoader();
+                triggerEvent(EVENTS.SNIPE_GOBACK);
             });
         }
 
@@ -69,17 +71,20 @@ export function enableMarketSnipe() {
                         // this refreshes the unassigned players at the home page
                         getUnassignedPlayers();
 
+                        triggerEvent(EVENTS.SNIPE_SUCCESS, response.item);
                         notifySuccess(localize("market.itemBuy.success").replace("{COINS}", response.item._auction.buyNowPrice.toLocaleString()));
                     }
                     else {
                         try {
                             request({ success: false, item: response.item });
+                            triggerEvent(EVENTS.SNIPE_FAILED, response);
                         }
                         catch { }
                     }
                 }).catch(err => {
                     try {
                         request({ success: false, item: response.item, error: err });
+                        triggerEvent(EVENTS.SNIPE_FAILED, { response: response, err: err });
                     }
                     catch { }
                 }).finally(() => {

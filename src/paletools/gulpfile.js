@@ -7,7 +7,7 @@ const webpackStream = require("webpack-stream");
 const webpackConfig = require("./webpack.config");
 const webpackMobileConfig = require("./webpack.config.mobile");
 
-const VERSION = "23.4.1";
+const VERSION = "23.5.0";
 
 function getJsCode(filePath, vinylFile){
     return vinylFile.contents;
@@ -24,7 +24,9 @@ function base64Encode(getCode){
         //transformedFile.contents = Buffer.from(`"${filename}": "${vinylFile.contents.toString('base64')}",`);
 
         const code = encodeURIComponent(vinylFile.contents);
-        transformedFile.contents = Buffer.from(`window.paletools = window.paletools || {};\nwindow.paletools['paletools-${VERSION}'] = "${code}";`);
+
+        const name = `paletools-${vinylFile.path.indexOf('mobile') > - 1 ? 'mobile-' : ''}${VERSION}`;
+        transformedFile.contents = Buffer.from(`window.paletools = window.paletools || {};\nwindow.paletools['${name}'] = "${code}";`);
         // 3. pass along transformed file for use in next `pipe()`
         callback(null, transformedFile);
       });
@@ -35,6 +37,10 @@ gulp.task('deploy', function () {
 
     gulp.src(['./dist/paletools-mobile*.js'])
             .pipe(gulp.dest(`d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\`));
+
+    gulp.src(['./dist/paletools-mobile.prod.js'])
+            .pipe(base64Encode(getJsCode))
+            .pipe(gulp.dest(`d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\mobile\\`));
 
     return gulp.src(['./dist/paletools.prod.js'])
             .pipe(base64Encode(getJsCode))
