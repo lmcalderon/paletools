@@ -154,7 +154,9 @@ function run() {
             const name = this._filterName.getValue();
             const key = name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             const filters = this.getStoredFilters();
-            searchCriteria.rating = this._playerRating.getValue();
+            if(this._playerRating){
+                searchCriteria.rating = this._playerRating.getValue();
+            }
             filters[key] = { name: name, criteria: searchCriteria };
             this.saveFilters(filters);
             this.loadSavedFilters();
@@ -178,10 +180,10 @@ function run() {
     UTMarketSearchFiltersView.prototype.loadFilter = function (filter) {
         const controller = getCurrentController();
         if (controller instanceof UTMarketSearchFiltersViewController) {
-            if (filter.criteria.defId && filter.criteria.defId.length > 0) {
+            if (filter.criteria.defId && filter.criteria.defId.length > 0 && this._playerId) {
                 this._playerId.setValue(filter.criteria.defId[0]);
             }
-            if (filter.criteria.rating) {
+            if (filter.criteria.rating && this._playerRating) {
                 this._playerRating.setValue(filter.criteria.rating);
             }
 

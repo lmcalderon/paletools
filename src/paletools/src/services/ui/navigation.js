@@ -6,14 +6,17 @@ import pointerClick from "../../utils/pointer";
 export function navigateBack(controller, delayMs) {
     function back() {
         try {
-            (controller || getCurrentController()).getNavigationController()._eBackButtonTapped();
+            const navigationController = (controller || getCurrentController()).getNavigationController();
+            navigationController._eBackButtonTapped();
+            while(!(getCurrentController() instanceof UTMarketSearchFiltersViewController)){
+                navigationController._eBackButtonTapped();
+            }
         }
         catch {
-            pointerClick(select(".ut-navigation-button-control"));
         }
     }
 
-    if (delay) {
+    if (delayMs) {
         delay(delayMs).then(() => {
             back();
         });

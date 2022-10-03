@@ -20,7 +20,7 @@ export function addSnipeRequest(request = () => { }) {
     logDebug("Snipe requested");
 }
 
-export function clearSnipeRequests(){
+export function clearSnipeRequests() {
     _snipeRequests.length = 0;
     logDebug("Snipe requests cleared");
 }
@@ -46,52 +46,48 @@ export function enableMarketSnipe() {
         clearSnipeRequests();
 
         function goBack() {
-            delay(_goBackDelay).then(() => {
-                navigateBack(controller);
-                hideLoader();
-                triggerEvent(EVENTS.SNIPE_GOBACK);
-            });
+            navigateBack(controller);
+            hideLoader();
+            triggerEvent(EVENTS.SNIPE_GOBACK);
         }
 
-        setTimeout(() => {
-            if (items.length === 0) {
-                goBack();
-            }
-            else {
-                let orderedItems = items.slice().sort((a, b) => {
-                    const auctionA = a._auction.buyNowPrice;
-                    const auctionB = b._auction.buyNowPrice;
-                    return auctionA - auctionB;
-                });
+        if (items.length === 0) {
+            goBack();
+        }
+        else {
+            let orderedItems = items.slice().sort((a, b) => {
+                const auctionA = a._auction.buyNowPrice;
+                const auctionB = b._auction.buyNowPrice;
+                return auctionA - auctionB;
+            });
 
-                tryBuyItem(orderedItems).then(response => {
-                    if (response.success) {
-                        request({ success: true, item: response.item });
+            tryBuyItem(orderedItems).then(response => {
+                if (response.success) {
+                    request({ success: true, item: response.item });
 
-                        // this refreshes the unassigned players at the home page
-                        getUnassignedPlayers();
+                    // this refreshes the unassigned players at the home page
+                    getUnassignedPlayers();
 
-                        triggerEvent(EVENTS.SNIPE_SUCCESS, response.item);
-                        notifySuccess(localize("market.itemBuy.success").replace("{COINS}", response.item._auction.buyNowPrice.toLocaleString()));
-                    }
-                    else {
-                        try {
-                            request({ success: false, item: response.item });
-                            triggerEvent(EVENTS.SNIPE_FAILED, response);
-                        }
-                        catch { }
-                    }
-                }).catch(err => {
+                    triggerEvent(EVENTS.SNIPE_SUCCESS, response.item);
+                    notifySuccess(localize("market.itemBuy.success").replace("{COINS}", response.item._auction.buyNowPrice.toLocaleString()));
+                }
+                else {
                     try {
-                        request({ success: false, item: response.item, error: err });
-                        triggerEvent(EVENTS.SNIPE_FAILED, { response: response, err: err });
+                        request({ success: false, item: response.item });
+                        triggerEvent(EVENTS.SNIPE_FAILED, response);
                     }
                     catch { }
-                }).finally(() => {
-                    goBack();
-                });
-            }
-        }, 0);
+                }
+            }).catch(err => {
+                try {
+                    request({ success: false, item: response.item, error: err });
+                    triggerEvent(EVENTS.SNIPE_FAILED, { response: response, err: err });
+                }
+                catch { }
+            }).finally(() => {
+                goBack();
+            });
+        }
 
         return false;
     });
