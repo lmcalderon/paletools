@@ -1,3 +1,4 @@
+import { clearSnipeRequests } from "../services/ui/market";
 
 export default function executeSlotActionPanelViewOverrides() {
     const UTSlotActionPanelView_generate = UTSlotActionPanelView.prototype._generate;
