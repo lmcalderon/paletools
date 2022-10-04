@@ -1,5 +1,5 @@
 const fallbackCommands = {
-    "openurl": args => window.open(args)
+    "openurl": args => location.href = args
 };
 
 class MessageBus {
