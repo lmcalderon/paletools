@@ -331,6 +331,11 @@ div.ut-pinned-item .listFUTItem div.entityContainer div.player-stats-data-compon
 .ut-watch-list-view .player-stats-data-component {
 	display: none !important;
 }
+
+.item.player .ut-item-row .ut-item-row-label {
+	text-overflow: unset;
+	width: auto;
+}
  
 /* override fut-trade-enhacer */
 .SearchResults.ui-layout-left > .paginated-item-list>ul {

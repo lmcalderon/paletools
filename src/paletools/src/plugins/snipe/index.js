@@ -8,6 +8,7 @@ import localize from "../../localization";
 import { getUnassignedPlayers } from "../../services/club";
 import sendPinEvents from "../../services/pinEvents";
 import { addSnipeRequest, clearSnipeRequests, enableMarketSnipe } from "../../services/ui/market";
+import { navigateBack } from "../../services/ui/navigation";
 import { incrementPriceRow } from "../../services/ui/search";
 import settings from "../../settings";
 import getCurrentController from "../../utils/controller";
@@ -60,7 +61,7 @@ function run() {
     UTMarketSearchFiltersView.prototype._generate = function _generate() {
         UTMarketSearchFiltersView__generate.call(this);
         const self = this;
-        function addBotModeButton(button, buttonText, priceRow, className) {
+        function addOneTouchButton(button, buttonText, priceRow, className) {
             button.init();
             button.setText(buttonText);
             button.addTarget(this, () => {
@@ -78,15 +79,15 @@ function run() {
             clearSnipeRequests();
         }, EventType.TAP);
 
-        this._botModeIncMinBid = new UTStandardButtonControl();
-        this._botModeIncMinBuyNow = new UTStandardButtonControl();
+        this._oneTouchIncMinBid = new UTStandardButtonControl();
+        this._oneTouchIncMinBuyNow = new UTStandardButtonControl();
 
-        if (cfg.buttons.search.enableBotMode && cfg.buttons.search.displayBotModeMinBid) {
-            addBotModeButton(this._botModeIncMinBid, localize("plugins.snipe.settings.search.botModeMinBid"), this._minBidPriceRow, "snipe-min-bid");
+        if (cfg.oneTouch.enabled && cfg.oneTouch.displayMinBid) {
+            addOneTouchButton(this._oneTouchIncMinBid, localize("plugins.snipe.settings.oneTouch.minBid"), this._minBidPriceRow, "snipe-min-bid");
         }
 
-        if (cfg.buttons.search.enableBotMode && cfg.buttons.search.displayBotModeMinBuy) {
-            addBotModeButton(this._botModeIncMinBuyNow, localize("plugins.snipe.settings.search.botModeMinBuy"), this._minBuyNowPriceRow, "snipe-min-buy-now");
+        if (cfg.oneTouch.enabled && cfg.oneTouch.displayMinBuy) {
+            addOneTouchButton(this._oneTouchIncMinBuyNow, localize("plugins.snipe.settings.oneTouch.minBuy"), this._minBuyNowPriceRow, "snipe-min-buy-now");
         }
     }
 
@@ -94,8 +95,8 @@ function run() {
     UTMarketSearchFiltersView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
         UTMarketSearchFiltersView_destroyGeneratedElements.call(this);
 
-        this._botModeIncMinBid.destroy();
-        this._botModeIncMinBuyNow.destroy();
+        this._oneTouchIncMinBid.destroy();
+        this._oneTouchIncMinBuyNow.destroy();
     }
 
 
@@ -134,7 +135,7 @@ function run() {
         },
         back = () => {
             clearSnipeRequests();
-            getCurrentController().getNavigationController()._eBackButtonTapped();
+            navigateBack();
         },
 
         search = () => {
@@ -192,21 +193,19 @@ function run() {
                 controller.getView()._minBidPriceRow.value = 0;
                 controller.getView()._maxBidPriceRow.value = 0;
             };
-            keys[buttons.search.botModeMinBid] = () => {
-                if (buttons.search.enableBotMode) {
+            keys[buttons.search.oneTouchMinBid] = () => {
+                if (buttons.oneTouch.enabled) {
                     keys[buttons.search.incMinBid]();
-                    //search();
-                    if (cfg.buttons.search.botModeFullAuto) {
+                    if (cfg.oneTouch.smartMode) {
                         requestSnipe();
                     }
                     search();
                 }
             };
-            keys[buttons.search.botModeMinBuy] = () => {
-                if (buttons.search.enableBotMode) {
+            keys[buttons.search.oneTouchMinBuy] = () => {
+                if (buttons.oneTouch.enabled) {
                     keys[buttons.search.incMinBuy]()
-                    //search();
-                    if (cfg.buttons.search.botModeFullAuto) {
+                    if (cfg.oneTouch.smartMode) {
                         requestSnipe();
                     }
                     search();
@@ -246,8 +245,8 @@ function run() {
                 };
             }
             else {
-                keys[buttons.search.botModeMinBid] = () => buttons.search.enableBotMode ? back() : false;
-                keys[buttons.search.botModeMinBuy] = () => buttons.search.enableBotMode ? back() : false;
+                keys[buttons.search.oneTouchMinBid] = () => buttons.oneTouch.enabled ? back() : false;
+                keys[buttons.search.oneTouchMinBuy] = () => buttons.oneTouch.enabled ? back() : false;
             }
         },
 
@@ -273,8 +272,8 @@ function run() {
                     stepper.endIncrease();
                 };
 
-                if (buttons.search.enableBotMode) {
-                    keys[buttons.search.botModeMinBid] = keys[buttons.search.botModeMinBuy] = () => buyNow();
+                if (buttons.oneTouch.enabled) {
+                    keys[buttons.search.oneTouchMinBid] = keys[buttons.search.oneTouchMinBuy] = () => buyNow();
                 }
             }
 
@@ -349,8 +348,8 @@ function run() {
         ${btn('.DetailPanel > .bidOptions', 'results', 'decBid', false)}
         ${btn('.DetailPanel > .bidOptions', 'results', 'incBid', true)}
         .ut-market-search-filters-view .call-to-action:after { content: '[ ${p.search.search}]'}
-        .ut-market-search-filters-view .call-to-action.snipe-min-bid:after { content: '[ ${p.search.botModeMinBid}]'}
-        .ut-market-search-filters-view .call-to-action.snipe-min-buy-now:after { content: '[ ${p.search.botModeMinBuy}]'}
+        .ut-market-search-filters-view .call-to-action.snipe-min-bid:after { content: '[ ${p.search.oneTouchMinBid}]'}
+        .ut-market-search-filters-view .call-to-action.snipe-min-buy-now:after { content: '[ ${p.search.oneTouchMinBuy}]'}
         .ut-market-search-filters-view .search-price-header:first-child > button:after { content: '[ ${p.search.resetBid}]';  font-size: 10px; display: block  }
         .ut-navigation-button-control:after { font-size:10px; float:right; margin-right:12px; content: '[ ${p.back} ]' }
         .pagingContainer .prev:after { font-size: 10px; display:block; content: '[ ${p.lists.prev} ]' }

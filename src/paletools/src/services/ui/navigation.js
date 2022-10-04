@@ -6,22 +6,31 @@ import { logDebug } from "../log";
 
 export function navigateBack(controller, delayMs) {
     function back(controller) {
+        const previousController = navigationController.getPreviousController();
+
         try {
-            const navigationController = controller.getNavigationController();
-            const previousController = navigationController.getPreviousController();
-            navigationController.popToViewController(previousController);
+            controller.getNavigationController()._eBackButtonTapped();
         }
-        catch {
+        catch (ex) {
+            logDebug("Navigation back failed: _eBackButtonTapped " + ex);
         }
 
-        setTimeout(() => {
-            const newCurrentController = getCurrentController();
-            if(isHidden(newCurrentController.getView().getRootElement())){
-                logDebug("view is hidden, executing hack");
-                newCurrentController.getNavigationController()._currentController = null;
-                newCurrentController.getNavigationController().pushViewController(newCurrentController);
+        if (previousController !== getCurrentController()) {
+            try {
+                controller.getNavigationController()._currentController = null;
+                controller.getNavigationController().popToViewController(previousController);
             }
-        }, 5);
+            catch (ex) {
+                logDebug("Navigation back failed: popToViewController " + ex)
+            }
+        }
+
+        const newCurrentController = getCurrentController();
+        if (isHidden(newCurrentController.getView().getRootElement())) {
+            logDebug("view is hidden, executing hack");
+            newCurrentController.getNavigationController()._currentController = null;
+            newCurrentController.getNavigationController().pushViewController(newCurrentController);
+        }
     }
 
     if (delayMs) {

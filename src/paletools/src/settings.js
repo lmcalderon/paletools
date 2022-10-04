@@ -22,12 +22,8 @@ const buttons = {
         decMaxBuy: 'ArrowDown',
         incMaxBuy: 'ArrowUp',
         search: 'Digit2',
-        botModeMinBid: 'BracketRight',
-        botModeMinBuy: 'BracketLeft',
-        enableBotMode: false,
-        displayBotModeMinBid: false,
-        displayBotModeMinBuy: false,
-        botModeFullAuto: false,
+        oneTouchMinBid: 'BracketRight',
+        oneTouchMinBuy: 'BracketLeft',
     },
     results: {
         bid: 'Digit4',
@@ -72,6 +68,12 @@ let settings = {
             findLowestPrice: true
         },
         snipe: {
+            oneTouch: {
+                enabled: false,
+                displayMinBid: false,
+                displayMinBuy: false,
+                smartMode: false,
+            },
             buttons: buttons,
             legacyMode: false,
             enabled: true

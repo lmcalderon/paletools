@@ -28,7 +28,10 @@ export default function menu(){
     let generalContainer = document.createElement("div");
     input(generalContainer, "buttons.enableDisable");
     toggle(generalContainer, "buttons.results.pressEnter");
-    toggle(generalContainer, "buttons.search.enableBotMode");
+    toggle(generalContainer, "oneTouch.enabled");
+    toggle(generalContainer, "oneTouch.displayMinBid");
+    toggle(generalContainer, "oneTouch.displayMinBuy");
+    toggle(generalContainer, "oneTouch.smartMode");
     //toggle(generalContainer, "legacyMode");
 
     let searchContainer = document.createElement("div");
@@ -56,11 +59,9 @@ export default function menu(){
     input(bidContainer, "buttons.search.incMinBuy");
     input(bidContainer, "buttons.search.decMaxBuy");
     input(bidContainer, "buttons.search.incMaxBuy");
-    input(bidContainer, "buttons.search.botModeMinBid");
-    input(bidContainer, "buttons.search.botModeMinBuy");
-    toggle(bidContainer, "buttons.search.displayBotModeMinBid");
-    toggle(bidContainer, "buttons.search.displayBotModeMinBuy");
-    toggle(bidContainer, "buttons.search.botModeFullAuto");
+    input(bidContainer, "buttons.search.oneTouchMinBid");
+    input(bidContainer, "buttons.search.oneTouchMinBuy");
+    
 
 
     container.appendChild(generalContainer);
