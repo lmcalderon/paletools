@@ -8,6 +8,7 @@ module.exports = (env) => {
         ...plugins,
         SELECT_CHEAPEST: false,
         DONATION: false,
+        DONATION_MOBILE: true,
         FILL_SBC_FROM_FUTBIN: false,
         GRID_MODE: false,
         WIDE_MODE: false,
@@ -15,6 +16,7 @@ module.exports = (env) => {
         SNIPE_MOBILE: true,
         CLUB_ANALYZER: false,
         SBC_BUILDER_ENHACER: false,
+        SELL_MULTIPLE: false,
     
         SBC_SMART_BUILDER: false,
         CLUB_SEARCH_ENHACER: false,
