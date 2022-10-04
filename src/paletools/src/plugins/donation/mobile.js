@@ -21,7 +21,7 @@ function run() {
         const html = `
                             <header><h1 class="tileHeader">Paletools v${VERSION}</h1></header>
                             <div class="data-container" style="flex-direction:column">
-                                <span class="itemsLabel" style="font-size:16px;line-height:initial">${localize("plugins.donate.message")}</span>
+                                <span class="itemsLabel" style="font-size:16px;line-height:initial">${localize("plugins.donation.message")}</span>
                                 <div style="text-align: center"><a href="https://twitter.com/paleta" style="color:white">@paleta</a></div>
                                 <div style="z-index:10000; text-align: center"><a href="#" id="donate-pp"><img src="${paypalImage}" /></a><a href="#" id="donate-ml"><img src="${mercadoPagoImage}" /></a></div>
                             </div>`;
