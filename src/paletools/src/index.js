@@ -6,7 +6,7 @@ import getCurrentController from "./utils/controller";
 import VERSION from "./version";
 import playAudio from "./utils/fx";
 import runOverrides from "./core-overrides";
-import { addClass, hasClass, removeClass, select } from "./utils/dom";
+import { addClass, hasClass, remove, removeClass, select } from "./utils/dom";
 import localize from "./localization";
 
 function setupPhoneView() {
@@ -19,6 +19,8 @@ function setupPhoneView() {
                     "web"), 
                 "phone");
         }
+        remove(select(".ut-fifa-header-view"));
+        removeClass(select("body"), "with-fifa-header");
     }
 }
 

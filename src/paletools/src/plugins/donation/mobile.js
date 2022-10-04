@@ -1,8 +1,10 @@
 let plugin;
 
+import { on } from "../../events";
 import localize from "../../localization";
+import messageBus from "../../services/messageBus";
 /// #if process.env.DONATION_MOBILE
-import { createElem, prepend } from "../../utils/dom";
+import { createElem, prepend, select } from "../../utils/dom";
 import VERSION from "../../version";
 
 
@@ -17,15 +19,24 @@ function run() {
         const tile = createElem("div", { className: "tile col-1-1" });
         
         const html = `
-                            <header><h1 class="tileHeader">Paletools v${VERSION} - ${localize("donate.title")}</h1></header>
+                            <header><h1 class="tileHeader">Paletools v${VERSION}</h1></header>
                             <div class="data-container" style="flex-direction:column">
-                                <span class="itemsLabel" style="font-size:16px;line-height:initial">${localize("donate.message")}</span>
-                                <div><a href="https://twitter.com/paleta" style="color:white">@paleta</a></div>
-                                <div style="z-index:10000"><a href="#" ontouchstart="javascript: console.log('LOADURL https://streamlabs.com/paleta_ar/tip')" style="float:left"><img src="${paypalImage}" /></a><a href="#" ontouchstart="javascript: console.log('LOADURL https://ceneka.net/mp/d/paletaeaa')" style="float:right"><img src="${mercadoPagoImage}" /></a></div>
+                                <span class="itemsLabel" style="font-size:16px;line-height:initial">${localize("plugins.donate.message")}</span>
+                                <div style="text-align: center"><a href="https://twitter.com/paleta" style="color:white">@paleta</a></div>
+                                <div style="z-index:10000; text-align: center"><a href="#" id="donate-pp"><img src="${paypalImage}" /></a><a href="#" id="donate-ml"><img src="${mercadoPagoImage}" /></a></div>
                             </div>`;
 
         tile.innerHTML = html;
-        prepend(this.getRootElement(), tile);
+        prepend(select(".layout-hub", this.getRootElement()), tile);
+
+        on(select("#donate-ml", tile), "pointerdown", () => {
+            messageBus.publish("openurl", "https://ceneka.net/mp/d/paletaeaa");
+        });
+
+        on(select("#donate-pp", tile), "pointerdown", () => {
+            messageBus.publish("openurl", "https://streamlabs.com/paleta_ar/tip");
+        });
+
     }
 }
 
