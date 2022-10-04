@@ -1,6 +1,6 @@
 import { addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
 import { EVENTS, triggerEvent } from "../../events";
-import localize from "../../localization";
+import localize, { localizeNumber } from "../../localization";
 import delay from "../../utils/delay";
 import { selectAll } from "../../utils/dom";
 import { displayLoader, hideLoader } from "../../utils/loader";
@@ -69,7 +69,7 @@ export function enableMarketSnipe() {
                     getUnassignedPlayers();
 
                     triggerEvent(EVENTS.SNIPE_SUCCESS, response.item);
-                    notifySuccess(localize("market.itemBuy.success").replace("{COINS}", response.item._auction.buyNowPrice.toLocaleString()));
+                    notifySuccess(localize("market.itemBuy.success").replace("{COINS}", localizeNumber(response.item._auction.buyNowPrice)));
                 }
                 else {
                     try {

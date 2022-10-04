@@ -18,6 +18,7 @@ export default {
     "plugins.donation.title": "Powered by Paletools",
     "plugins.donation.paypal": "PayPal Donation",
     "plugins.donation.mercadopago": "MercadoPago Donation",
+    "plugins.donation.message": "If you enjoy Paletools please consider donating",
 
     /// #if process.env.COMPARE_MIN_MAX_PRICES
     "plugins.compareMinMaxPrices.settings.title": "Compare Prices",

@@ -1,8 +1,9 @@
 let plugin;
 
+import localize from "../../localization";
 /// #if process.env.DONATION_MOBILE
+import { createElem, prepend } from "../../utils/dom";
 import VERSION from "../../version";
-import { createElem } from "../../utils/dom";
 
 
 function run() {
@@ -16,14 +17,15 @@ function run() {
         const tile = createElem("div", { className: "tile col-1-1" });
         
         const html = `
-                            <header><h1 class="tileHeader">Paletools v${VERSION} - ${loc("donate.title")}</h1></header>
+                            <header><h1 class="tileHeader">Paletools v${VERSION} - ${localize("donate.title")}</h1></header>
                             <div class="data-container" style="flex-direction:column">
-                                <a href="https://twitter.com/paleta">@paleta</a>
-                                <span class="itemsLabel" style="font-size:16px;line-height:initial">${loc("donate.message")}</span>
+                                <span class="itemsLabel" style="font-size:16px;line-height:initial">${localize("donate.message")}</span>
+                                <div><a href="https://twitter.com/paleta" style="color:white">@paleta</a></div>
                                 <div style="z-index:10000"><a href="#" ontouchstart="javascript: console.log('LOADURL https://streamlabs.com/paleta_ar/tip')" style="float:left"><img src="${paypalImage}" /></a><a href="#" ontouchstart="javascript: console.log('LOADURL https://ceneka.net/mp/d/paletaeaa')" style="float:right"><img src="${mercadoPagoImage}" /></a></div>
                             </div>`;
 
-        $(this.getRootElement()).prepend(html);
+        tile.innerHTML = html;
+        prepend(this.getRootElement(), tile);
     }
 }
 
