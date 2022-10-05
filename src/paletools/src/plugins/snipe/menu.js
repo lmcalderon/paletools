@@ -1,6 +1,7 @@
 import { addLabelWithTextInputWithKeyPress, addLabelWithToggle } from "../../controls";
 import { getObjectPropertyValueByPath, setObjectPropertyByPath } from "../../utils/object";
 import settings, { saveConfiguration } from "../../settings";
+import localize from "../../localization";
 
 const cfg = settings.plugins.snipe;
 export default function menu(){
@@ -14,11 +15,13 @@ export default function menu(){
         }, null, true);
     }
 
-    function toggle(container, path){
+    function toggle(container, path, displayWarning){
         const value = getObjectPropertyValueByPath(cfg, path)
         addLabelWithToggle(container, `plugins.snipe.settings.${path.replace('buttons.','')}`, value, toggleState => {
-            setObjectPropertyByPath(cfg, path, toggleState);
-            saveConfiguration();
+            if(toggleState && confirm(localize("plugins.dangerous"))){
+                setObjectPropertyByPath(cfg, path, toggleState);
+                saveConfiguration();
+            }
         });
     }
 
@@ -31,7 +34,7 @@ export default function menu(){
     toggle(generalContainer, "oneTouch.enabled");
     toggle(generalContainer, "oneTouch.displayMinBid");
     toggle(generalContainer, "oneTouch.displayMinBuy");
-    toggle(generalContainer, "oneTouch.smartMode");
+    toggle(generalContainer, "oneTouch.superMode", true);
     //toggle(generalContainer, "legacyMode");
 
     let searchContainer = document.createElement("div");

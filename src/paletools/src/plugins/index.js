@@ -29,9 +29,9 @@ import clubSearchEnhacer from "./clubSearchEnhacer";
 import keepPlayerSellValues from "./keepPlayerSellValues";
 import sellMultiple from "./sellMultiple";
 import xmlHttpRequest from "./xmlHttpRequest";
-import increaseAllowedAuctions from "./increaseAllowedAuctions";
 import pristinePlayers from "./pristinePlayers";
 import showPlayerContracts from "./showPlayerContracts";
+import incrementAllowedActions from "./incrementAllowedAuctions";
 
 const plugins = [
     minMaxPrices,
@@ -64,7 +64,7 @@ const plugins = [
     keepPlayerSellValues,
     sellMultiple,
     xmlHttpRequest,
-    increaseAllowedAuctions,
+    incrementAllowedActions,
     pristinePlayers,
     showPlayerContracts
 ].filter(x => x);

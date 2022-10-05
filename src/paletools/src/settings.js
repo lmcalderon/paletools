@@ -72,7 +72,7 @@ let settings = {
                 enabled: false,
                 displayMinBid: false,
                 displayMinBuy: false,
-                smartMode: false,
+                superMode: false,
             },
             buttons: buttons,
             legacyMode: false,
@@ -145,6 +145,9 @@ let settings = {
             enabled: false
         },
         showPlayerContracts: {
+            enabled: false
+        },
+        incrementAllowedAuctions: {
             enabled: false
         }
     }
