@@ -6,7 +6,7 @@ import { logDebug } from "../log";
 
 export function navigateBack(controller, delayMs) {
     function back(controller) {
-        const previousController = navigationController.getPreviousController();
+        const previousController = controller.getNavigationController().getPreviousController();
 
         try {
             controller.getNavigationController()._eBackButtonTapped();
@@ -30,6 +30,31 @@ export function navigateBack(controller, delayMs) {
             logDebug("view is hidden, executing hack");
             newCurrentController.getNavigationController()._currentController = null;
             newCurrentController.getNavigationController().pushViewController(newCurrentController);
+        }
+
+        if (isPhone()) {
+            delay(50).then(() => {
+                const viewContent = select(".ut-navigation-container-view--content");
+
+                if (!viewContent.innerHTML) {
+                    const newCurrentController = getCurrentController();
+                    logDebug("HTML is empty, pushing previousController")
+                    const navigationController = newCurrentController.getNavigationController();
+
+                    let index = navigationController._childViewControllers.length - 1;
+                    
+                    for(; index > 0; index--){
+                        if(navigationController._childViewControllers[index].className === previousController.className) break;
+                    }
+
+                    if(index > 0){
+                        navigationController._childViewControllers.length = index;
+                    }
+
+                    newCurrentController.getNavigationController()._currentController = null;
+                    newCurrentController.getNavigationController().pushViewController(previousController);
+                }
+            });
         }
     }
 

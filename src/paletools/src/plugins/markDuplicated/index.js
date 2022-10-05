@@ -14,18 +14,22 @@ const cfg = settings.plugins.markDuplicated;
 
 function run() {
 
-    let club = null;
+    let _club = null;
 
 
     if (settings.enabled && cfg.enabled) {
-        loadClubPlayers().then(currentClub => {club = currentClub});
+        loadClubPlayers().then(currentClub => {
+            _club = currentClub;
+        });
     }
 
     const UTTransfersHubViewController_requestTransferTargetData = UTTransfersHubViewController.prototype._requestTransferTargetData;
 
     UTTransfersHubViewController.prototype._requestTransferTargetData = function () {
         if (settings.enabled && cfg.enabled) {
-            loadClubPlayers().then(currentClub => {club = currentClub});
+            loadClubPlayers().then(currentClub => {
+                _club = currentClub;
+            });
         }
 
         UTTransfersHubViewController_requestTransferTargetData.call(this);
@@ -40,7 +44,7 @@ function run() {
             } else {
                 const controller = getCurrentController();
                 if (controller instanceof UTMarketSearchResultsSplitViewController) {
-                    if (club && club[this.data.definitionId]) {
+                    if (_club && _club[this.data.definitionId]) {
                         addClass(this.__entityContainer, "club-duplicated");
                     }
                 }
@@ -59,7 +63,7 @@ function run() {
                     const player = t[index];
                     if (club[player.id]) {
                         this.__playerResultsList.children[index].classList.add('club-duplicated');
-                        if(club[player.id].untradeable){
+                        if (club[player.id].untradeable) {
                             this.__playerResultsList.children[index].classList.add('club-untradeable');
                         }
                     }
