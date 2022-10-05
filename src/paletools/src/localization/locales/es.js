@@ -86,7 +86,7 @@ export default {
     "plugins.snipe.settings.search.oneTouchMinBuy": "Snipe +Comprar Ahora",
     "plugins.snipe.settings.oneTouch.displayMinBid": "Mostrar boton Snipe +Puja",
     "plugins.snipe.settings.oneTouch.displayMinBuy": "Mostrar boton Snipe +Comprar Ahora",
-    "plugins.snipe.settings.oneTouch.smartMode": "Modo Snipe inteligente",
+    "plugins.snipe.settings.oneTouch.superMode": "Modo Snipe inteligente",
     "plugins.snipe.settings.legacyMode": "Usar modo legacy para comprar (palesnipe 3.1)",
     /// #endif
 

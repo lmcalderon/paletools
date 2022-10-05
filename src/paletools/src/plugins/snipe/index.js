@@ -196,7 +196,7 @@ function run() {
             keys[buttons.search.oneTouchMinBid] = () => {
                 if (cfg.oneTouch.enabled) {
                     keys[buttons.search.incMinBid]();
-                    if (cfg.oneTouch.smartMode) {
+                    if (cfg.oneTouch.superMode) {
                         requestSnipe();
                     }
                     search();
@@ -205,7 +205,7 @@ function run() {
             keys[buttons.search.oneTouchMinBuy] = () => {
                 if (cfg.oneTouch.enabled) {
                     keys[buttons.search.incMinBuy]()
-                    if (cfg.oneTouch.smartMode) {
+                    if (cfg.oneTouch.superMode) {
                         requestSnipe();
                     }
                     search();

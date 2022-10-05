@@ -1,24 +1,27 @@
 import { addLabelWithTextInputWithKeyPress, addLabelWithToggle } from "../../controls";
-import { getObjectPropertyValueByPath, setObjectPropertyByPath } from "../../utils/object";
-import settings, { saveConfiguration } from "../../settings";
 import localize from "../../localization";
+import settings, { saveConfiguration } from "../../settings";
+import { getObjectPropertyValueByPath, setObjectPropertyByPath } from "../../utils/object";
 
 const cfg = settings.plugins.snipe;
-export default function menu(){
+export default function menu() {
 
-    function input(container, path){
+    function input(container, path) {
         const value = getObjectPropertyValueByPath(cfg, path)
-        addLabelWithTextInputWithKeyPress(container, `plugins.snipe.settings.${path.replace('buttons.','')}`, value, (elem, code) => {
+        addLabelWithTextInputWithKeyPress(container, `plugins.snipe.settings.${path.replace('buttons.', '')}`, value, (elem, code) => {
             elem.value = code;
             setObjectPropertyByPath(cfg, path, code);
             saveConfiguration();
         }, null, true);
     }
 
-    function toggle(container, path, displayWarning){
+    function toggle(container, path, displayWarning) {
         const value = getObjectPropertyValueByPath(cfg, path)
-        addLabelWithToggle(container, `plugins.snipe.settings.${path.replace('buttons.','')}`, value, toggleState => {
-            if(toggleState && confirm(localize("plugins.dangerous"))){
+        addLabelWithToggle(container, `plugins.snipe.settings.${path.replace('buttons.', '')}`, value, toggleState => {
+            if (toggleState) {
+                if (displayWarning && !confirm(localize("plugins.dangerous"))) {
+                    return false;
+                }
                 setObjectPropertyByPath(cfg, path, toggleState);
                 saveConfiguration();
             }
@@ -64,12 +67,12 @@ export default function menu(){
     input(bidContainer, "buttons.search.incMaxBuy");
     input(bidContainer, "buttons.search.oneTouchMinBid");
     input(bidContainer, "buttons.search.oneTouchMinBuy");
-    
+
 
 
     container.appendChild(generalContainer);
     container.appendChild(searchContainer);
     container.appendChild(bidContainer);
-    
+
     return container;
 }
