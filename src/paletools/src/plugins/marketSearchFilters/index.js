@@ -26,6 +26,16 @@ function run() {
         });
     }
 
+    const UTTransfersHubViewController_requestTransferTargetData_ = UTTransfersHubViewController.prototype._requestTransferTargetData;
+
+    UTTransfersHubViewController.prototype._requestTransferTargetData = function () {
+        if (settings.enabled && cfg.hideDuplicates) {
+            loadClubPlayers().then(currentClub => {club = currentClub});
+        }
+
+        UTTransfersHubViewController_requestTransferTargetData_.call(this);
+    };
+
     const UTMarketSearchFiltersView__generate = UTMarketSearchFiltersView.prototype._generate
     UTMarketSearchFiltersView.prototype._generate = function _generate() {
         function createContainer(child) {
