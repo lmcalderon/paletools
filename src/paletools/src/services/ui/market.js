@@ -25,30 +25,31 @@ export function clearSnipeRequests() {
     logDebug("Snipe requests cleared");
 }
 
-const UTMarketSearchFiltersView_generate = UTMarketSearchFiltersView.prototype._generate;
-UTMarketSearchFiltersView.prototype._generate = function _generate() {
-    UTMarketSearchFiltersView_generate.call(this);
-    const inputs = selectAll(".ut-numeric-input-spinner-control");
-    if (inputs.length > 3) {
-        inputs[0].scrollIntoView();
-    }
-}
 
-
+const _goBackRequests = [];
 export function enableMarketSnipe() {
+    const UTNavigationController_showController = UTNavigationController.prototype._showController;
+    UTNavigationController.prototype._showController = function (...args) {
+        UTNavigationController_showController.call(this, ...args);
+
+        if(_goBackRequests.length > 0){
+            const goBackRequest = _goBackRequests.shift();
+            _goBackRequests.length = 0;
+            goBackRequest();
+            this._eBackButtonTapped();
+        }
+    }
+
     addMarketSearchPreRender((items, controller) => {
 
         if (_snipeRequests.length === 0) return true;
         logDebug(`Snipe Requests: ${_snipeRequests.length}`);
 
-        displayLoader();
         let request = _snipeRequests.shift();
         clearSnipeRequests();
 
         function goBack() {
-            navigateBack(controller);
-            hideLoader();
-            triggerEvent(EVENTS.SNIPE_GOBACK);
+            navigateBack(controller);            
         }
 
         if (items.length === 0) {
@@ -89,6 +90,6 @@ export function enableMarketSnipe() {
             });
         }
 
-        return false;
+        return true;
     });
 }
