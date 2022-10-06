@@ -49,7 +49,7 @@ export function enableMarketSnipe() {
         clearSnipeRequests();
 
         function goBack() {
-            navigateBack(controller);            
+            navigateBack(controller, _goBackDelay);            
         }
 
         if (items.length === 0) {

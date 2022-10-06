@@ -82,11 +82,11 @@ function run() {
         this._oneTouchIncMinBid = new UTStandardButtonControl();
         this._oneTouchIncMinBuyNow = new UTStandardButtonControl();
 
-        if (cfg.oneTouch.enabled && cfg.oneTouch.displayMinBid) {
+        if (cfg.oneTouch.isEnabled && cfg.oneTouch.displayMinBid) {
             addOneTouchButton(this._oneTouchIncMinBid, localize("plugins.snipe.settings.search.oneTouchMinBid"), this._minBidPriceRow, "snipe-min-bid");
         }
 
-        if (cfg.oneTouch.enabled && cfg.oneTouch.displayMinBuy) {
+        if (cfg.oneTouch.isEnabled && cfg.oneTouch.displayMinBuy) {
             addOneTouchButton(this._oneTouchIncMinBuyNow, localize("plugins.snipe.settings.search.oneTouchMinBuy"), this._minBuyNowPriceRow, "snipe-min-buy-now");
         }
     }
@@ -194,7 +194,7 @@ function run() {
                 controller.getView()._maxBidPriceRow.value = 0;
             };
             keys[buttons.search.oneTouchMinBid] = () => {
-                if (cfg.oneTouch.enabled) {
+                if (cfg.oneTouch.isEnabled) {
                     keys[buttons.search.incMinBid]();
                     if (cfg.oneTouch.superMode) {
                         requestSnipe();
@@ -203,7 +203,7 @@ function run() {
                 }
             };
             keys[buttons.search.oneTouchMinBuy] = () => {
-                if (cfg.oneTouch.enabled) {
+                if (cfg.oneTouch.isEnabled) {
                     keys[buttons.search.incMinBuy]()
                     if (cfg.oneTouch.superMode) {
                         requestSnipe();
@@ -245,8 +245,8 @@ function run() {
                 };
             }
             else {
-                keys[buttons.search.oneTouchMinBid] = () => cfg.oneTouch.enabled ? back() : false;
-                keys[buttons.search.oneTouchMinBuy] = () => cfg.oneTouch.enabled ? back() : false;
+                keys[buttons.search.oneTouchMinBid] = () => cfg.oneTouch.isEnabled ? back() : false;
+                keys[buttons.search.oneTouchMinBuy] = () => cfg.oneTouch.isEnabled ? back() : false;
             }
         },
 
@@ -272,7 +272,7 @@ function run() {
                     stepper.endIncrease();
                 };
 
-                if (cfg.oneTouch.enabled) {
+                if (cfg.oneTouch.isEnabled) {
                     keys[buttons.search.oneTouchMinBid] = keys[buttons.search.oneTouchMinBuy] = () => buyNow();
                 }
             }

@@ -69,7 +69,7 @@ let settings = {
         },
         snipe: {
             oneTouch: {
-                enabled: false,
+                isEnabled: false,
                 displayMinBid: false,
                 displayMinBuy: false,
                 superMode: false,
@@ -149,6 +149,9 @@ let settings = {
         },
         incrementAllowedAuctions: {
             enabled: false
+        },
+        warningScreen: {
+            enabled: true
         }
     }
 };

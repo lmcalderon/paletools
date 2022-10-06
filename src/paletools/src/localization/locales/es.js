@@ -60,7 +60,7 @@ export default {
     "plugins.snipe.settings.title": "Sniping",
     "plugins.snipe.settings.enableDisable": "Habilitar / Deshabilitar",
     "plugins.snipe.settings.results.pressEnter": "Auto presionar ENTER después de comprar",
-    "plugins.snipe.settings.oneTouch.enabled": "Modo Snipe de Un Toque (Tuki)",
+    "plugins.snipe.settings.oneTouch.isEnabled": "Modo Snipe de Un Toque (Tuki)",
     "plugins.snipe.settings.back": "Volver atrás",
     "plugins.snipe.settings.search.search": "Buscar",
     "plugins.snipe.settings.results.buy": "Comprar ahora",
@@ -215,9 +215,12 @@ export default {
     "plugins.pristinePlayers.title": "Remarcar jugadores pristinos (1 dueño y 7 contratos)",
     /// #endif
 
-     /// #if process.env.SHOW_PLAYER_CONTRACTS
-     "plugins.showPlayerContracts.title": "Mostrar contratos de jugadores en el mercado",
-     /// #endif
+    /// #if process.env.SHOW_PLAYER_CONTRACTS
+    "plugins.showPlayerContracts.title": "Mostrar contratos de jugadores en el mercado",
+    /// #endif
+
+    "plugins.warningScreen.title": "PALETOOLS - ADVERTENCIA DE USO",
+    "plugins.warningScreen.disclaimer": "<p>Querido usuario, ya que Paletools es una herramienta que te permite realizar acciones no pensadas por EA y te permite ser mucho mas r&aacute;pido en el uso de la WebApp tu estas entiendo que puedes estar en riesgo de un posible BAN por parte de EA</p><p><br /></p><p>Tu aceptas utilizar la herramienta bajo tu responsabilidad y aceptas que vas a ser muy cuidadoso y cauteloso con su uso.</p><p><br /></p><p>Si realizas muchos snipes seguidos puedes recibir un SOFT BAN del mercado o incluso peor un <b>BAN permanente</b></p><p><br /></p><p>Por favor <b>USA ESTA HERRAMIENTA RESPONSABLEMENTE</b></p><p><br /></p><p>&iexcl;Gracias y que tengas un gran d&iacute;a!</p>",
 
     "plugins.eaBugFixer.settings.title": "Arreglar cagadas de EA"
 };

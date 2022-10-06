@@ -32,6 +32,7 @@ import xmlHttpRequest from "./xmlHttpRequest";
 import pristinePlayers from "./pristinePlayers";
 import showPlayerContracts from "./showPlayerContracts";
 import incrementAllowedActions from "./incrementAllowedAuctions";
+import warningScreen from "./warningScreen";
 
 const plugins = [
     minMaxPrices,
@@ -66,7 +67,8 @@ const plugins = [
     xmlHttpRequest,
     incrementAllowedActions,
     pristinePlayers,
-    showPlayerContracts
+    showPlayerContracts,
+    warningScreen
 ].filter(x => x);
 
 const menus = [];

@@ -60,7 +60,7 @@ export default {
     "plugins.snipe.settings.title": "Sniping",
     "plugins.snipe.settings.enableDisable": "Enable / Disable",
     "plugins.snipe.settings.results.pressEnter": "Auto press ENTER after buy",
-    "plugins.snipe.settings.oneTouch.enabled": "One Touch Snipe",
+    "plugins.snipe.settings.oneTouch.isEnabled": "One Touch Snipe",
     "plugins.snipe.settings.back": "Go Back",
     "plugins.snipe.settings.search.search": "Search",
     "plugins.snipe.settings.results.buy": "Buy now",
@@ -223,6 +223,9 @@ export default {
     "plugins.showPlayerContracts.title": "Show Player Contracts on Transfer Market",
     /// #endif
 
-    "plugins.eaBugFixer.settings.title": "Fix EA mistakes",
+    "plugins.warningScreen.title": "PALETOOLS - USAGE WARNING",
+    "plugins.warningScreen.disclaimer": "<p>Dear user, since Paletools allows you to perform actions that were not design by EA and allows you to be much quicker in the usage of the WebApp you are at a potential risk of ban from EA</p><p><br /></p><p>Therefore you shall use it at your own discretion and you should be very cautious</p><p><br /></p><p>If you perform too many snipes in a row you might get a soft market ban or even worst a <b>permanent ban from the transfer market</b></p><p><br /></p><p>Please <b>USE THIS TOOL AT YOUR OWN RISK</b></p><p><br /></p><p>Thanks a have a nice day!</p>",
+
+    "plugins.eaBugFixer.settings.title": "Fix EA mistakes"
 };
 

@@ -34,7 +34,7 @@ export default function menu() {
     let generalContainer = document.createElement("div");
     input(generalContainer, "buttons.enableDisable");
     toggle(generalContainer, "buttons.results.pressEnter");
-    toggle(generalContainer, "oneTouch.enabled");
+    toggle(generalContainer, "oneTouch.isEnabled", true);
     toggle(generalContainer, "oneTouch.displayMinBid");
     toggle(generalContainer, "oneTouch.displayMinBuy");
     toggle(generalContainer, "oneTouch.superMode", true);
