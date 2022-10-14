@@ -9,6 +9,7 @@ import { addSnipeRequest, enableMarketSnipe } from "../../services/ui/market";
 import { incrementPriceRow } from "../../services/ui/search";
 import { append, select } from "../../utils/dom";
 import settings, { saveConfiguration } from "../../settings";
+import { EVENTS, on } from "../../events";
 
 const cfg = settings.plugins.snipe;
 
@@ -27,15 +28,22 @@ function run() {
         this._snipeButton.init();
         this._snipeButton.setText("SNIPE");
         this._snipeButton.addTarget(this, () => {
-            addSnipeRequest();
-
-            incrementPriceRow(this._minBidPriceRow, this._maxBuyNowPriceRow);
-            this._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
+            executeSnipe();
         }, EventType.TAP);
         this._snipeButton.getRootElement().classList.add("call-to-action");
         this._snipeButton.getRootElement().classList.add("snipe")
 
+        const executeSnipe = () => {
+            addSnipeRequest();
+
+            incrementPriceRow(this._minBidPriceRow, this._maxBuyNowPriceRow);
+            this._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
+        }
+
         append(select(".button-container", this.__searchContainer), this._snipeButton.getRootElement());
+
+
+        on(EVENTS.SNIPE_EXECUTE, () => executeSnipe);
     }
 
     const UTMarketSearchFiltersView_destroyGeneratedElements = UTMarketSearchFiltersView.prototype.destroyGeneratedElements;

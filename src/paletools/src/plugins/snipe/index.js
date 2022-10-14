@@ -20,7 +20,7 @@ import menu from "./menu";
 
 const cfg = settings.plugins.snipe;
 
-function requestSnipe(){
+function requestSnipe() {
     displayLoader();
     addSnipeRequest();
 }
@@ -65,14 +65,18 @@ function run() {
             button.init();
             button.setText(buttonText);
             button.addTarget(this, () => {
-                requestSnipe();
-                incrementPriceRow(priceRow, self._maxBuyNowPriceRow);
-                self._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
+                executeSnipe(priceRow);
             }, EventType.TAP);
             button.getRootElement().classList.add("call-to-action");
             button.getRootElement().classList.add(className)
 
             append(select(".button-container", self.__searchContainer), button.getRootElement());
+        }
+
+        const executeSnipe = (priceRow) => {
+            requestSnipe();
+            incrementPriceRow(priceRow, self._maxBuyNowPriceRow);
+            self._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
         }
 
         this._searchButton.addTarget(this, () => {
@@ -89,6 +93,8 @@ function run() {
         if (cfg.oneTouch.isEnabled && cfg.oneTouch.displayMinBuy) {
             addOneTouchButton(this._oneTouchIncMinBuyNow, localize("plugins.snipe.settings.search.oneTouchMinBuy"), this._minBuyNowPriceRow, "snipe-min-buy-now");
         }
+
+        on(EVENTS.SNIPE_EXECUTE, () => executeSnipe(this._oneTouchIncMinBid));
     }
 
     const UTMarketSearchFiltersView_destroyGeneratedElements = UTMarketSearchFiltersView.prototype.destroyGeneratedElements;

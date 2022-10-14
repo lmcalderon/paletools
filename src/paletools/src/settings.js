@@ -103,7 +103,8 @@ let settings = {
             enabled: true
         },
         clubAnalyzer: {
-            enabled: true
+            enabled: true,
+            autoRefresh: true
         },
         sbcTimesCompleted: {
             enabled: true

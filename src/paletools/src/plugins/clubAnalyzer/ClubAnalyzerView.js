@@ -63,12 +63,13 @@ ClubAnalyzerView.prototype._appendBody = function (container) {
     append(contentContainer, content);
 
     append(container,
-        contentContainer,
-        createElem("div", { className: "button-container" }, `
+        
+        createElem("div", { id: "clubanalyzercommands", className: "button-container" }, `
             <button id="reload-club-analyzer" class="btn-standard call-to-action" data-loading="Reloading...">${localize("plugins.clubAnalyzer.view.buttons.reload")}</button>
             <button id="export-csv-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${localize("plugins.clubAnalyzer.view.buttons.exportCsv")}</button>
             <button id="export-html-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${localize("plugins.clubAnalyzer.view.buttons.exportHtml")}</button>
-            `));
+            `),
+            contentContainer,);
 
     on(select("#reload-club-analyzer", container), "click", () => {
         this.onReloadClicked.notify();
@@ -98,14 +99,30 @@ ClubAnalyzerView.prototype._createDashboard = function (viewmodel) {
                     <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/images/SearchFilters/level/gold.png" /></td><td>${counters.rare.gold}</td><td>${counters.common.gold}</td></tr>
                     <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/images/SearchFilters/level/silver.png" /></td><td>${counters.rare.silver}</td><td>${counters.common.silver}</td></tr>
                     <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/images/SearchFilters/level/bronze.png" /></td><td>${counters.rare.bronze}</td><td>${counters.common.bronze}</td></tr>
-                    <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/images/SearchFilters/level/SP.png" /></td><td>${counters.special}</td><td></td></tr>
+                    <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/images/SearchFilters/level/SP.png" /></td><td>${counters.totw}</td><td></td></tr>
                 </table>
                 </div>
                 <div>
                     <table class="latam tile">
-                        <tr><th></th><th>${localize("search.cardLevels.cardLevel3")}</th><th>${localize("search.cardLevels.cardLevel2")}</th><th>${localize("search.cardLevels.cardLevel1")}</th></tr>
-                        <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/content/21D4F1AC-91A3-458D-A64E-895AA6D871D1/2021/fut/items/images/backgrounds/itemCompanionBGs/8f60cc02-051a-4f95-bdcb-a2bc454e1f47/cards_bg_s_1_53_0.png" /></td><td>${counters.libertadores.gold}</td><td>${counters.libertadores.silver}</td><td>${counters.libertadores.bronze}</td></tr>
-                        <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/content/21D4F1AC-91A3-458D-A64E-895AA6D871D1/2021/fut/items/images/backgrounds/itemCompanionBGs/ab719e69-0d3e-430c-8e67-80a106de93c1/cards_bg_s_1_52_0.png" /></td><td>${counters.sudamericana.gold}</td><td>${counters.sudamericana.silver}</td><td>${counters.sudamericana.bronze}</td></tr>
+                        <tr>
+                            <th></th>
+                            <th>MOTM</th>
+                            <th>${localize("search.cardLevels.cardLevel3")}</th>
+                            <th>${localize("search.cardLevels.cardLevel2")}</th>
+                            <th>${localize("search.cardLevels.cardLevel1")}</th>
+                        </tr>
+                        <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/content/21D4F1AC-91A3-458D-A64E-895AA6D871D1/2021/fut/items/images/backgrounds/itemCompanionBGs/8f60cc02-051a-4f95-bdcb-a2bc454e1f47/cards_bg_s_1_53_0.png" /></td>
+                            <td>${counters.libertadores.motm}</td>
+                            <td>${counters.libertadores.gold}</td>
+                            <td>${counters.libertadores.silver}</td>
+                            <td>${counters.libertadores.bronze}</td>
+                        </tr>
+                        <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/content/21D4F1AC-91A3-458D-A64E-895AA6D871D1/2021/fut/items/images/backgrounds/itemCompanionBGs/ab719e69-0d3e-430c-8e67-80a106de93c1/cards_bg_s_1_52_0.png" /></td>
+                        <td>${counters.sudamericana.motm}</td>
+                        <td>${counters.sudamericana.gold}</td>
+                        <td>${counters.sudamericana.silver}</td>
+                        <td>${counters.sudamericana.bronze}</td>
+                        </tr>
                     </table>
                     <table class="limbo tile">
                         <tr><th>${localize("navbar.label.newitems")}</th><th>${localize("panel.label.transferlist")}</th><th>${localize("panel.label.transfertargets")}</th></tr>
@@ -212,6 +229,7 @@ ClubAnalyzerView.prototype.prepareForUpdate = function () {
     const buttons = selectAll(".menu-container > button", this.__root);
     removeClass(buttons, "selected");
     addClass(buttons[0], "selected");
+    hide(select("#clubanalyzer-commands"));
 }
 
 ClubAnalyzerView.prototype.update = function (viewmodel) {
@@ -237,6 +255,7 @@ ClubAnalyzerView.prototype.update = function (viewmodel) {
 
     const reports = selectAll(".club-analyzer-report");
     hide(reports);
+    show(select("#clubanalyzer-commands"));
     show(reports[0]);
 
     on(selectAll("li", this._body), "click", ev => {

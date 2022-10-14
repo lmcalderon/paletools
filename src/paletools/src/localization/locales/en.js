@@ -144,6 +144,7 @@ export default {
 
     /// #if process.env.CLUB_ANALYZER
     "plugins.clubAnalyzer.settings.title": "Club Analyzer",
+    "plugins.clubAnalyzer.settings.autoRefresh": "Auto Refresh",
     "plugins.clubAnalyzer.view.dashboard.description": "Players count (including duplicated, not including loans) in club + unnasigned up to 50, watchlist (won) up to 100 and tradepile",
     "plugins.clubAnalyzer.view.loading.players": "Loading players {count} loaded...",
     "plugins.clubAnalyzer.view.loading.usermassinfo": "Loading unassigned players data...",

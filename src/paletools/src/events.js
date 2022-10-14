@@ -30,5 +30,6 @@ export const EVENTS = {
     APP_LOADED: "appLoaded",
     SNIPE_SUCCESS: "snipeSuccess",
     SNIPE_FAILED: "snipeFailed",
-    SNIPE_GOBACK: "snipeGoBack"
+    SNIPE_GOBACK: "snipeGoBack",
+    SNIPE_EXECUTE: "snipeExecute"
 }

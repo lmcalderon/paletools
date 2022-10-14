@@ -1,9 +1,13 @@
 let plugin;
+import { addLabelWithToggle } from "../../controls";
 /// #if process.env.CLUB_ANALYZER
 import localize from "../../localization";
+import settings, { saveConfiguration } from "../../settings";
 import { addStyle } from "../../utils/styles";
 import { ClubAnalyzerController } from "./ClubAnalyzerController";
 import styles from "./styles.css";
+
+const cfg = settings.plugins.clubAnalyzer;
 
 function run() {
 
@@ -29,8 +33,24 @@ function run() {
     addStyle('paletools-club-analyzer', styles.replace("#EXTENDED_PLAYER_INFO.TOTAL#", localize("extendedPlayerInfo.total")));
 }
 
+function menu() {
+    const container = document.createElement("div");
+    addLabelWithToggle(container, "plugins.clubAnalyzer.settings.autoRefresh", cfg.autoRefresh, toggleState => {
+        cfg.autoRefresh = toggleState;
+        saveConfiguration();
+    });
+    return container;
+}
+
 plugin = {
-    run: run
+    run: run,
+    order: 20,
+    menu: menu,
+    settings: {
+        name: 'club-analyzer',
+        title: 'plugins.clubAnalyzer.settings.title',
+        menu: menu
+    }
 };
 /// #endif
 

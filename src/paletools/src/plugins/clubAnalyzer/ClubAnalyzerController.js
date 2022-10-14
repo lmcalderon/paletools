@@ -3,8 +3,12 @@
 import localize from "../../localization";
 import { getAllClubPlayers } from "../../services/club";
 import http from "../../services/http";
+import storage from "../../services/storage";
+import settings from "../../settings";
 import { ClubAnalyzerView } from "./ClubAnalyzerView";
 import ClubAnalyzerViewModel from "./ClubAnalyzerViewModel";
+
+const cfg = settings.plugins.clubAnalyzer;
 
 export function ClubAnalyzerController(t) {
     UTViewController.call(this);
@@ -28,7 +32,12 @@ ClubAnalyzerController.prototype.init = function () {
 
 ClubAnalyzerController.prototype.viewDidAppear = function () {
     this.getNavigationController().setNavigationVisibility(true, true);
-    this._reload();
+
+    if(cfg.autoRefresh || !storage.get("clubAnalyzerLoaded")){
+        this._reload();
+    }
+
+    storage.set("clubAnalyzerLoaded", true, false);
 }
 
 ClubAnalyzerController.prototype.getNavigationTitle = function () {
@@ -145,42 +154,6 @@ function analyzeClub(loadingCallback) {
     });
 };
 
-
-// function analyzeClub(loadingCallback) {
-//     let players, usermassinfo, tradepile, watchlist;
-
-//     return new Promise((resolve) => {
-//         loadingCallback("players", 0);
-//         getAllClubPlayers(null, null, count => loadingCallback("players", count))
-//             .then(p => {
-//                 players = p;
-//                 loadingCallback("usermassinfo");
-//                 http('usermassinfo').then(umi => {
-//                     usermassinfo = umi;
-
-//                     loadingCallback("tradepile");
-//                     http('tradepile').then(tp => {
-//                         tradepile = tp;
-
-//                         loadingCallback("watchlist");
-//                         http('watchlist').then(wl => {
-//                             watchlist = wl;
-
-//                             let allPlayerNames = {
-//                                 players: {}
-//                             };
-
-//                             loadingCallback("process");
-//                             const viewmodel = processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist);
-//                             resolve(viewmodel);
-//                         });
-//                     });
-
-//                 });
-//             })
-//     });
-// };
-
 function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist) {
     const viewmodel = {
         players: {
@@ -202,27 +175,29 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
         },
         counters: {
             special: 0,
+            totw: 0,
+            tots: 0,
             rare: {
                 gold: 0,
                 silver: 0,
                 bronze: 0,
-                ucl: 0
             },
             common: {
                 gold: 0,
                 silver: 0,
                 bronze: 0,
-                ucl: 0
             },
             libertadores: {
                 gold: 0,
                 silver: 0,
-                bronze: 0
+                bronze: 0,
+                motm: 0
             },
             sudamericana: {
                 gold: 0,
                 silver: 0,
-                bronze: 0
+                bronze: 0,
+                motm: 0
             },
             unnasignedTotal: 0,
             watchlistTotal: 0,
@@ -287,11 +262,17 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
                     viewmodel.counters[rarity].gold++;
                 }
                 break;
-            case 47:
-                viewmodel.counters.common.ucl++;
+            case 54:
+                viewmodel.counters.libertadores.motm++;
                 break;
-            case 48:
-                viewmodel.counters.rare.ucl++;
+            case 59:
+                viewmodel.counters.sudamericana.motm++;
+                break;
+            case 3:
+                viewmodel.counters.totw++;
+                break;
+            case 11:
+                viewmodel.counters.tots++;
                 break;
             default:
                 viewmodel.counters.special++;

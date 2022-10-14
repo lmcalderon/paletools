@@ -1,9 +1,6 @@
 import { addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
 import { EVENTS, triggerEvent } from "../../events";
 import localize, { localizeNumber } from "../../localization";
-import delay from "../../utils/delay";
-import { selectAll } from "../../utils/dom";
-import { displayLoader, hideLoader } from "../../utils/loader";
 import { notifySuccess } from "../../utils/notifications";
 import { getUnassignedPlayers } from "../club";
 import getDebugSettings from "../debug";
@@ -49,7 +46,9 @@ export function enableMarketSnipe() {
         clearSnipeRequests();
 
         function goBack() {
-            navigateBack(controller, _goBackDelay);            
+            navigateBack(controller, _goBackDelay, () => {
+                triggerEvent(EVENTS.SNIPE_GOBACK);
+            });
         }
 
         if (items.length === 0) {

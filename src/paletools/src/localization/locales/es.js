@@ -144,6 +144,7 @@ export default {
 
     /// #if process.env.CLUB_ANALYZER
     "plugins.clubAnalyzer.settings.title": "Club Analyzer",
+    "plugins.clubAnalyzer.settings.autoRefresh": "Actualización Automática",
     "plugins.clubAnalyzer.view.dashboard.description": "Cantidad de jugadores (incluye duplicados, no incluye préstamos + hasta 50 jugadores sin asignar + hasta 100 jugadores de la watchlist (solo los ganados) + la lista de transferibles",
     "plugins.clubAnalyzer.view.loading.players": "Cargando jugadores, {count} cargados...",
     "plugins.clubAnalyzer.view.loading.usermassinfo": "Cargando jugadores sin asignar...",
