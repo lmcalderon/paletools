@@ -15,7 +15,7 @@ function run() {
     `,
         async () => {
             cfg.enabled = false;
-            //saveConfiguration();
+            saveConfiguration();
         });
     }
 }
