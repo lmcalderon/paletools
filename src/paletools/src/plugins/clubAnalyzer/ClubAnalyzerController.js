@@ -167,6 +167,7 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
                 tradeable: {},
                 untradeable: {}
             },
+            club: {},
             tradepile: {},
             watchlistWon: {},
             watchlistWinning: {},
@@ -229,13 +230,16 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
                     rarity: getRarity(data.rareflag),
                     nation: getNationName(data.nationId),
                     team: getTeamName(data.teamid),
-                    league: getLeagueName(data.leagueId)
+                    league: getLeagueName(data.leagueId),
+                    preferredPosition: data.preferredPosition,
+                    avg: data.lastSalePrice
                 }
             }
             else {
                 destination[data.definitionId].count++;
                 destination[data.definitionId].sumPrices += data.lastSalePrice;
                 destination[data.definitionId].players.push(data);
+                destination[data.definitionId].avg = Math.round(destination[data.definitionId].sumPrices / destination[data.definitionId].count);
             }
         }
 
@@ -301,6 +305,7 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
     overrideItemData(tradepile.auctionInfo, "itemData");
     overrideItemData(watchlist.auctionInfo, "itemData");
 
+    processPlayers(players, viewmodel.players.club, x => x, x => x.lastSalePrice);
     processPlayers(usermassinfo.purchasedItems.itemData, viewmodel.players.unnasigned.all, x => x, undefined, true);
     processPlayers(usermassinfo.purchasedItems.itemData.filter(x => !x.untradeable), viewmodel.players.unnasigned.tradeable, x => x, undefined, true);
     processPlayers(usermassinfo.purchasedItems.itemData.filter(x => x.untradeable), viewmodel.players.unnasigned.untradeable, x => x, undefined, true);

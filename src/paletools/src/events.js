@@ -31,5 +31,9 @@ export const EVENTS = {
     SNIPE_SUCCESS: "snipeSuccess",
     SNIPE_FAILED: "snipeFailed",
     SNIPE_GOBACK: "snipeGoBack",
-    SNIPE_EXECUTE: "snipeExecute"
+    SNIPE_EXECUTE: "snipeExecute",
+    REQUEST_OPEN: "requestOpen",
+    REQUEST_SEND: "requestSend",
+    REQUEST_FINISHED: "requestFinished",
+    LOG: "logMessage"
 }

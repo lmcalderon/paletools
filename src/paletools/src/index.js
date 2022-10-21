@@ -1,5 +1,5 @@
 import runPlugins from "./plugins";
-import { EVENTS, triggerEvent } from "./events";
+import { EVENTS, on, triggerEvent } from "./events";
 import { addStyle } from "./utils/styles";
 import styles from "./styles.css";
 import getCurrentController from "./utils/controller";
@@ -8,6 +8,7 @@ import playAudio from "./utils/fx";
 import runOverrides from "./core-overrides";
 import { addClass, hasClass, remove, removeClass, select } from "./utils/dom";
 import localize from "./localization";
+import { hide } from "./utils/visibility";
 
 function setupPhoneView() {
     if (isPhone && isPhone()) {
@@ -19,7 +20,7 @@ function setupPhoneView() {
                     "web"), 
                 "phone");
         }
-        remove(select(".ut-fifa-header-view"));
+        hide(select(".ut-fifa-header-view"));
         removeClass(select("body"), "with-fifa-header");
     }
 }

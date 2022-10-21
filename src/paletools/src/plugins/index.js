@@ -33,6 +33,7 @@ import pristinePlayers from "./pristinePlayers";
 import showPlayerContracts from "./showPlayerContracts";
 import incrementAllowedActions from "./incrementAllowedAuctions";
 import warningScreen from "./warningScreen";
+import debugMode from "./debugMode";
 
 const plugins = [
     minMaxPrices,
@@ -68,7 +69,8 @@ const plugins = [
     incrementAllowedActions,
     pristinePlayers,
     showPlayerContracts,
-    warningScreen
+    warningScreen,
+    debugMode
 ].filter(x => x);
 
 const menus = [];

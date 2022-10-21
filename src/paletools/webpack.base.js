@@ -30,6 +30,7 @@ module.exports = {
     SELL_MULTIPLE: true,
     PRISTINE_PLAYERS: true,
     SHOW_PLAYER_CONTRACTS: true,
+    DEBUG_MODE: true,
 
     SBC_SMART_BUILDER: false,
     CLUB_SEARCH_ENHACER: false,

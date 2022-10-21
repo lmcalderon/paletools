@@ -153,6 +153,9 @@ let settings = {
         },
         warningScreen: {
             enabled: true
+        },
+        debugMode: {
+            enabled: false
         }
     }
 };

@@ -3,7 +3,7 @@ import delay from "../../utils/delay";
 
 export function navigateBack(controller, delayMs, callback) {
     function back(controller) {
-        controller.getNavigationController()._eBackButtonTapped();
+        setTimeout(() => controller.getNavigationController()._eBackButtonTapped(),0);
     }
 
     if (delayMs) {

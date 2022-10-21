@@ -9,7 +9,7 @@ import { tryBuyItem } from "../market";
 import { navigateBack } from "./navigation";
 
 const _snipeRequests = [];
-const _goBackDelay = getDebugSettings().goBackDelay || 50;
+const _goBackDelay = getDebugSettings().goBackDelay || 0;
 
 
 export function addSnipeRequest(request = () => { }) {
@@ -89,6 +89,6 @@ export function enableMarketSnipe() {
             });
         }
 
-        return true;
+        return false;
     });
 }

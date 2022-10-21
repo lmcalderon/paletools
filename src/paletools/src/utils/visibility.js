@@ -14,6 +14,8 @@ export function show(elem) {
 
         removeClass(elem, "hide");
     }
+
+    return elem;
 }
 
 export function hide(elem) {
@@ -29,4 +31,6 @@ export function hide(elem) {
 
         addClass(elem, "hide");
     }
+
+    return elem;
 }

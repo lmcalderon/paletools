@@ -42,7 +42,7 @@
         color: #ffd100;
 }
 
-.club-analyzer .player {
+.club-analyzer li.player {
     display: flex;
     align-items: center;
 }
@@ -112,6 +112,15 @@
     margin-right: 4px;
     color: white;
 }
+
+.club-analyzer-auctionreport .fut_icon {
+    position: absolute;
+}
+
+.club-analyzer-auctionreport th.sorted-desc .fut_icon {
+    transform: rotate(180deg);
+}
+
 
 .club-analyzer .loans {
     z-index: 3;

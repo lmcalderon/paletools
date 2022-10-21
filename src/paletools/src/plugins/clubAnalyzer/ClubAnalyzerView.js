@@ -12,6 +12,13 @@ export function ClubAnalyzerView(t) {
     this.onExportHtmlClicked = new EAObservable();
 }
 
+function loc(key) {
+    let value = localize(`plugins.clubAnalyzer.${key}`);
+    if (!value || value.indexOf(key) > -1) return localize(key);
+
+    return value;
+}
+
 JSUtils.inherits(ClubAnalyzerView, UTView);
 
 ClubAnalyzerView.prototype.dealloc = function dealloc() {
@@ -28,12 +35,13 @@ ClubAnalyzerView.prototype._appendMainMenu = function (container) {
     <div class="menu-container">
             <button id="clubanalyzer-players-dashboard" class="ea-filter-bar-item-view selected">Dashboard</button>
             <button id="clubanalyzer-players-by-rating" class="ea-filter-bar-item-view">Rating</button>
-            <button id="clubanalyzer-players-by-rarity" class="ea-filter-bar-item-view">${localize("extendedPlayerInfo.general.rarity")}</button>
-            <button id="clubanalyzer-players-by-league" class="ea-filter-bar-item-view">${localize("search.details.itemLeague")}</button>
-            <button id="clubanalyzer-players-by-nation" class="ea-filter-bar-item-view">${localize("extendedPlayerInfo.general.nation")}</button>
-            <button id="clubanalyzer-players-by-unnasigned" class="ea-filter-bar-item-view">${localize("navbar.label.newitems")} <span id="clubanalyzer-counter-unnasigned"></span></button>
-            <button id="clubanalyzer-players-by-transferlist" class="ea-filter-bar-item-view">${localize("panel.label.transferlist")} <span id="clubanalyzer-counter-tradepile"></span></button>
-            <button id="clubanalyzer-players-by-transfertargets" class="ea-filter-bar-item-view">${localize("panel.label.transfertargets")}  <span id="clubanalyzer-counter-watchlist"></span></button>
+            <button id="clubanalyzer-players-by-rarity" class="ea-filter-bar-item-view">${loc("extendedPlayerInfo.general.rarity")}</button>
+            <button id="clubanalyzer-players-by-league" class="ea-filter-bar-item-view">${loc("search.details.itemLeague")}</button>
+            <button id="clubanalyzer-players-by-nation" class="ea-filter-bar-item-view">${loc("extendedPlayerInfo.general.nation")}</button>
+            <button id="clubanalyzer-players-by-club-bought" class="ea-filter-bar-item-view">Bought x Club</button>
+            <button id="clubanalyzer-players-by-unnasigned" class="ea-filter-bar-item-view">${loc("navbar.label.newitems")} <span id="clubanalyzer-counter-unnasigned"></span></button>
+            <button id="clubanalyzer-players-by-transferlist" class="ea-filter-bar-item-view">${loc("panel.label.transferlist")} <span id="clubanalyzer-counter-tradepile"></span></button>
+            <button id="clubanalyzer-players-by-transfertargets" class="ea-filter-bar-item-view">${loc("panel.label.transfertargets")}  <span id="clubanalyzer-counter-watchlist"></span></button>
         </div>`));
 
     const allButtons = selectAll(".menu-container > button", container);
@@ -63,13 +71,13 @@ ClubAnalyzerView.prototype._appendBody = function (container) {
     append(contentContainer, content);
 
     append(container,
-        
+
         createElem("div", { id: "clubanalyzercommands", className: "button-container" }, `
-            <button id="reload-club-analyzer" class="btn-standard call-to-action" data-loading="Reloading...">${localize("plugins.clubAnalyzer.view.buttons.reload")}</button>
-            <button id="export-csv-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${localize("plugins.clubAnalyzer.view.buttons.exportCsv")}</button>
-            <button id="export-html-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${localize("plugins.clubAnalyzer.view.buttons.exportHtml")}</button>
+            <button id="reload-club-analyzer" class="btn-standard call-to-action" data-loading="Reloading...">${loc("view.buttons.reload")}</button>
+            <button id="export-csv-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${loc("view.buttons.exportCsv")}</button>
+            <button id="export-html-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${loc("view.buttons.exportHtml")}</button>
             `),
-            contentContainer,);
+        contentContainer,);
 
     on(select("#reload-club-analyzer", container), "click", () => {
         this.onReloadClicked.notify();
@@ -91,11 +99,11 @@ ClubAnalyzerView.prototype._createDashboard = function (viewmodel) {
     const counters = viewmodel.counters;
     return createElem("div", { id: "clubanalyzer-report-dashboard", className: "club-analyzer-report" },
         `<h3 class="tile">
-                ${localize("plugins.clubAnalyzer.view.dashboard.description")}
+                ${loc("view.dashboard.description")}
                 </h3>
                 <div>
                 <table class="rarities tile">
-                    <tr><th></th><th>${localize("item.raretype1")}</th><th>${localize("item.raretype0")}</th></tr>
+                    <tr><th></th><th>${loc("item.raretype1")}</th><th>${loc("item.raretype0")}</th></tr>
                     <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/images/SearchFilters/level/gold.png" /></td><td>${counters.rare.gold}</td><td>${counters.common.gold}</td></tr>
                     <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/images/SearchFilters/level/silver.png" /></td><td>${counters.rare.silver}</td><td>${counters.common.silver}</td></tr>
                     <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/images/SearchFilters/level/bronze.png" /></td><td>${counters.rare.bronze}</td><td>${counters.common.bronze}</td></tr>
@@ -107,9 +115,9 @@ ClubAnalyzerView.prototype._createDashboard = function (viewmodel) {
                         <tr>
                             <th></th>
                             <th>MOTM</th>
-                            <th>${localize("search.cardLevels.cardLevel3")}</th>
-                            <th>${localize("search.cardLevels.cardLevel2")}</th>
-                            <th>${localize("search.cardLevels.cardLevel1")}</th>
+                            <th>${loc("search.cardLevels.cardLevel3")}</th>
+                            <th>${loc("search.cardLevels.cardLevel2")}</th>
+                            <th>${loc("search.cardLevels.cardLevel1")}</th>
                         </tr>
                         <tr><td><img src="https://www.ea.com/fifa/ultimate-team/web-app/content/21D4F1AC-91A3-458D-A64E-895AA6D871D1/2021/fut/items/images/backgrounds/itemCompanionBGs/8f60cc02-051a-4f95-bdcb-a2bc454e1f47/cards_bg_s_1_53_0.png" /></td>
                             <td>${counters.libertadores.motm}</td>
@@ -125,7 +133,7 @@ ClubAnalyzerView.prototype._createDashboard = function (viewmodel) {
                         </tr>
                     </table>
                     <table class="limbo tile">
-                        <tr><th>${localize("navbar.label.newitems")}</th><th>${localize("panel.label.transferlist")}</th><th>${localize("panel.label.transfertargets")}</th></tr>
+                        <tr><th>${loc("navbar.label.newitems")}</th><th>${loc("panel.label.transferlist")}</th><th>${loc("panel.label.transfertargets")}</th></tr>
                         <tr><td>${counters.unnasignedTotal}</td><td>${counters.tradepileTotal}</td><td>${counters.watchlistTotal}</td></tr>
                     </table>
                 </div>
@@ -144,7 +152,7 @@ ClubAnalyzerView.prototype._renderPlayer = function (player, addAuctionInfo) {
                 ${player.loans > -1 ? `<span class="loans">${player.loans}</span>` : ''}
                 ${addAuctionInfo ? `<span class="count">${player.count}</span>` : ""}
                 ${addAuctionInfo ? `<span class="avg">${Math.round(player.sumPrices / player.count)}</span>` : ""}
-                ${addAuctionInfo ? `<span class="rarity">${localize(player.rarity)}</span>` : ""}
+                ${addAuctionInfo ? `<span class="rarity">${loc(player.rarity)}</span>` : ""}
             </li>`;
 }
 
@@ -177,28 +185,131 @@ ClubAnalyzerView.prototype._createCountReportTree = function (data, level) {
     return html;
 }
 
-ClubAnalyzerView.prototype._createAuctionReport = function (id, data, caption, className) {
-    const keys = Object.keys(data);
+ClubAnalyzerView.prototype._setupAuctionReportSort = function () {
+    const reports = selectAll(".club-analyzer-auctionreport");
 
-    if (keys.length === 0) {
+    for (let report of reports) {
+        const sortHeaders = selectAll("[data-sortby]", report);
+        for (let header of sortHeaders) {
+            on(header, "click", ev => {
+                const reportData = JSON.parse(report.dataset.reportData)
+                this._createAuctionReport(reportData.id, reportData.data, reportData.caption, null, header.dataset.sortby, header.dataset.sortbyDirection === "asc" ? "desc" : "asc", reportData.addCount);
+            });
+        }
+    }
+}
+
+ClubAnalyzerView.prototype._createAuctionReport = function (id, data, caption, className, sortBy, sortByDirection, addCount) {
+    sortBy = sortBy || "rating";
+    sortByDirection = sortByDirection || "desc";
+
+    function renderPlayer(player) {
+        return `<tr class="player">
+                    <td>
+                        <a class="fullname" href="https://www.futbin.com/players?page=1&search=${player.data.f}%20${player.data.l}" target="_blank">
+                            <span class="firstname">${player.data.f}</span> 
+                            <span class="lastname">${player.data.l}</span>
+                        </a>
+                    </td>
+                    <td class="position">${PlayerPosition[player.preferredPosition]}</td>
+                    <td class="rating">${player.rating}</td>
+                    <td class="rarity">${loc(player.rarity)}</td>
+                    ${(addCount ? `<td class="count">${player.count}</td>` : "")}
+                    <td class="avg">${player.avg}</td>
+                </tr>`;
+    }
+
+    function renderTh(dataSortBy, text) {
+        return `<th data-sortby="${dataSortBy}" data-sortby-direction="${sortByDirection}" class="${(dataSortBy === sortBy ? `sorted-${sortByDirection}` : "")}">${text}
+                ${(dataSortBy === sortBy ? "<span class=\"fut_icon icon_arrow\"></span>" : "")}
+                </th>`;
+    }
+
+    function sortPlayer(p1, p2) {
+        let cmpA, cmpB;
+
+        switch (sortBy) {
+            case "name":
+                cmpA = p1.data.f + p1.data.l;
+                cmpB = p2.data.f + p2.data.l;
+                break;
+            case "position":
+                cmpA = p1.preferredPosition;
+                cmpB = p2.preferredPosition;
+                break;
+            case "rating":
+                cmpA = p1.rating;
+                cmpB = p2.rating;
+                break;
+            case "rarity":
+                cmpA = loc(p1.rarity);
+                cmpB = loc(p2.rarity);
+                break;
+            case "value":
+                cmpA = p1.avg;
+                cmpB = p2.avg;
+                break;
+        }
+
+        let sortResult = 0;
+        if (typeof cmpA === "string") {
+            sortResult = sortByDirection === "asc"
+                ? cmpA.localeCompare(cmpB)
+                : cmpB.localeCompare(cmpA);
+        }
+        else {
+            sortResult = sortByDirection === "asc"
+                ? cmpA - cmpB
+                : cmpB - cmpA;
+        }
+
+        if (sortResult === 0) {
+            const n1 = p1.data.f + p1.data.l;
+            const n2 = p2.data.f + p2.data.l;
+            return sortByDirection === "asc" ? n1.localeCompare(n2) : n2.localeCompare(n1);
+        }
+
+        return sortResult;
+    }
+
+    const players = Object.keys(data).map(x => data[x]);
+
+    if (players.length === 0) {
         return;
     }
 
     className = className || "";
 
-    let html = caption ? `<h2>${caption}</h2>` : "";
-    html += `<ul>`;
-    for (let player of keys.map(x => data[x]).sort((p1, p2) => {
-        const n1 = p1.data.f + p1.data.l;
-        const n2 = p2.data.f + p2.data.l;
-        return n1 < n2 ? -1 : n1 > n2 ? 1 : 0;
-    })) {
-        html += this._renderPlayer(player, true);
+    let html = "<table>";
+    html += caption ? `<caption>${caption}</caption>` : "";
+    html += `<tr>
+                ${renderTh("name", loc("extendedPlayerInfo.general.firstName"))}
+                ${renderTh("position", loc("extendedPlayerInfo.general.preferredPosition"))}
+                ${renderTh("rating", loc("extendedPlayerInfo.general.overall"))}
+                ${renderTh("rarity", loc("extendedPlayerInfo.general.rarity"))}
+                ${(addCount ? renderTh("count", "#") : "")}
+                ${renderTh("value", loc("searchauctions.label.pricing"))}
+            </tr>`;
+    for (let player of players.sort(sortPlayer)) {
+        html += renderPlayer(player);
     }
 
-    html += "</ul></div>";
+    html += "</table>";
 
-    return createElem("div", { id: id, className: `club-analyzer-report club-analyzer-auctionreport ${className}` }, html);
+    const existingDiv = document.getElementById(id);
+    if (existingDiv) {
+        existingDiv.innerHTML = html;
+    }
+    else {
+        let div = createElem("div", { id: id, className: `club-analyzer-report club-analyzer-auctionreport ${className}` }, html);
+        div.dataset.reportData = {
+            id: id,
+            data: data,
+            caption: caption,
+            addCount: addCount
+        };
+        return div;
+    }
 }
 
 ClubAnalyzerView.prototype._generate = function _generate() {
@@ -245,14 +356,18 @@ ClubAnalyzerView.prototype.update = function (viewmodel) {
         this._createCountReport("clubanalyzer-report-by-rarity", viewmodel.players.byRarity),
         this._createCountReport("clubanalyzer-report-by-league", viewmodel.players.byLeague),
         this._createCountReport("clubanalyzer-report-by-nation", viewmodel.players.byNation),
-        this._createAuctionReport("clubanalyzer-report-by-unnasigned", viewmodel.players.unnasigned.tradeable, "Tradeable", "clubanalyzer-report-by-unnasigned"),
-        this._createAuctionReport("clubanalyzer-report-by-unnasigned2", viewmodel.players.unnasigned.untradeable, "Untradeable", "clubanalyzer-report-by-unnasigned"),
-        this._createAuctionReport("clubanalyzer-report-by-transferlist", viewmodel.players.tradepile),
-        this._createAuctionReport("clubanalyzer-report-by-transfertargets", viewmodel.players.watchlistWon, localize("watchlist.dock.categories.won")),
-        this._createAuctionReport("clubanalyzer-report-by-transfertargets2", viewmodel.players.watchlistWinning, localize("wdock.label.winning"), "clubanalyzer-report-by-transfertargets"),
-        this._createAuctionReport("clubanalyzer-report-by-transfertargets3", viewmodel.players.watchlistLoosing, localize("dock.label.outbid"), "clubanalyzer-report-by-transfertargets"),
-        this._createAuctionReport("clubanalyzer-report-by-transfertargets4", viewmodel.players.watchlistLost, localize("watchlist.dock.categories.expired"), "clubanalyzer-report-by-transfertargets"));
 
+        this._createAuctionReport("clubanalyzer-report-by-club-bought", viewmodel.players.club),
+        this._createAuctionReport("clubanalyzer-report-by-unnasigned", viewmodel.players.unnasigned.tradeable, "Tradeable", "clubanalyzer-report-by-unnasigned", null, null, true),
+        this._createAuctionReport("clubanalyzer-report-by-unnasigned2", viewmodel.players.unnasigned.untradeable, "Untradeable", "clubanalyzer-report-by-unnasigned", null, null, true),
+        this._createAuctionReport("clubanalyzer-report-by-transferlist", viewmodel.players.tradepile, null, null, null, null, true),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets", viewmodel.players.watchlistWon, loc("watchlist.dock.categories.won"), null, null, null, true),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets2", viewmodel.players.watchlistWinning, loc("wdock.label.winning"), "clubanalyzer-report-by-transfertargets", null, null, true),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets3", viewmodel.players.watchlistLoosing, loc("dock.label.outbid"), "clubanalyzer-report-by-transfertargets", null, null, true),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets4", viewmodel.players.watchlistLost, loc("watchlist.dock.categories.expired"), "clubanalyzer-report-by-transfertargets", null, null, true));
+
+
+    this._setupAuctionReportSort();
     const reports = selectAll(".club-analyzer-report");
     hide(reports);
     show(select("#clubanalyzer-commands"));
