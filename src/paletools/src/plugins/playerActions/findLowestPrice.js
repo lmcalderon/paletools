@@ -78,7 +78,8 @@ const findLowestPriceAction = {
             triggerEvent("findLowestPriceAction:searchstart");
 
             try {
-                const minPrice = await findLowestMarketPrice(this._viewmodel.current().definitionId);
+                const viewmodel = this._viewmodel.current();
+                const minPrice = await findLowestMarketPrice(viewmodel.definitionId, viewmodel.type);
                 triggerEvent("findLowestPriceAction:searchend", minPrice || localize("plugins.playerActions.findLowestPrice.notFound"));
             }
             catch {

@@ -30,3 +30,7 @@
 .list-for-profit-custom > input {
    width: 100px;
 }
+
+.list-for-profit-market > button {
+   width: 100%;
+}

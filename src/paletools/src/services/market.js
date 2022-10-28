@@ -56,12 +56,46 @@ export async function listItemOnTransferMarket(item, sellPrice, startPrice, igno
 	return sellPrice;
 };
 
-export async function findLowestMarketPrice(playerId) {
+function updateSearchCriteriaFromItemType(searchCriteria, itemType){
+	searchCriteria.type = null;
+	searchCriteria.category = null;
+
+	if(itemType === ItemType.BADGE || itemType === ItemType.KIT){
+		searchCriteria.category = itemType;
+		searchCriteria.type = SearchType.CLUB_INFO;
+		return;
+	}
+
+	if(itemType === ItemType.HEALTH || itemType === ItemType.CONTRACT) {
+		searchCriteria.type = SearchType.CONSUMABLES_DEVELOPMENT;
+		searchCriteria.category = itemType === ItemType.HEALTH ? SearchCategory.HEALING : SearchCategory.CONTRACT;
+		return;
+	}
+
+	if(itemType === ItemType.TRAINING){
+		searchCriteria.type = SearchType.CONSUMABLES_TRAINING;
+		return;
+	}
+
+	if(itemType === ItemType.MANAGER){
+		searchCriteria.type = SearchType.STAFF;
+		return;
+	}
+
+	if(itemType === ItemType.NONE){
+		searchCriteria.type = SearchType.ANY;
+		return;
+	}
+
+	searchCriteria.type = itemType;
+}
+
+export async function findLowestMarketPrice(definitionId, itemType = SearchType.PLAYER, pricesCount = 3) {
 	const searchCriteria = new UTSearchCriteriaDTO();
 	const searchModel = new UTBucketedItemSearchViewModel();
-	searchCriteria.type = SearchType.PLAYER;
-	searchCriteria.defId = [playerId];
-	searchCriteria.category = SearchCategory.ANY;
+
+	updateSearchCriteriaFromItemType(searchCriteria, itemType);
+	searchCriteria.defId = [definitionId];
 	searchModel.searchFeature = enums.ItemSearchFeature.MARKET;
 	searchModel.defaultSearchCriteria.type = searchCriteria.type;
 	searchModel.defaultSearchCriteria.category = searchCriteria.category;
@@ -93,8 +127,11 @@ export async function findLowestMarketPrice(playerId) {
 		await delay(100, 300);
 	}
 
+	if(pricesCount <= 1){
+		return minBuyNowArr[0];
+	}
 
-	return minBuyNowArr.slice(0, 3);
+	return minBuyNowArr.slice(0, pricesCount);
 }
 
 function performMarketSearch(criteria) {

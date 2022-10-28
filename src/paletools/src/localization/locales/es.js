@@ -41,6 +41,7 @@ export default {
     "plugins.playerActions.settings.listForProfit": "Listado rápido - mostrar botones",
     "plugins.playerActions.settings.listForProfitAutoPublish": "Listado rápido - auto publicar",
     "plugins.playerActions.listForProfit.button.set": "SUMAR %",
+    "plugins.playerActions.listForProfit.button.market": "Mas Barato",
     /// #endif
 
     /// #if process.env.MARKET_SEARCH_FILTERS

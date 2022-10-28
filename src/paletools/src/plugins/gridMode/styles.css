@@ -204,6 +204,10 @@ section.ui-layout-right .listFUTItem.untradeable::before {
 	display: none !important;
 }
 
+.ut-transfer-list-view .sectioned-item-list:nth-child(3) .listFUTItem .dataString {
+	display: none !important;
+}
+
 .ut-transfer-list-view .sectioned-item-list:nth-child(3) .listFUTItem .auction {
 	display: none !important;
 }

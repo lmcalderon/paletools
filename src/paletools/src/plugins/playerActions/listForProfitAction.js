@@ -1,6 +1,6 @@
 import { EVENTS, on } from "../../events";
 import localize from "../../localization";
-import { getSellBidPrice, roundOffPrice } from "../../services/market";
+import { findLowestMarketPrice, getSellBidPrice, roundOffPrice } from "../../services/market";
 import settings from "../../settings";
 import { addClass, append, createElem } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
@@ -18,9 +18,14 @@ const listForProfitAction = {
         UTQuickListPanelViewController.prototype.renderView = function () {
             UTQuickListPanelViewController_renderView.call(this);
 
-            if (this.item && this.item.lastSalePrice) {
-                this.getView()._itemBuyNowPrice = this.item.lastSalePrice;
-                show(this.getView()._listForProfitContainer);
+            if (this.item) {
+                this.getView()._item = this.item;
+                if (this.item.lastSalePrice) {
+                    show(this.getView()._listForProfitContainer);
+                }
+                else {
+                    hide(this.getView()._listForProfitContainer);
+                }
             }
             else {
                 this.getView()._itemBuyNowPrice = null;
@@ -30,10 +35,10 @@ const listForProfitAction = {
     },
 
     generate: (instance, buttonsContainerFunc) => {
-        function listForProfit(profit) {
-            if (!instance._itemBuyNowPrice || profit <= 5) return;
+        function listForValue(value) {
+            if (!value) return;
 
-            const sellBuyPrice = roundOffPrice(instance._itemBuyNowPrice * ((profit / 100) + 1));
+            const sellBuyPrice = roundOffPrice(value);
             const sellBidPrice = getSellBidPrice(sellBuyPrice);
 
             if (cfg.listForProfitAutoPublish) {
@@ -49,11 +54,17 @@ const listForProfitAction = {
             }
         }
 
+        function listForProfit(profit) {
+            if (!instance._item || !instance._item.lastSalePrice || profit <= 5) return;
+            listForValue(instance._item.lastSalePrice * ((profit / 100) + 1));
+        }
+
 
         if (cfg.listForProfit) {
             const container = createElem("div", { className: "list-for-profit" });
             const buttonsContainer = createElem("div", { className: "list-for-profit-buttons" });
             const customContainer = createElem("div", { className: "list-for-profit-custom" });
+            const marketContainer = createElem("div", { className: "list-for-profit-market" });
             for (let profit of profits) {
                 const button = new UTStandardButtonControl();
                 button.init();
@@ -75,16 +86,30 @@ const listForProfitAction = {
             customProfitButton.addTarget(instance, () => listForProfit(customProfit.getValue()), EventType.TAP);
             addClass(customProfitButton, "call-to-action");
 
-            append(customContainer, customProfit.getRootElement());
-            append(customContainer, customProfitButton.getRootElement());
+            const marketButton = new UTStandardButtonControl();
+            marketButton.init();
+            marketButton.setText(localize("plugins.playerActions.listForProfit.button.market"));
+            marketButton.addTarget(instance, async () => {
+                marketButton.setInteractionState(false);
+                try {
+                    const lowestPrice = await findLowestMarketPrice(instance._item.definitionId, instance._item.type, 1);
+                    listForValue(lowestPrice.value);
+                }
+                catch{
+                }
+                marketButton.setInteractionState(true);
+            }, EventType.TAP);
+            addClass(marketButton, "call-to-action");
 
 
-            append(container, buttonsContainer);
-            append(container, customContainer);
-            append(buttonsContainerFunc(instance), container);
+            append(marketContainer, marketButton);
+            append(customContainer, customProfit, customProfitButton);
+            append(container, buttonsContainer, customContainer);
 
-            on(EVENTS.APP_ENABLED, () => show(container.getRootElement()));
-            on(EVENTS.APP_DISABLED, () => hide(container.getRootElement()));
+            append(buttonsContainerFunc(instance), container, marketContainer);
+
+            on(EVENTS.APP_ENABLED, () => show(container));
+            on(EVENTS.APP_DISABLED, () => hide(container));
 
             instance._listForProfitContainer = container;
         }

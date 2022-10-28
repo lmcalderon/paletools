@@ -41,6 +41,7 @@ export default {
     "plugins.playerActions.findLowestPrice.notFound": "Extinct",
     "plugins.playerActions.findLowestPrice.searching": "Searching...",
     "plugins.playerActions.listForProfit.button.set": "ADD %",
+    "plugins.playerActions.listForProfit.button.market": "Cheapest",
     /// #endif
 
     /// #if process.env.MARKET_SEARCH_FILTERS
