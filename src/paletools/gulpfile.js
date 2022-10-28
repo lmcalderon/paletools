@@ -2,12 +2,9 @@ const gulp = require('gulp');
 const through = require('through2');
 const path = require('path');
 const fs = require("fs");
-const webpack = require("webpack");
-const webpackStream = require("webpack-stream");
-const webpackConfig = require("./webpack.config");
-const webpackMobileConfig = require("./webpack.config.mobile");
 
-const VERSION = "23.8.7";
+
+let VERSION;
 
 function getJsCode(filePath, vinylFile){
     return vinylFile.contents;
@@ -33,6 +30,15 @@ function base64Encode(getCode){
 }
 
 gulp.task('deploy', function () {
+    const versionData = fs.readFileSync(__dirname + "/src/version.js", { encoding: "utf-8", flag: "r" });
+
+    var regex = /(\d+\.\d+\.\d+)/g;
+    var results = regex.exec(versionData);
+    VERSION = results[1];
+
+    console.log(`Deploying v${VERSION}`);
+
+
     fs.writeFileSync("d:\\code\\eallegretta.github.io\\fifa\\version.txt", VERSION);
 
     gulp.src(['./dist/paletools-mobile*.js'])
