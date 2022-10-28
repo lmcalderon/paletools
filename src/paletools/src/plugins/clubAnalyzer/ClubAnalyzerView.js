@@ -19,6 +19,8 @@ function loc(key) {
     return value;
 }
 
+const _reportsData = {};
+
 JSUtils.inherits(ClubAnalyzerView, UTView);
 
 ClubAnalyzerView.prototype.dealloc = function dealloc() {
@@ -38,7 +40,7 @@ ClubAnalyzerView.prototype._appendMainMenu = function (container) {
             <button id="clubanalyzer-players-by-rarity" class="ea-filter-bar-item-view">${loc("extendedPlayerInfo.general.rarity")}</button>
             <button id="clubanalyzer-players-by-league" class="ea-filter-bar-item-view">${loc("search.details.itemLeague")}</button>
             <button id="clubanalyzer-players-by-nation" class="ea-filter-bar-item-view">${loc("extendedPlayerInfo.general.nation")}</button>
-            <button id="clubanalyzer-players-by-club-bought" class="ea-filter-bar-item-view">Bought x Club</button>
+            <button id="clubanalyzer-players-by-club-bought" class="ea-filter-bar-item-view">${loc("view.tab.club")}</button>
             <button id="clubanalyzer-players-by-unnasigned" class="ea-filter-bar-item-view">${loc("navbar.label.newitems")} <span id="clubanalyzer-counter-unnasigned"></span></button>
             <button id="clubanalyzer-players-by-transferlist" class="ea-filter-bar-item-view">${loc("panel.label.transferlist")} <span id="clubanalyzer-counter-tradepile"></span></button>
             <button id="clubanalyzer-players-by-transfertargets" class="ea-filter-bar-item-view">${loc("panel.label.transfertargets")}  <span id="clubanalyzer-counter-watchlist"></span></button>
@@ -188,15 +190,15 @@ ClubAnalyzerView.prototype._createCountReportTree = function (data, level) {
 ClubAnalyzerView.prototype._setupAuctionReportSort = function () {
     const reports = selectAll(".club-analyzer-auctionreport");
 
-    for (let report of reports) {
-        const sortHeaders = selectAll("[data-sortby]", report);
-        for (let header of sortHeaders) {
-            on(header, "click", ev => {
-                const reportData = JSON.parse(report.dataset.reportData)
-                this._createAuctionReport(reportData.id, reportData.data, reportData.caption, null, header.dataset.sortby, header.dataset.sortbyDirection === "asc" ? "desc" : "asc", reportData.addCount);
-            });
-        }
-    }
+    on(window, "click", ev => {
+        if(!ev.target.dataset.sortby) return;
+
+        const header = ev.target;
+        const parentDiv = ev.target.closest("div");
+        const reportId = parentDiv.getAttribute("id");
+        const reportData = _reportsData[reportId];
+        this._createAuctionReport(reportData.id, reportData.data, reportData.caption, null, header.dataset.sortby, header.dataset.sortbyDirection === "asc" ? "desc" : "asc", reportData.addCount);
+    });
 }
 
 ClubAnalyzerView.prototype._createAuctionReport = function (id, data, caption, className, sortBy, sortByDirection, addCount) {
@@ -244,6 +246,10 @@ ClubAnalyzerView.prototype._createAuctionReport = function (id, data, caption, c
             case "rarity":
                 cmpA = loc(p1.rarity);
                 cmpB = loc(p2.rarity);
+                break;
+            case "count":
+                cmpA = p1.count;
+                cmpB = p2.count;
                 break;
             case "value":
                 cmpA = p1.avg;
@@ -302,7 +308,7 @@ ClubAnalyzerView.prototype._createAuctionReport = function (id, data, caption, c
     }
     else {
         let div = createElem("div", { id: id, className: `club-analyzer-report club-analyzer-auctionreport ${className}` }, html);
-        div.dataset.reportData = {
+        _reportsData[id] = {
             id: id,
             data: data,
             caption: caption,
@@ -362,7 +368,7 @@ ClubAnalyzerView.prototype.update = function (viewmodel) {
         this._createAuctionReport("clubanalyzer-report-by-unnasigned2", viewmodel.players.unnasigned.untradeable, "Untradeable", "clubanalyzer-report-by-unnasigned", null, null, true),
         this._createAuctionReport("clubanalyzer-report-by-transferlist", viewmodel.players.tradepile, null, null, null, null, true),
         this._createAuctionReport("clubanalyzer-report-by-transfertargets", viewmodel.players.watchlistWon, loc("watchlist.dock.categories.won"), null, null, null, true),
-        this._createAuctionReport("clubanalyzer-report-by-transfertargets2", viewmodel.players.watchlistWinning, loc("wdock.label.winning"), "clubanalyzer-report-by-transfertargets", null, null, true),
+        this._createAuctionReport("clubanalyzer-report-by-transfertargets2", viewmodel.players.watchlistWinning, loc("dock.label.winning"), "clubanalyzer-report-by-transfertargets", null, null, true),
         this._createAuctionReport("clubanalyzer-report-by-transfertargets3", viewmodel.players.watchlistLoosing, loc("dock.label.outbid"), "clubanalyzer-report-by-transfertargets", null, null, true),
         this._createAuctionReport("clubanalyzer-report-by-transfertargets4", viewmodel.players.watchlistLost, loc("watchlist.dock.categories.expired"), "clubanalyzer-report-by-transfertargets", null, null, true));
 

@@ -1,0 +1,18 @@
+.list-for-profit {
+   display: flex;
+   justify-content: space-between;
+}
+
+.list-for-profit > button {
+   position: relative;
+   width: 60px;
+   white-space: nowrap;
+   text-overflow: unset;
+   overflow: visible;
+}
+
+.list-for-profit > button::before {
+   content: '+';
+   position: absolute;
+   left: 5px;
+}

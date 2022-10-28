@@ -5,11 +5,13 @@ let plugin;
 /// #if process.env.SNIPE_MOBILE
 import { addLabelWithToggle } from "../../controls";
 import { getUnassignedPlayers } from "../../services/club";
-import { addSnipeRequest, enableMarketSnipe } from "../../services/ui/market";
+import { addSnipeRequest, addSnipeRequestNoBack, enableMarketSnipe } from "../../services/ui/market";
 import { incrementPriceRow } from "../../services/ui/search";
-import { append, select } from "../../utils/dom";
+import { addClass, append, createElem, select } from "../../utils/dom";
 import settings, { saveConfiguration } from "../../settings";
 import { EVENTS, on } from "../../events";
+import { navigateBack } from "../../services/ui/navigation";
+import localize from "../../localization";
 
 const cfg = settings.plugins.snipe;
 
@@ -34,7 +36,12 @@ function run() {
         this._snipeButton.getRootElement().classList.add("snipe")
 
         const executeSnipe = () => {
-            addSnipeRequest();
+            if (cfg.autoBack) {
+                addSnipeRequest();
+            }
+            else {
+                addSnipeRequestNoBack();
+            }
 
             incrementPriceRow(this._minBidPriceRow, this._maxBuyNowPriceRow);
             this._triggerActions(UTMarketSearchFiltersView.Event.SEARCH);
@@ -52,6 +59,31 @@ function run() {
         if (!cfg.enabled) return;
         this._snipeButton.destroy();
     }
+
+    const UTMarketSearchView_setEmptyListMessage = UTMarketSearchView.prototype.setEmptyListMessage;
+    UTMarketSearchView.prototype.setEmptyListMessage = function (e) {
+        UTMarketSearchView_setEmptyListMessage.call(this, e);
+    }
+
+    const UTMarketSearchView_generate = UTMarketSearchView.prototype._generate;
+    UTMarketSearchView.prototype._generate = function _generate() {
+        UTMarketSearchView_generate.call(this);
+        const container = createElem("div", { className: "button-container"});
+        this._goBackButton = new UTStandardButtonControl();
+        this._goBackButton.init();
+        this._goBackButton.setText(localize("plugins.snipeMobile.button.goBack"));
+        this._goBackButton.addTarget(this, () => navigateBack(), EventType.TAP);
+        addClass(this._goBackButton.getRootElement(), "call-to-action");
+
+        append(container, this._goBackButton);
+        append(this.getRootElement(), container);
+    }
+
+    const UTMarketSearchView_destroyGeneratedElements = UTMarketSearchView.prototype.destroyGeneratedElements;
+    UTMarketSearchView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
+        UTMarketSearchView_destroyGeneratedElements.call(this);
+        this._goBackButton.dealloc();
+    }
 }
 
 function menu() {
@@ -61,14 +93,19 @@ function menu() {
         saveConfiguration();
     });
 
+    addLabelWithToggle(container, "plugins.snipeMobile.settings.autoBack", cfg.autoBack, toggleState => {
+        cfg.autoBack = toggleState;
+        saveConfiguration();
+    });
+
     return container;
 }
 
 plugin = {
     run: run,
     settings: {
-        name: "snipe",
-        title: 'plugins.snipe.settings.title',
+        name: "snipeMobile",
+        title: 'plugins.snipeMobile.settings.title',
         menu: menu
     },
     order: 0

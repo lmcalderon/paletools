@@ -10,6 +10,10 @@ import { hide, show } from "../../utils/visibility";
 const cfg = settings.plugins.playerActions;
 
 const findLowestPriceAction = {
+    canRun: (instance) => {
+        return instance === UTDefaultActionPanelView || instance === UTAuctionActionPanelView;
+    },
+
     generate: (instance, buttonsContainerFunc) => {
         if (cfg.findLowestPrice) {
             instance._findLowestPriceButton = new UTGroupButtonControl();

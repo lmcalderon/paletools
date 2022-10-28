@@ -31,6 +31,7 @@ export default {
     "plugins.playerActions.settings.copyPlayerId": "Habilitar copiar Id del jugador",
     "plugins.playerActions.settings.futbinSearch": "Habilitar búsqueda en FUTBIN",
     "plugins.playerActions.settings.findLowestPrice": "Buscar el valor más barato",
+    "plugins.playerActions.settings.listForProfit": "Botones de listado rápido en el mercado",
 
     "plugins.playerActions.copyPlayerId": "Copiar Id del jugador al portapapeles",
     "plugins.playerActions.futbinSearch": "Buscar en FUTBIN",
@@ -91,7 +92,9 @@ export default {
     /// #endif
 
     /// #if process.env.SNIPE_MOBILE
-    "plugins.snipe.settings.title": "Sniping",
+    "plugins.snipeMobile.settings.title": "Sniping",
+    "plugins.snipeMobile.settings.autoBack": "Ir hacia atrás automáticamente",
+    "plugins.snipeMobile.button.goBack": "VOLVER",
     /// #endif
 
     // #if process.env.DUPLICATED_TO_SBC
@@ -154,6 +157,7 @@ export default {
     "plugins.clubAnalyzer.view.buttons.reload": "Recargar",
     "plugins.clubAnalyzer.view.buttons.exportCsv": "Exportar como CSV",
     "plugins.clubAnalyzer.view.buttons.exportHtml": "Exportar como HTML",
+    "plugins.clubAnalyzer.view.tab.club": "Comprados en Club",
     /// #endif
 
     /// #if process.env.SHOW_CONSOLE_OUTPUT

@@ -6,19 +6,27 @@ import futbinSearchAction from "./futbinSearchAction";
 import findLowestPriceAction from "./findLowestPrice";
 import { addLabelWithToggle } from "../../controls";
 import settings, { saveConfiguration } from "../../settings";
+import listForProfitAction from "./listForProfitAction";
+import styles from "./styles.css";
+import { addStyle } from "../../utils/styles";
 
 const cfg = settings.plugins.playerActions;
 
 function run() {
-    let actions = [copyPlayerIdAction, futbinSearchAction, findLowestPriceAction];
+    let actions = [copyPlayerIdAction, futbinSearchAction, findLowestPriceAction, listForProfitAction];
 
     function addActionsToActionPanel(className, buttonsContainerFunc) {
         const generate = className.prototype._generate;
+
+        for(let action of actions.filter(x => x.canRun(className) && x.inject)){
+            action.inject(className.prototype);
+        }
+
         className.prototype._generate = function _generate() {
             generate.call(this);
             if(!settings.enabled) return;
             if (!this._generateAddActionsToPanelCalled) {
-                for (let action of actions) {
+                for (let action of actions.filter(x => x.canRun(className))) {
                     action.generate(this, buttonsContainerFunc);
                 }
 
@@ -29,7 +37,7 @@ function run() {
         const _destroyGeneratedElements = className.prototype.destroyGeneratedElements;
         className.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
             _destroyGeneratedElements.call(this);
-            for (let action of actions) {
+            for (let action of actions.filter(x => x.canRun(className))) {
                 action.destroyGeneratedElements(this);
             }
         }
@@ -37,7 +45,7 @@ function run() {
         const dealloc = className.prototype.dealloc;
         className.prototype.dealloc = function () {
             dealloc.call(this);
-            for (let action of actions) {
+            for (let action of actions.filter(x => x.canRun(className))) {
                 action.dealloc(this);
             }
         }
@@ -45,11 +53,13 @@ function run() {
 
     addActionsToActionPanel(UTDefaultActionPanelView, instance => instance.__itemActions);
     addActionsToActionPanel(UTAuctionActionPanelView, instance => instance.getRootElement().querySelector(".ut-button-group"));
+    addActionsToActionPanel(UTQuickListPanelView, instance => instance.__panelActions);
 
     const ItemDetails__getPanelViewInstanceFromData = controllers.items.ItemDetails.prototype._getPanelViewInstanceFromData;
     controllers.items.ItemDetails.prototype._getPanelViewInstanceFromData = function _getPanelViewInstanceFromData(e, t) {
         ItemDetails__getPanelViewInstanceFromData.call(this, e, t);
-        if (this._panel instanceof UTDefaultActionPanelView || this._panel instanceof UTAuctionActionPanelView) {
+        if (this._panel instanceof UTDefaultActionPanelView 
+            || this._panel instanceof UTAuctionActionPanelView) {
             for (let action of actions) {
                 action.attachEvent(this);
             }
@@ -59,6 +69,8 @@ function run() {
     for (let action of actions) {
         action.createEvent(controllers.items.ItemDetails.prototype);
     }
+
+    addStyle("player-actions", styles);
 }
 
 function menu(){
@@ -73,6 +85,7 @@ function menu(){
     add('copyPlayerId');
     add('futbinSearch');
     add('findLowestPrice');
+    add('listForProfit');
 
     return container;
 }

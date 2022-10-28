@@ -65,7 +65,12 @@ let settings = {
         playerActions: {
             copyPlayerId: true,
             futbinSearch: true,
-            findLowestPrice: true
+            findLowestPrice: true,
+            listForProfit: true
+        },
+        snipeMobile: {
+            enabled: true,
+            autoBack: false
         },
         snipe: {
             oneTouch: {

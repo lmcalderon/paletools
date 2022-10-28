@@ -6,6 +6,10 @@ import { append } from "../../utils/dom";
 const cfg = settings.plugins.playerActions;
 
 const futBinSearchAction = {
+    canRun: (instance) => {
+        return instance === UTDefaultActionPanelView || instance === UTAuctionActionPanelView;
+    },
+
     generate: (instance, buttonsContainerFunc) => {
         if (cfg.futbinSearch) {
             instance._futbinSearchButton = new UTGroupButtonControl();

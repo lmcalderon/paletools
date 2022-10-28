@@ -9,6 +9,10 @@ import { show } from "../../utils/visibility";
 const cfg = settings.plugins.playerActions;
 
 const copyPlayerIdAction = {
+    canRun: (instance) => {
+        return instance === UTDefaultActionPanelView || instance === UTAuctionActionPanelView;
+    },
+
     generate: (instance, buttonsContainerFunc) => {
         if (cfg.copyPlayerId) {
             instance._copyPlayerIdButton = new UTGroupButtonControl();

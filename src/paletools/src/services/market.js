@@ -1,4 +1,5 @@
 import delay from "../utils/delay";
+import { toPromise } from "../utils/observable";
 import sendPinEvents from "./pinEvents";
 
 const PAGE_SIZE = 20;
@@ -7,30 +8,30 @@ const MIN_BUY_NOW_COUNT = 3;
 const itemActionController = new UTItemActionController();
 
 export function tryBuyItem(items) {
-    if(!items || items.length === 0) return false;
+	if (!items || items.length === 0) return false;
 
-    return new Promise((resolve, reject) => {
-        if(!items || items.length === 0){
-            resolve(false);
-            return;
-        }
+	return new Promise((resolve, reject) => {
+		if (!items || items.length === 0) {
+			resolve(false);
+			return;
+		}
 
-        for (let item of items) {
-            const auction = item._auction;
-            if (auction._tradeState === AuctionTradeStateEnum.ACTIVE) {
-                itemActionController.bid(item, auction.buyNowPrice).observe(this, function (e, t) {
-                    e.unobserve(this);
-                    if (t.success) {
-                        resolve({ success: true, item: item });
-                    }
-                    else {
-                        resolve({ success: false, item: item });
-                    }
-                });
-                break;
-            }
-        }
-    });
+		for (let item of items) {
+			const auction = item._auction;
+			if (auction._tradeState === AuctionTradeStateEnum.ACTIVE) {
+				itemActionController.bid(item, auction.buyNowPrice).observe(this, function (e, t) {
+					e.unobserve(this);
+					if (t.success) {
+						resolve({ success: true, item: item });
+					}
+					else {
+						resolve({ success: false, item: item });
+					}
+				});
+				break;
+			}
+		}
+	});
 }
 
 export async function listItemOnTransferMarket(item, sellPrice, startPrice, ignoreCardIfOffLimits) {
@@ -55,95 +56,61 @@ export async function listItemOnTransferMarket(item, sellPrice, startPrice, igno
 	return sellPrice;
 };
 
-export function findLowestMarketPrice(playerId, page = 1) {
-	services.Item.clearTransferMarketCache();
-	return findLowestMarketPriceInternal(playerId, page);
-}
+export async function findLowestMarketPrice(playerId) {
+	const searchCriteria = new UTSearchCriteriaDTO();
+	const searchModel = new UTBucketedItemSearchViewModel();
+	searchCriteria.type = SearchType.PLAYER;
+	searchCriteria.defId = [playerId];
+	searchCriteria.category = SearchCategory.ANY;
+	searchModel.searchFeature = enums.ItemSearchFeature.MARKET;
+	searchModel.defaultSearchCriteria.type = searchCriteria.type;
+	searchModel.defaultSearchCriteria.category = searchCriteria.category;
 
-async function findLowestMarketPriceInternal(playerId, page = 1) {
-	let result = await findLowestMarketPriceForPage(playerId, page, MIN_BUY_NOW_COUNT);
-
-	let minBuyNow = result.minBuyNow;
-	if (result.hasNextPage) {
-		await delay(100, 300);
-		let cmpResult = await findLowestMarketPriceInternal(playerId, page + 1);
-
-		for (let result of cmpResult) {
-			let minBuyNowIndex = minBuyNow.findIndex(x => x.value === result.value);
-			if (minBuyNowIndex > -1) {
-				minBuyNow[minBuyNowIndex].count++;
-			}
-			else {
-				minBuyNow.push(result);
-			}
+	let minBuyNowArr = [];
+	let iteration = 0;
+	while (true) {
+		if(++iteration === 10){
+			break;
 		}
 
-		minBuyNow.sort((a, b) => a.value - b.value);
-		minBuyNow = minBuyNow.slice(0, MIN_BUY_NOW_COUNT);
+		sendPinEvents("Transfer Market Search");
+		services.Item.clearTransferMarketCache();
+		searchModel.updateSearchCriteria(searchCriteria);
+
+		let items = await performMarketSearch(searchModel.searchCriteria);
+		if(items.length === 0){
+			break;
+		}
+
+		const minBuyNow = Math.min(...items.map(x => x._auction.buyNowPrice));
+		minBuyNowArr.unshift({ value: minBuyNow, count: items.filter(x => x._auction.buyNowPrice === minBuyNow).length });
+		searchCriteria.maxBuy = roundOffPrice(getSellBidPrice(minBuyNow));
+
+		if(items.length < searchModel.searchCriteria.count){
+			break;
+		}
+
+		await delay(100, 300);
 	}
 
-	return minBuyNow;
+
+	return minBuyNowArr.slice(0, 3);
 }
 
-function findLowestMarketPriceForPage(playerId, page, minBuyCount) {
+function performMarketSearch(criteria) {
 	return new Promise((resolve, reject) => {
-		const criteria = new UTSearchCriteriaDTO();
-		criteria.defId = [playerId];
-		let minBuyNow = [];
-
-		function sortMinBuyNow() {
-			if (minBuyNow.length <= 1) return;
-
-			minBuyNow.sort((a, b) => {
-				return a.value - b.value;
-			});
-		}
-
-		function updateMinBuyNow(buyNowPrice) {
-			if (minBuyNow.length < minBuyCount) {
-				const minBuyNowIndex = minBuyNow.findIndex(x => x.value === buyNowPrice);
-				if (minBuyNowIndex === -1) {
-					minBuyNow.push({ value: buyNowPrice, count: 1 });
-					sortMinBuyNow();
-				}
-				else {
-					minBuyNow[minBuyNowIndex].count++;
+		services.Item.searchTransferMarket(criteria, 1).observe(
+			this,
+			(sender, response) => {
+				if (response.success) {
+					sendPinEvents("Transfer Market Results - List View");
+					sendPinEvents("Item - Detail View");
+					resolve(response.data.items);
+				} else {
+					resolve([]);
 				}
 			}
-			else {
-				if (buyNowPrice < minBuyNow[minBuyCount - 1].value) {
-					minBuyNow[minBuyCount - 1] = { value: buyNowPrice, count: 1 };
-					sortMinBuyNow();
-				}
-				else {
-					const minBuyNowIndex = minBuyNow.findIndex(x => x.value === buyNowPrice);
-					if (minBuyNowIndex > -1) {
-						minBuyNow[minBuyNowIndex].count++;
-					}
-				}
-			}
-		}
-
-		services.Item.searchTransferMarket(criteria, page).observe(this, (sender, response) => {
-			if (response.success) {
-				if (response.data.items.length > 0) {
-					if (page === 1) {
-						sendPinEvents("Transfer Market Results - List View");
-					}
-
-					for (let playerIndex = 0; playerIndex < response.data.items.length; playerIndex++) {
-						const buyNowPrice = response.data.items[playerIndex]._auction.buyNowPrice;
-						updateMinBuyNow(buyNowPrice);
-					}
-
-					resolve({ minBuyNow: minBuyNow, hasNextPage: response.data.items.length === PAGE_SIZE + 1 });
-				}
-			}
-			else {
-				reject(response.error);
-			}
-		});
-	});
+		)});
 }
 
 function computeSellPrice(sellPrice, item) {
@@ -184,7 +151,7 @@ export function getSellBidPrice(bin) {
 	return bin - 1000;
 }
 
-function getBuyBidPrice(bin) {
+export function getBuyBidPrice(bin) {
 	if (bin < 1000) return bin + 50;
 	if (bin >= 1000 && bin < 10000) return bin + 100;
 	if (bin >= 10000 && bin < 50000) return bin + 250;
@@ -192,7 +159,7 @@ function getBuyBidPrice(bin) {
 	return bin + 1000;
 }
 
-function roundOffPrice(price, minVal = 0) {
+export function roundOffPrice(price, minVal = 0) {
 	let range = JSUtils.find(UTCurrencyInputControl.PRICE_TIERS, function (e) {
 		return price >= e.min;
 	});

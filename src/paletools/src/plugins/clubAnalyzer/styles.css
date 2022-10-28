@@ -68,57 +68,62 @@
     width: 100%;
 }
 
-.club-analyzer-auctionreport .player .fullname {
-    order: 0;
-    flex-grow: inherit;
-    margin-right: 4px;
+.club-analyzer-auctionreport td:first-child {
+    width: 40%;
 }
 
 .club-analyzer-auctionreport .player .rating {
     order: 1;
     margin-right: 8px;
+    text-align: center;
 }
 
 
 .club-analyzer-auctionreport .player .rarity {
     order: 2;
     margin-right: 8px;
+    text-align: center;
 }
 
 .club-analyzer-auctionreport .player .count {
-    order: 3;
-    margin-right: 8px;
     border-left: 1px solid #275261;
-    padding-left: 8px;
     color: yellow;
-}
-
-.club-analyzer-auctionreport .player .count:before {
-    content: '#EXTENDED_PLAYER_INFO.TOTAL#';
-    margin-right: 4px;
-    color: white;
+    text-align: right;
+    width: 40px;
 }
 
 .club-analyzer-auctionreport .player .avg {
-    order: 4;
-    margin-right: 8px;
     border-left: 1px solid #275261;
-    padding-left: 8px;
     color: yellow;
-}
-
-.club-analyzer-auctionreport .player .avg:before {
-    content: 'AVG';
-    margin-right: 4px;
-    color: white;
+    text-align: right;
+    width: 100px;
 }
 
 .club-analyzer-auctionreport .fut_icon {
     position: absolute;
+    transform: rotate(180deg);
+}
+
+.club-analyzer-auctionreport table {
+    border-collapse: collapse;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.club-analyzer-auctionreport table th {
+    background-color: #1f1d1e;
+}
+
+.club-analyzer-auctionreport table th, .club-analyzer-auctionreport table td {
+    padding: 4px;
+}
+
+.club-analyzer-auctionreport table tr:nth-child(odd) {
+    background-color: #33353c;
 }
 
 .club-analyzer-auctionreport th.sorted-desc .fut_icon {
-    transform: rotate(180deg);
+    transform: none;
 }
 
 

@@ -7,7 +7,7 @@ const webpackStream = require("webpack-stream");
 const webpackConfig = require("./webpack.config");
 const webpackMobileConfig = require("./webpack.config.mobile");
 
-const VERSION = "23.8.2";
+const VERSION = "23.8.5";
 
 function getJsCode(filePath, vinylFile){
     return vinylFile.contents;

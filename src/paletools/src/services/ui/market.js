@@ -11,9 +11,12 @@ import { navigateBack } from "./navigation";
 const _snipeRequests = [];
 const _goBackDelay = getDebugSettings().goBackDelay || 0;
 
+export function addSnipeRequestNoBack(request = () => { }) {
+    _snipeRequests.push([request, false]);
+}
 
 export function addSnipeRequest(request = () => { }) {
-    _snipeRequests.push(request);
+    _snipeRequests.push([request, true]);
     logDebug("Snipe requested");
 }
 
@@ -29,7 +32,7 @@ export function enableMarketSnipe() {
     UTNavigationController.prototype._showController = function (...args) {
         UTNavigationController_showController.call(this, ...args);
 
-        if(_goBackRequests.length > 0){
+        if (_goBackRequests.length > 0) {
             const goBackRequest = _goBackRequests.shift();
             _goBackRequests.length = 0;
             goBackRequest();
@@ -42,16 +45,19 @@ export function enableMarketSnipe() {
         if (_snipeRequests.length === 0) return true;
         logDebug(`Snipe Requests: ${_snipeRequests.length}`);
 
-        let request = _snipeRequests.shift();
+        let [request, shouldGoBack] = _snipeRequests.shift();
         clearSnipeRequests();
 
         function goBack() {
+            if(!shouldGoBack) return;
+
             navigateBack(controller, _goBackDelay, () => {
                 triggerEvent(EVENTS.SNIPE_GOBACK);
             });
         }
 
         if (items.length === 0) {
+            request({ success: true, item: null });
             goBack();
         }
         else {
@@ -89,6 +95,6 @@ export function enableMarketSnipe() {
             });
         }
 
-        return false;
+        return !shouldGoBack;
     });
 }
