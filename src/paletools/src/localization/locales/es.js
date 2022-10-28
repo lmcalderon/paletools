@@ -38,6 +38,9 @@ export default {
     "plugins.playerActions.findLowestPrice.button": "Buscar el valor más barato",
     "plugins.playerActions.findLowestPrice.notFound": "Extincto",
     "plugins.playerActions.findLowestPrice.searching": "Buscando...",
+    "plugins.playerActions.settings.listForProfit": "Listado rápido - mostrar botones",
+    "plugins.playerActions.settings.listForProfitAutoPublish": "Listado rápido - auto publicar",
+    "plugins.playerActions.listForProfit.button.set": "SUMAR %",
     /// #endif
 
     /// #if process.env.MARKET_SEARCH_FILTERS

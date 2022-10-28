@@ -1,9 +1,15 @@
 .list-for-profit {
    display: flex;
    justify-content: space-between;
+   flex-direction: column;
 }
 
-.list-for-profit > button {
+.list-for-profit-buttons {
+   display: flex;
+   justify-content: space-between;
+}
+
+.list-for-profit-buttons > button {
    position: relative;
    width: 60px;
    white-space: nowrap;
@@ -11,8 +17,16 @@
    overflow: visible;
 }
 
-.list-for-profit > button::before {
+.list-for-profit-buttons > button::before {
    content: '+';
    position: absolute;
    left: 5px;
+}
+
+.list-for-profit-custom {
+   display: flex;
+}
+
+.list-for-profit-custom > input {
+   width: 100px;
 }

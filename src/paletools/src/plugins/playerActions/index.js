@@ -12,9 +12,9 @@ import { addStyle } from "../../utils/styles";
 
 const cfg = settings.plugins.playerActions;
 
-function run() {
-    let actions = [copyPlayerIdAction, futbinSearchAction, findLowestPriceAction, listForProfitAction];
+let actions = [copyPlayerIdAction, futbinSearchAction, findLowestPriceAction, listForProfitAction];
 
+function run() {
     function addActionsToActionPanel(className, buttonsContainerFunc) {
         const generate = className.prototype._generate;
 
@@ -86,6 +86,7 @@ function menu(){
     add('futbinSearch');
     add('findLowestPrice');
     add('listForProfit');
+    add('listForProfitAutoPublish');
 
     return container;
 }

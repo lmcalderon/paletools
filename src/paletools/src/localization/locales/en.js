@@ -31,13 +31,16 @@ export default {
     "plugins.playerActions.settings.copyPlayerId": "Enable Copy Player Id",
     "plugins.playerActions.settings.futbinSearch": "Enable FUTBIN search",
     "plugins.playerActions.settings.findLowestPrice": "Find lowest market price",
-    "plugins.playerActions.settings.listForProfit": "Quick market list buttons",
+    "plugins.playerActions.settings.listForProfit": "Quick market list - show buttons",
+    "plugins.playerActions.settings.listForProfitAutoPublish": "Quick market list - auto publish",
+
 
     "plugins.playerActions.copyPlayerId": "Copy Player Id to clipboard",
     "plugins.playerActions.futbinSearch": "FUTBIN search",
     "plugins.playerActions.findLowestPrice.button": "Find lowest market price",
     "plugins.playerActions.findLowestPrice.notFound": "Extinct",
     "plugins.playerActions.findLowestPrice.searching": "Searching...",
+    "plugins.playerActions.listForProfit.button.set": "ADD %",
     /// #endif
 
     /// #if process.env.MARKET_SEARCH_FILTERS

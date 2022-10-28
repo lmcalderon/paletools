@@ -66,7 +66,8 @@ let settings = {
             copyPlayerId: true,
             futbinSearch: true,
             findLowestPrice: true,
-            listForProfit: true
+            listForProfit: true,
+            listForProfitAutoPublish: false
         },
         snipeMobile: {
             enabled: true,
