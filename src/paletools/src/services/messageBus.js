@@ -1,3 +1,5 @@
+import getWindow from "./window";
+
 const fallbackCommands = {
     "openurl": args => location.href = args
 };
@@ -9,8 +11,8 @@ class MessageBus {
     }
 
     publish(cmd, args) {
-        if (window.jsBridge) {
-            window.jsBridge.invokeAction(JSON.stringify({ command: cmd, commandArgs: args }));
+        if (getWindow().jsBridge) {
+            getWindow().jsBridge.invokeAction(JSON.stringify({ command: cmd, commandArgs: args }));
             return;
         }
 
@@ -37,6 +39,6 @@ class MessageBus {
 
 const messageBus = new MessageBus();
 
-window.messageBus = messageBus;
+getWindow().messageBus = messageBus;
 
 export default messageBus;

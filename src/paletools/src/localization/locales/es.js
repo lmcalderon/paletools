@@ -228,6 +228,41 @@ export default {
     "plugins.showPlayerContracts.title": "Mostrar contratos de jugadores en el mercado",
     /// #endif
 
+    /// #if process.env.PLAYER_CARD_INFO
+    "plugins.playerCardInfo.settings.title": "Información Extra en Cartas",
+    "plugins.playerCardInfo.settings.alternatePositions": "Mostrar posiciones alternativas",
+    "plugins.playerCardInfo.settings.skillMoves": "Mostrar filigranas",
+    "plugins.playerCardInfo.settings.weakFoot": "Mostrar pierna mala",
+    "plugins.playerCardInfo.settings.untradeable": "Mostrar si es intransferible",
+    /// #endif
+
+    /// #if process.env.TRACK_TRANSACTIONS
+    "plugins.trackTransactions.settings.title": "Guardar Información de las Transacciones",
+    /// #endif
+
+    /// #if process.env.SELL_PROFIT
+    "plugins.sellProfit.settings.title": "Mostrar ganancias de las ventas",
+    "plugins.sellProfit.realProfit.text": "Ganancia",
+    "plugins.sellProfit.expectedProfit.text": "Ganancia Esperada",
+    /// #endif
+
+    /// #if process.env.TRANSACTIONS_HISTORY
+    "plugins.transactionsHistory.settings.title": "Historial de Transacciones",
+    "plugins.transactionsHistory.panel.title": "Historial de Transacciones",
+    "plugins.transactionsHistory.panel.label": "Todas",
+    "plugins.transactionsHistory.panel.bought": "Compras",
+    "plugins.transactionsHistory.panel.sold": "Ventas",
+    "plugins.transactionsHistory.view.table.date": "Fecha",
+    "plugins.transactionsHistory.view.table.item": "Item",
+    "plugins.transactionsHistory.view.table.price": "Monedas",
+    "plugins.transactionsHistory.view.menu.dashboard": "Resumen",
+    "plugins.transactionsHistory.view.buttons.filterToday": "Hoy",
+    "plugins.transactionsHistory.view.buttons.filterWeek": "Esta semana",
+    "plugins.transactionsHistory.view.buttons.filterMonth": "Este mes",
+    "plugins.transactionsHistory.view.buttons.filterAnyMonth": "-- Elija un mes --",
+    "plugins.transactionsHistory.view.dashboard.month": "Mes",
+    /// #endif
+
     "plugins.warningScreen.title": "PALETOOLS - ADVERTENCIA DE USO",
     "plugins.warningScreen.disclaimer": "<p>Querido usuario, ya que Paletools es una herramienta que te permite realizar acciones no pensadas por EA y te permite ser mucho mas r&aacute;pido en el uso de la WebApp tu estas entiendo que puedes estar en riesgo de un posible BAN por parte de EA</p><p><br /></p><p>Tu aceptas utilizar la herramienta bajo tu responsabilidad y aceptas que vas a ser muy cuidadoso y cauteloso con su uso.</p><p><br /></p><p>Si realizas muchos snipes seguidos puedes recibir un SOFT BAN del mercado o incluso peor un <b>BAN permanente</b></p><p><br /></p><p>Por favor <b>USA ESTA HERRAMIENTA RESPONSABLEMENTE</b></p><p><br /></p><p>&iexcl;Gracias y que tengas un gran d&iacute;a!</p>",
 

@@ -2,6 +2,7 @@ let plugin;
 
 /// #if process.env.SHOW_CONSOLE_OUTPUT
 import { addLabelWithToggle } from "../../controls";
+import getWindow from "../../services/window";
 import settings from "../../settings";
 
 const cfg = settings.plugins.showConsoleOutput;
@@ -10,7 +11,7 @@ function run() {
     var iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
-    window.console = iframe.contentWindow.console;
+    getWindow().console = iframe.contentWindow.console;
 }
 
 function menu() {

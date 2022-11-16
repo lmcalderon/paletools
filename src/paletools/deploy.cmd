@@ -1,3 +1,2 @@
-call build.cmd
-call build-mobile.cmd
+call build-all.cmd
 call gulp deploy 

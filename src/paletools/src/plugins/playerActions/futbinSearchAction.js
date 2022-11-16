@@ -1,5 +1,6 @@
 import { on } from "../../events";
 import localize from "../../localization";
+import getWindow from "../../services/window";
 import settings from "../../settings";
 import { append } from "../../utils/dom";
 
@@ -41,7 +42,7 @@ const futBinSearchAction = {
     
     createEvent: (proto) => {
         proto._onFutbinSearch = function () {
-            window.open(`https://www.futbin.com/players?page=1&search=${this._viewmodel.current()._staticData.firstName}%20${this._viewmodel.current()._staticData.lastName}`);
+            getWindow().open(`https://www.futbin.com/players?page=1&search=${this._viewmodel.current()._staticData.firstName}%20${this._viewmodel.current()._staticData.lastName}`);
         }
     }
 }

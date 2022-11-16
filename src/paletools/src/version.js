@@ -1,3 +1,3 @@
-const VERSION = "23.8.7";
+const VERSION = "23.9.1";
 
 export default VERSION;

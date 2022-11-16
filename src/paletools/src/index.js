@@ -1,14 +1,15 @@
-import runPlugins from "./plugins";
-import { EVENTS, on, triggerEvent } from "./events";
-import { addStyle } from "./utils/styles";
-import styles from "./styles.css";
-import getCurrentController from "./utils/controller";
-import VERSION from "./version";
-import playAudio from "./utils/fx";
 import runOverrides from "./core-overrides";
-import { addClass, hasClass, remove, removeClass, select } from "./utils/dom";
-import localize from "./localization";
+import { EVENTS, triggerEvent } from "./events";
+import runPlugins from "./plugins";
+import db from "./services/db";
+import { logDebug } from "./services/log";
+import { watchForPlayersMovedToClub } from "./services/ui/club";
+import getWindow from "./services/window";
+import styles from "./styles.css";
+import { addClass, hasClass, removeClass, select } from "./utils/dom";
+import { addStyle } from "./utils/styles";
 import { hide } from "./utils/visibility";
+import VERSION from "./version";
 
 function setupPhoneView() {
     if (isPhone && isPhone()) {
@@ -16,8 +17,8 @@ function setupPhoneView() {
         if (!hasClass("phone")) {
             addClass(
                 removeClass(
-                    removeClass(body, "landscape"), 
-                    "web"), 
+                    removeClass(body, "landscape"),
+                    "web"),
                 "phone");
         }
         hide(select(".ut-fifa-header-view"));
@@ -38,22 +39,25 @@ function resetConsole() {
     var iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
-    window.console = iframe.contentWindow.console;
+    getWindow().console = iframe.contentWindow.console;
 }
 
 let initialized = false;
 let isAppLoaded = false;
-function init() {
-    setupPhoneView();
-    removeOrientationWarning();
+async function init() {
     const login = select(".ut-login");
-    if (login || (!services
-        && !services.Localization
-        && !services.Authentication.sessionUtas
-        && !services.Authentication.sessionUtas.url)) {
+    if (login || (
+        !services 
+        || !services.Localization
+        || !services.Authentication.sessionUtas
+        || !services.Authentication.sessionUtas.url)) {
         setTimeout(init, 1000);
         return;
     }
+
+    resetConsole();
+    setupPhoneView();
+    removeOrientationWarning();
 
     // detect if the script was already run
     const app = getAppMain();
@@ -63,12 +67,23 @@ function init() {
     else {
         return;
     }
-
-    resetConsole();
+    
     runOverrides();
+    await initDatabase();
     initApp();
     triggerEvent(EVENTS.APP_STARTED);
     initialized = true;
+}
+
+async function initDatabase() {
+    if (db.isSupported()) {
+        try {
+            await db.init();
+        }
+        catch {
+            logDebug("Error initializing database");
+        }
+    }
 }
 
 function initApp() {
@@ -84,6 +99,7 @@ function initApp() {
         runPlugins();
         getAppMain().getRootViewController().showGameView();
         triggerEvent(EVENTS.APP_LOADED);
+        watchForPlayersMovedToClub(); 
     } else {
         setTimeout(initApp, 1000);
     }

@@ -34,6 +34,10 @@ import showPlayerContracts from "./showPlayerContracts";
 import incrementAllowedActions from "./incrementAllowedAuctions";
 import warningScreen from "./warningScreen";
 import debugMode from "./debugMode";
+import sellProfit from "./sellProfit";
+import trackTransactions from "./trackTransactions";
+import playerCardInfo from "./playerCardInfo";
+import transactionsHistory from "./transactionsHistory";
 
 const plugins = [
     minMaxPrices,
@@ -70,7 +74,11 @@ const plugins = [
     pristinePlayers,
     showPlayerContracts,
     warningScreen,
-    debugMode
+    sellProfit,
+    trackTransactions,
+    debugMode,
+    playerCardInfo,
+    transactionsHistory
 ].filter(x => x);
 
 const menus = [];

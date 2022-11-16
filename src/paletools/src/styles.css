@@ -29,3 +29,7 @@ input[type="number"] {
     background-color: #2b3540;
     border-bottom: 1px solid #556c95;
 }
+
+.listFUTItem .auction {
+    top: 15px !important;
+}

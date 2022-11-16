@@ -2,10 +2,33 @@ import delay from "../utils/delay";
 import { toPromise } from "../utils/observable";
 import sendPinEvents from "./pinEvents";
 
-const PAGE_SIZE = 20;
-const MIN_BUY_NOW_COUNT = 3;
-
 const itemActionController = new UTItemActionController();
+
+export function getTransferListItems() {
+	return new Promise((resolve, reject) => {
+		services.Item.requestTransferItems().observe(this, (e, response) => {
+			if(response.success){
+				resolve(response.response.items);
+			}
+			else {
+				reject(response.error);
+			}
+		});
+	});
+}
+
+export function getWatchedItems() {
+	return new Promise((resolve, reject) => {
+		services.Item.requestWatchedItems().observe(this, (e, response) => {
+			if(response.success){
+				resolve(response.response.items);
+			}
+			else {
+				reject(response.error);
+			}
+		});
+	});
+}
 
 export function tryBuyItem(items) {
 	if (!items || items.length === 0) return false;
@@ -202,4 +225,8 @@ export function roundOffPrice(price, minVal = 0) {
 	});
 	var nearestPrice = Math.round(price / range.inc) * range.inc;
 	return Math.max(Math.min(nearestPrice, 14999000), minVal);
+}
+
+export function getPriceAfterTax(price) {
+	return price - (price * 5 / 100);
 }

@@ -1,0 +1,11 @@
+.sell-profit-value {
+    color: #00ff00;
+}
+
+.sell-profit-value.profit-loss {
+    color: red;
+}
+
+.ut-quick-list-panel-view .panelActions .boughtPrice.sell-profit {
+    display: block;
+}

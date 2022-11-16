@@ -73,6 +73,8 @@ export function createElem(tag, attrs, html) {
 
     if (attrs) {
         for (let attr of Object.keys(attrs)) {
+            if(!attrs[attr]) continue;
+            
             elem.setAttribute(attr === "className" ? "class" : attr, attrs[attr]);
         }
     }

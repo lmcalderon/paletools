@@ -19,6 +19,7 @@ module.exports = (env) => {
         SELL_MULTIPLE: false,
         SBC_SMART_BUILDER: false,
         CLUB_SEARCH_ENHACER: false,
+        TRANSACTIONS_HISTORY: false,
         EA_BUG_FIXER: false,
         ...env
     };

@@ -6,15 +6,22 @@ export function show(elem) {
 
     if (isIterable(elem)) {
         removeClass(elem, "hide");
+        for(let el of elem){
+            if(el.style.display === "none"){
+                el.style.display = "";
+            }
+        }
     }
     else {
         if (elem.getRootElement) {
             elem = elem.getRootElement();
         }
-
         removeClass(elem, "hide");
+        if(elem.style.display === "none"){
+            elem.style.display = "";
+        }
     }
-
+    
     return elem;
 }
 

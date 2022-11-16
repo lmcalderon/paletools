@@ -232,6 +232,41 @@ export default {
     "plugins.showPlayerContracts.title": "Show Player Contracts on Transfer Market",
     /// #endif
 
+    /// #if process.env.PLAYER_CARD_INFO
+    "plugins.playerCardInfo.settings.title": "Display Extra Card Information",
+    "plugins.playerCardInfo.settings.alternatePositions": "Display alternative positions",
+    "plugins.playerCardInfo.settings.skillMoves": "Display skill moves",
+    "plugins.playerCardInfo.settings.weakFoot": "Display weak foot",
+    "plugins.playerCardInfo.settings.untradeable": "Display untradeable icon",
+    /// #endif
+
+    /// #if process.env.TRACK_TRANSACTIONS
+    "plugins.trackTransactions.settings.title": "Save Transactions Information",
+    /// #endif
+
+    /// #if process.env.SELL_PROFIT
+    "plugins.sellProfit.settings.title": "Show sell profit",
+    "plugins.sellProfit.realProfit.text": "Profit",
+    "plugins.sellProfit.expectedProfit.text": "Expected Profit",
+    /// #endif
+
+    /// #if process.env.TRANSACTIONS_HISTORY
+    "plugins.transactionsHistory.settings.title": "Transactions History",
+    "plugins.transactionsHistory.panel.title": "Transactions History",
+    "plugins.transactionsHistory.panel.label": "All",
+    "plugins.transactionsHistory.panel.bought": "Bought",
+    "plugins.transactionsHistory.panel.sold": "Sold",
+    "plugins.transactionsHistory.view.menu.dashboard": "Dashboard",
+    "plugins.transactionsHistory.view.table.date": "Date",
+    "plugins.transactionsHistory.view.table.item": "Item",
+    "plugins.transactionsHistory.view.table.price": "Coins",
+    "plugins.transactionsHistory.view.buttons.filterToday": "Today",
+    "plugins.transactionsHistory.view.buttons.filterWeek": "This Week",
+    "plugins.transactionsHistory.view.buttons.filterMonth": "This Month",
+    "plugins.transactionsHistory.view.buttons.filterAnyMonth": "-- Select Month --",
+    "plugins.transactionsHistory.view.dashboard.month": "Month",
+    /// #endif
+
     "plugins.warningScreen.title": "PALETOOLS - USAGE WARNING",
     "plugins.warningScreen.disclaimer": "<p>Dear user, since Paletools allows you to perform actions that were not design by EA and allows you to be much quicker in the usage of the WebApp you are at a potential risk of ban from EA</p><p><br /></p><p>Therefore you shall use it at your own discretion and you should be very cautious</p><p><br /></p><p>If you perform too many snipes in a row you might get a soft market ban or even worst a <b>permanent ban from the transfer market</b></p><p><br /></p><p>Please <b>USE THIS TOOL AT YOUR OWN RISK</b></p><p><br /></p><p>Thanks a have a nice day!</p>",
 

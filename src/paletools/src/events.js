@@ -1,11 +1,14 @@
+import getWindow from "./services/window";
 import { isIterable } from "./utils/iterable";
 
 export function on(target, eventName, callback) {
     if(typeof target === "string"){
         callback = eventName;
         eventName = target;
-        target = window;
+        target = getWindow();
     }
+
+    eventName = getEventName(eventName);
 
     if(isIterable(target)){
         for(let t of target){
@@ -18,7 +21,14 @@ export function on(target, eventName, callback) {
 }
 
 export function triggerEvent(eventName, data) {
-    window.dispatchEvent(new CustomEvent(eventName, { bubbles: true, detail: data }));
+    eventName = getEventName(eventName);
+    getWindow().dispatchEvent(new CustomEvent(eventName, { bubbles: true, detail: data }));
+}
+
+function getEventName(eventName){
+    return EVENTS.hasOwnProperty(eventName) 
+        ? `paletools:${eventName}`
+        : eventName;
 }
 
 export const EVENTS = {
@@ -35,5 +45,9 @@ export const EVENTS = {
     REQUEST_OPEN: "requestOpen",
     REQUEST_SEND: "requestSend",
     REQUEST_FINISHED: "requestFinished",
-    LOG: "logMessage"
+    LOG: "logMessage",
+    ITEM_WON: "itemWon",
+    ITEMS_WON: "itemsWon",
+    ITEMS_SOLD: "itemsSold",
+    ITEM_MOVED: "itemMoved"
 }

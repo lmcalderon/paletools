@@ -1,3 +1,5 @@
+import getWindow from "../services/window";
+
 export default function executeDropDownControlOverrides(){
 
     const UTDropDownControl_init = UTDropDownControl.prototype.init;
@@ -15,7 +17,7 @@ export default function executeDropDownControlOverrides(){
 
         if(isPhone()) return;
 
-        window.addEventListener(EventType.KEYUP, this._paletoolsHandleKeyUpEvent);
+        getWindow().addEventListener(EventType.KEYUP, this._paletoolsHandleKeyUpEvent);
     }
 
     const UTDropDownControl_removeWindowListener = UTDropDownControl.prototype.removeWindowListener;
@@ -24,6 +26,6 @@ export default function executeDropDownControlOverrides(){
 
         if(isPhone()) return;
 
-        window.removeEventListener(EventType.KEYUP, this._paletoolsHandleKeyUpEvent);
+        getWindow().removeEventListener(EventType.KEYUP, this._paletoolsHandleKeyUpEvent);
     }
 }

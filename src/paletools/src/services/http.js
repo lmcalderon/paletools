@@ -1,5 +1,5 @@
 export default function http(url, method, body){
-    return fetch(`${window.services.Authentication.sessionUtas.url}/ut/game/fifa${window.APP_YEAR_SHORT}/${url}`, {
+    return fetch(`${services.Authentication.sessionUtas.url}/ut/game/fifa${APP_YEAR_SHORT}/${url}`, {
         method: method || 'GET',
         headers: {
             "X-UT-SID": services.Authentication.getUtasSession()["id"],

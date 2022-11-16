@@ -1,6 +1,8 @@
+import getWindow from "../services/window";
+
 export default function guid(){
-    if(window.crypto.randomUUID){
-        return window.crypto.randomUUID();
+    if(getWindow().crypto.randomUUID){
+        return getWindow().crypto.randomUUID();
     }
 
     var d = new Date().getTime();//Timestamp

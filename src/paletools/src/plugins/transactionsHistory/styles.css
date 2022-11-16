@@ -1,0 +1,66 @@
+#tx-dashboard-overall-report td {
+    padding: 35px;
+    border: 1px solid;
+    font-size: 70px;
+    text-align: center;
+}
+
+#tx-dashboard-overall-report th {
+    font-weight: bolder;
+}
+
+#tx-dashboard-overall-report {
+    font-size: 24px;
+    margin: 0 auto;
+    border-collapse: separate;
+}
+
+.tx-report {
+    border-collapse: collapse;
+    width: 75%;
+    margin: 0 auto;
+}
+
+#tx-dashboard-month-report {
+    width: 50%;
+}
+
+.tx-report th {
+    background-color: #1f1d1e;
+}
+
+.tx-report th,
+.tx-report table td {
+    padding: 4px;
+}
+
+.tx-report tr:nth-child(odd) {
+    background-color: #33353c;
+}
+
+#tx-bought-report td:nth-child(3),
+#tx-sold-report td:nth-child(3) {
+    border-left: 1px solid #275261;
+    color: yellow;
+    text-align: right;
+}
+
+.tx-report th .fut_icon {
+    display: none;
+}
+
+.tx-date-range {
+    text-align: center;
+    font-size: 28px;
+    padding: 10px;
+}
+
+.tx-filter-months {
+    background-color: #f8eede;
+    color: #243962;
+    font-family: UltimateTeamCondensed;
+    font-size: 24px;
+    margin-left: .5rem;
+    padding-left: 40px;
+    padding-right: 40px;
+}

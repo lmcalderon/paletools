@@ -1,6 +1,7 @@
+import getWindow from "./window";
 
-window.paletools ||= {};
+getWindow().paletools ||= {};
 
 export default function getDebugSettings(){
-    return window.paletools;
+    return getWindow().paletools;
 };

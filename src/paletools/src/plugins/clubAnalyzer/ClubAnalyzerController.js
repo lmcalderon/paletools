@@ -1,9 +1,10 @@
 /// #if process.env.CLUB_ANALYZER
 
 import localize from "../../localization";
-import { getAllClubPlayers } from "../../services/club";
 import http from "../../services/http";
 import storage from "../../services/storage";
+import { loadClubPlayers } from "../../services/ui/club";
+import getWindow from "../../services/window";
 import settings from "../../settings";
 import { ClubAnalyzerView } from "./ClubAnalyzerView";
 import ClubAnalyzerViewModel from "./ClubAnalyzerViewModel";
@@ -96,11 +97,11 @@ ClubAnalyzerController.prototype._exportHtml = function () {
 }
 
 function getTeamName(id) {
-    return localize(`global.teamabbr15.${window.APP_YEAR}.team${id}`);
+    return localize(`global.teamabbr15.${getWindow().APP_YEAR}.team${id}`);
 }
 
 function getLeagueName(id) {
-    return localize(`global.leagueFull.${window.APP_YEAR}.league${id}`);
+    return localize(`global.leagueFull.${getWindow().APP_YEAR}.league${id}`);
 }
 
 function getNationName(id) {
@@ -120,7 +121,7 @@ function analyzeClub(loadingCallback) {
 
     return new Promise(async (resolve) => {
         loadingCallback("players", 0);
-        players = await getAllClubPlayers(null, null, count => loadingCallback("players", count));
+        players = await loadClubPlayers(count => loadingCallback("players", count));
         loadingCallback("usermassinfo");
         usermassinfo = await http('usermassinfo');
         loadingCallback("tradepile");
@@ -207,7 +208,8 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
     };
 
     const processPlayers = (players, destination, getPlayer, condition, shouldAddToCounters) => {
-        for (let player of players) {
+        for (let playerId of Object.keys(players)) {
+            const player = players[playerId];
             if (typeof condition !== "undefined") {
                 if (!condition(player)) {
                     continue;
@@ -315,7 +317,8 @@ function processClub(allPlayerNames, players, usermassinfo, tradepile, watchlist
     processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistLoosing, x => x.itemData, x => x.bidState === "outbid" && x.tradeState !== "closed");
     processPlayers(watchlist.auctionInfo, viewmodel.players.watchlistLost, x => x.itemData, x => x.bidState === "outbid" && x.tradeState === "closed");
 
-    for (let player of players) {
+    for (let playerId of Object.keys(players)) {
+        const player = players[playerId];
         viewmodel.players.all[player.definitionId] = player;
         player.data = { f: player._staticData.firstName, l: player._staticData.lastName };
 

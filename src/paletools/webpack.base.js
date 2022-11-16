@@ -31,6 +31,10 @@ module.exports = {
     PRISTINE_PLAYERS: true,
     SHOW_PLAYER_CONTRACTS: true,
     DEBUG_MODE: true,
+    SELL_PROFIT: true,
+    TRACK_TRANSACTIONS: true,
+    TRANSACTIONS_HISTORY: true,
+    PLAYER_CARD_INFO: true,
 
     SBC_SMART_BUILDER: false,
     CLUB_SEARCH_ENHACER: false,

@@ -12,6 +12,7 @@
     "css-loader": "^6.5.0",
     "gulp": "^4.0.2",
     "gulp-copy": "^4.0.1",
+    "gulp-userscript": "^1.2.0",
     "ifdef-loader": "^2.3.2",
     "javascript-obfuscator": "^3.0.0",
     "raw-loader": "^4.0.2",

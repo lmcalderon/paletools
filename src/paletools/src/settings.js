@@ -160,6 +160,22 @@ let settings = {
         warningScreen: {
             enabled: true
         },
+        sellProfit: {
+            enabled: true
+        },
+        trackTransactions: {
+            enabled: true
+        },
+        playerCardInfo: {
+            enabled: true,
+            alternatePositions: true,
+            skillMoves: true,
+            weakFoot: true,
+            untradeable: true
+        },
+        transactionsHistory: {
+            enabled: true
+        },
         debugMode: {
             enabled: false
         }

@@ -1,0 +1,103 @@
+.playerOverview .preferredPosition {
+    display: none !important; /* remove fut trade enhacer */
+}
+
+.alternative-positions {
+    font-size: 10px;
+    color: white;
+    font-family: 'UltimateTeamCondensed';
+    display: inline-block;
+    position: absolute;
+    top: 36px;
+    right: 2px;
+}
+
+.large .alternative-positions {
+    top: -70px;
+    right: 10px;
+}
+
+.alternative-position {
+    border: 1px solid white;
+    border-radius: 100%;
+    background-color: #0099cc;
+    width: 16px;
+    text-align: center;
+    height: 16px;
+    line-height: 16px;
+    margin-bottom: 1px;
+}
+
+.stars {
+    position: absolute;
+    top: 80px;
+    left: 12px;
+    font-size: 12px;
+}
+
+
+.large .stars {
+    top: -70px;
+    left: 6px;
+}
+
+.large .stars > div {
+    display: block;
+    border: 1px solid white;
+    border-radius: 100%;
+    background-color: #0099cc;
+    width: 19px;
+    line-height: 16px;
+    text-align: center;
+    height: 16px;
+    color: white !important;
+    margin-bottom: 2px;
+}
+
+
+.stars > div {
+    display: inline-block;
+    margin-right: 2px;
+}
+
+.stars .skill-moves::before {
+    content: "\E074";
+    font-family: 'UltimateTeam-Icons';
+    font-size: 8px;
+}
+
+.stars .weak-foot::before {
+    /* content: "\E011";
+    font-family: 'UltimateTeam-Icons';
+    font-size: 8px;
+    display: inline-block;
+    transform: scaleX(-1); */
+}
+
+.stars .weak-foot-left::before {
+    /* transform: none !important; */
+}
+
+.ut-transfer-list-view .alternative-positions, .ut-watch-list-view .alternative-positions,
+.ut-transfer-list-view .stars, .ut-watch-list-view .stars  {
+    display: none;
+}
+
+.ut-squad-slot-chemistry-points-view.item {
+    bottom: 0px;
+}
+
+.ut-squad-slot-view .untradeable::before {
+    content: "\E07F";
+    font-family: UltimateTeam-Icons,sans-serif;
+    color: #f6b803;
+    margin-top: 2px;
+    position: absolute;
+    width: 1.1em;
+}
+
+.ut-squad-slot-view .untradeable {
+    position: absolute;
+    right: 19px;
+    top: 0;
+}
