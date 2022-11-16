@@ -27,7 +27,7 @@ function run() {
         if(!settings.enabled || !cfg.enabled) return;
 
         for(let item of ev.detail.items) {
-            db.transactions.insertSell(item);
+            db.transactions.insertBuy(item);
         }
     })
 }

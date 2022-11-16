@@ -74,13 +74,11 @@ function run() {
             setupCounts();
 
             on(EVENTS.ITEM_WON, ev => {
-                buyCount++;
-                displayCounts();
+                setupCounts();
             });
 
             on(EVENTS.ITEMS_SOLD, ev => {
-                sellCount += ev.details.items.length;
-                displayCounts();
+                setupCounts();
             });
 
             on(EVENTS.APP_DISABLED, () => hide(_transferHistoryTile));

@@ -35,8 +35,6 @@ function deploy() {
         let work;
 
         for (let step of deploySteps) {
-                console.log(JSON.stringify(step));
-
                 work = gulp.src(step.from);
                 if (step.transform) {
                         work = work.pipe(step.transform);

@@ -166,6 +166,7 @@ export class TransactionsStore {
 
     insertBuy(item, buyPrice) {
         if (!this.#db) return;
+        if(buyPrice < 200) return;
 
         this.#insertRecord(TX_BUY_NAME, item, buyPrice, id => this.getBuyByItemId(id));
     }
@@ -178,6 +179,7 @@ export class TransactionsStore {
 
     async insertSell(item, sellPrice) {
         if (!this.#db) return;
+        if(sellPrice < 200) return;
 
         this.#insertRecord(TX_SELL_NAME, item, sellPrice, id => this.getSellByItemId(id));
     }
