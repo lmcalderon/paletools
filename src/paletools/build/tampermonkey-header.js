@@ -18,5 +18,5 @@ module.exports = {
       "futbin.com"
     ],
     updateURL: "https://pale.tools/fifa/dist/latest/paletools.user.js",
-    downloadURL: `https://pale.tools/fifa/dist/${VERSION}/paletools.user.js`
+    downloadURL: `https://pale.tools/fifa/dist/latest/paletools.user.js`
 };
