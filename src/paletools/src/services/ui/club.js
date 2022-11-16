@@ -16,7 +16,7 @@ function playersToDictionary(players){
     return playersDict;
 }
 
-export function watchForPlayersMovedToClub() {
+export function watchForPlayersMovement() {
     on(EVENTS.ITEM_MOVED, ev => {
         if(ev.detail.item.type !== ItemType.PLAYER) return;
 
@@ -29,6 +29,14 @@ export function watchForPlayersMovedToClub() {
             if(_clubCache[ev.detail.item.definitionId]){
                 delete _clubCache[ev.detail.item.definitionId];
             }
+        }
+    });
+
+    on(EVENTS.ITEM_DISCARDED, ev => {
+        if(ev.detail.item.type !== ItemType.PLAYER) return;
+
+        if(_clubCache[ev.detail.item.definitionId]) {
+            delete _clubCache[ev.detail.item.definitionId];
         }
     });
 }

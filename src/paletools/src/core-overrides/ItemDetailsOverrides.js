@@ -19,7 +19,7 @@ export function executeItemDetailsOverrides() {
     UTTransferListViewController.prototype._clearSold = function _clearSold() {
         UTTransferListViewController_clearSold.call(this);
         
-        const items = this.getView().getSection(UTTransferSectionListViewModel.SECTION.SOLD).listRows.map(x => x.data);
+        const items = this.getView().getSection(UTTransferSectionListViewModel.SECTION.SOLD).listRows.map(x => x.data).filter(x => x.getAuctionData().isSold());
         triggerEvent(EVENTS.ITEMS_SOLD, { items: items });
     }
 }

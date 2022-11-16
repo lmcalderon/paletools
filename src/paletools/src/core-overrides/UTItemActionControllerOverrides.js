@@ -30,4 +30,19 @@ export default function executeItemActionControllerOverrides() {
 
         return observable;
     }
+
+    const UTItemActionController_discard = UTItemActionController.prototype.discard;
+    UTItemActionController.prototype.discard = function (t, e) {
+        const observable = UTItemActionController_discard.call(this, t, e);
+
+        observable.observe(this, (sender, response) => {
+            sender.unobserve(this);
+
+            if(response.success) {
+                triggerEvent(EVENTS.ITEM_DISCARDED, { item: t });
+            }
+        });
+
+        return observable;
+    }
 }

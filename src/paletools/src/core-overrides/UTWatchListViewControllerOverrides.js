@@ -10,7 +10,7 @@ export default function executeWatchListViewControllerOverrides() {
         this.onDataChange.observe(this, (sender, data) => {
             let itemsToSend = [];
 
-            for(let item of data.items) {
+            for(let item of data.items.filter(x => x.getAuctionData().isWon())) {
                 if(!watchedItemsCache[item.id]){
                     watchedItemsCache[item.id] = item;
                     itemsToSend.push(item);

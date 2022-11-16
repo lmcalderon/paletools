@@ -54,7 +54,7 @@ class Database {
         this.transactions = new TransactionsStore(this);
 
         this.initPromise = new Promise((resolve, reject) => {
-            const openRequest = indexedDB.open("paletools", 2);
+            const openRequest = indexedDB.open("paletools", 5);
 
             openRequest.addEventListener("upgradeneeded", async ev => {
                 this.#db = ev.target.result;

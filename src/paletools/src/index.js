@@ -3,7 +3,7 @@ import { EVENTS, triggerEvent } from "./events";
 import runPlugins from "./plugins";
 import db from "./services/db";
 import { logDebug } from "./services/log";
-import { watchForPlayersMovedToClub } from "./services/ui/club";
+import { watchForPlayersMovement } from "./services/ui/club";
 import getWindow from "./services/window";
 import styles from "./styles.css";
 import { addClass, hasClass, removeClass, select } from "./utils/dom";
@@ -99,7 +99,7 @@ function initApp() {
         runPlugins();
         getAppMain().getRootViewController().showGameView();
         triggerEvent(EVENTS.APP_LOADED);
-        watchForPlayersMovedToClub(); 
+        watchForPlayersMovement(); 
     } else {
         setTimeout(initApp, 1000);
     }

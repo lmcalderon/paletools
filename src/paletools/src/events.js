@@ -49,5 +49,7 @@ export const EVENTS = {
     ITEM_WON: "itemWon",
     ITEMS_WON: "itemsWon",
     ITEMS_SOLD: "itemsSold",
-    ITEM_MOVED: "itemMoved"
+    ITEM_MOVED: "itemMoved",
+    ITEM_DISCARDED: "itemDiscarded",
+    TRANSACTIONS_RELOADED: "transactionsReindex"
 }

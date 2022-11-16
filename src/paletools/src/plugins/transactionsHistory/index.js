@@ -81,6 +81,10 @@ function run() {
                 setupCounts();
             });
 
+            on(EVENTS.TRANSACTIONS_RELOADED, ev => {
+                setupCounts();
+            });
+
             on(EVENTS.APP_DISABLED, () => hide(_transferHistoryTile));
             on(EVENTS.APP_ENABLED, () => show(_transferHistoryTile));
         }

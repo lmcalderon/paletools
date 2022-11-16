@@ -1,5 +1,6 @@
 /// #if process.env.TRANSACTIONS_HISTORY
 
+import { ButtonGroup } from "../../controls/ButtonGroup";
 import { MenuBar } from "../../controls/MenuBar";
 import { Table } from "../../controls/Table";
 import UTNativeDropDownControl from "../../controls/UTNativeDropDownControl";
@@ -24,6 +25,7 @@ function loc(key) {
 
 export function TransactionsHistoryView(t) {
     UTView.call(this);
+    this.onReIndexClicked = new EAObservable();
     this.onDropDatabaseClicked = new EAObservable();
     this.onDateChanged = new EAObservable();
     this.onExportCsvClicked = new EAObservable();
@@ -44,10 +46,12 @@ TransactionsHistoryView.prototype._appendMainMenu = function (container) {
             if (item.id === "tx-dashboard") {
                 hide(select("#tx-date-commands"));
                 hide(self._rangeContainer);
+                show(self._dashboardActions);
             }
             else {
                 show(select("#tx-date-commands"));
                 show(self._rangeContainer);
+                hide(self._dashboardActions);
             }
             hide(selectAll(".tx-report"));
             show(select(`#${item.id}-report`));
@@ -58,6 +62,20 @@ TransactionsHistoryView.prototype._appendMainMenu = function (container) {
     });
 
     append(container, menuBar);
+}
+
+TransactionsHistoryView.prototype._createdDashboardActionsMenu = function (container) {
+    const self = this;
+    const menu = new ButtonGroup({
+        id: "tx-dashboard-commands",
+        buttons: [
+            { label: "Re-index", onClick: () => self.onReIndexClicked.notify() },
+            { label: "Export", onClick: () => self.onExportCsvClicked.notify() },
+            { label: "Delete Database", onClick: () => confirm("Are you sure you want to delete all the transactions?") ? self.onDropDatabaseClicked.notify() : null }
+        ]
+    });
+
+    return menu;
 }
 
 
@@ -168,9 +186,11 @@ TransactionsHistoryView.prototype._createDashboard = function () {
         headers: [loc("view.dashboard.month"), loc("panel.bought"), loc("panel.sold")]
     })
 
-    append(container, overallTable, monthTable);
+    const actions = this._createdDashboardActionsMenu();
 
-    return [container, overallTable, monthTable];
+    append(container, actions, overallTable, monthTable);
+
+    return [container, actions, overallTable, monthTable];
 }
 
 TransactionsHistoryView.prototype._generate = function _generate() {
@@ -187,7 +207,7 @@ TransactionsHistoryView.prototype._generate = function _generate() {
         append(contentContainer, content);
         append(content, pinnedList);
 
-        [this._dashboardContainer, this._dashboardOverall, this._dashboardMonth] = this._createDashboard();
+        [this._dashboardContainer, this._dashboardActions, this._dashboardOverall, this._dashboardMonth] = this._createDashboard();
         this._buyTable = this._createTable("tx-bought-report");
         this._sellTable = this._createTable("tx-sold-report");
         this._rangeContainer = createElem("div", { className: "tx-date-range" });

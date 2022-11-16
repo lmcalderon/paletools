@@ -1,4 +1,4 @@
-import { on } from "../../events";
+import { EVENTS, on } from "../../events";
 import { getUnassignedPlayers } from "../club";
 import { dateToInt } from "../date";
 import { logDebug } from "../log";
@@ -31,6 +31,10 @@ export class TransactionsStore {
 
         const auctionData = item.getAuctionData();
 
+        price = price || item.lastSalePrice || auctionData.currentBid;
+
+        if(price < 200) return;
+
         try {
             this.#db.addRecord(store, {
                 itemId: item.id,
@@ -51,14 +55,7 @@ export class TransactionsStore {
     async build(version = 1) {
         logDebug(`Building for v${version}`);
         if (version < 2) {
-            try {
-                this.#db.deleteStore(TX_BUY_NAME);
-            }
-            catch { }
-            try {
-                this.#db.deleteStore(TX_SELL_NAME);
-            }
-            catch { }
+            this.drop();
         }
 
         if (!version || version === 1) {
@@ -74,47 +71,63 @@ export class TransactionsStore {
             sellStore.createIndex("timestamp", "timestamp", { unique: false });
         }
 
-        on(EVENTS.APP_LOADED, async () => {
+        on(EVENTS.APP_LOADED, () => {
             // scan club for bought players
-            const club = await loadClubPlayers();
-            for (let playerId of Object.keys(club).filter(x => x.lastSalePrice > 0)) {
-                const player = club[playerId];
-                this.insertBuy(player, player.lastSalePrice, player.timestamp);
-            }
-
-            try {
-                let items = await getTransferListItems();
-                for (let item of items.filter(x => x.lastSalePrice > 0)) {
-                    this.insertBuy(item, item.lastSalePrice, item.timestamp);
-                }
-
-                for (let item of item.filter(x => x.getAuctionData().isSold())) {
-                    this.insertSell(item);
-                }
-            }
-            catch {
-            }
-
-            try {
-                let items = await getUnassignedPlayers();
-                for (let item of items.filter(x => x.lastSalePrice > 0)) {
-                    this.insertBuy(item, item.lastSalePrice, item.timestamp);
-                }
-            }
-            catch {
-
-            }
-
-            try {
-                let items = await getWatchedItems();
-                for (let item of items.filter(x => x.getAuctionData().isWon())) {
-                    this.insertBuy(item);
-                }
-            }
-            catch {
-
-            }
+            this.scan();
         });
+    }
+
+    async drop() {
+        try {
+            this.#db.deleteStore(TX_BUY_NAME);
+        }
+        catch { }
+        try {
+            this.#db.deleteStore(TX_SELL_NAME);
+        }
+        catch { }
+    }
+
+    async scan() {
+        const club = await loadClubPlayers();
+        for (let playerId of Object.keys(club).filter(x => club[x].lastSalePrice > 0)) {
+            const player = club[playerId];
+            logDebug(player);
+            this.insertBuy(player, player.lastSalePrice, player.timestamp);
+        }
+
+        try {
+            let items = await getTransferListItems();
+            for (let item of items.filter(x => x.lastSalePrice > 0)) {
+                this.insertBuy(item, item.lastSalePrice, item.timestamp);
+            }
+
+            for (let item of item.filter(x => x.getAuctionData().isSold())) {
+                this.insertSell(item);
+            }
+        }
+        catch {
+        }
+
+        try {
+            let items = await getUnassignedPlayers();
+            for (let item of items.filter(x => x.lastSalePrice > 0)) {
+                this.insertBuy(item, item.lastSalePrice, item.timestamp);
+            }
+        }
+        catch {
+
+        }
+
+        try {
+            let items = await getWatchedItems();
+            for (let item of items.filter(x => x.getAuctionData().isWon())) {
+                this.insertBuy(item);
+            }
+        }
+        catch {
+
+        }
     }
 
     getBuyCount() {
