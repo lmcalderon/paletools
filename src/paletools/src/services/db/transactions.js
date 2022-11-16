@@ -1,3 +1,4 @@
+import { on } from "../../events";
 import { getUnassignedPlayers } from "../club";
 import { dateToInt } from "../date";
 import { logDebug } from "../log";
@@ -73,45 +74,47 @@ export class TransactionsStore {
             sellStore.createIndex("timestamp", "timestamp", { unique: false });
         }
 
-        // scan club for bought players
-        const club = await loadClubPlayers();
-        for (let playerId of Object.keys(club).filter(x => x.lastSalePrice > 0)) {
-            const player = club[playerId];
-            this.insertBuy(player, player.lastSalePrice, player.timestamp);
-        }
-
-        try {
-            let items = await getTransferListItems();
-            for (let item of items.filter(x => x.lastSalePrice > 0)) {
-                this.insertBuy(item, item.lastSalePrice, item.timestamp);
+        on(EVENTS.APP_LOADED, async () => {
+            // scan club for bought players
+            const club = await loadClubPlayers();
+            for (let playerId of Object.keys(club).filter(x => x.lastSalePrice > 0)) {
+                const player = club[playerId];
+                this.insertBuy(player, player.lastSalePrice, player.timestamp);
             }
 
-            for (let item of item.filter(x => x.getAuctionData().isSold())) {
-                this.insertSell(item);
+            try {
+                let items = await getTransferListItems();
+                for (let item of items.filter(x => x.lastSalePrice > 0)) {
+                    this.insertBuy(item, item.lastSalePrice, item.timestamp);
+                }
+
+                for (let item of item.filter(x => x.getAuctionData().isSold())) {
+                    this.insertSell(item);
+                }
             }
-        }
-        catch {
-        }
-
-        try {
-            let items = await getUnassignedPlayers();
-            for (let item of items.filter(x => x.lastSalePrice > 0)) {
-                this.insertBuy(item, item.lastSalePrice, item.timestamp);
+            catch {
             }
-        }
-        catch {
 
-        }
-
-        try {
-            let items = await getWatchedItems();
-            for (let item of items.filter(x => x.getAuctionData().isWon())) {
-                this.insertBuy(item);
+            try {
+                let items = await getUnassignedPlayers();
+                for (let item of items.filter(x => x.lastSalePrice > 0)) {
+                    this.insertBuy(item, item.lastSalePrice, item.timestamp);
+                }
             }
-        }
-        catch {
+            catch {
 
-        }
+            }
+
+            try {
+                let items = await getWatchedItems();
+                for (let item of items.filter(x => x.getAuctionData().isWon())) {
+                    this.insertBuy(item);
+                }
+            }
+            catch {
+
+            }
+        });
     }
 
     getBuyCount() {
@@ -166,7 +169,7 @@ export class TransactionsStore {
 
     insertBuy(item, buyPrice) {
         if (!this.#db) return;
-        if(buyPrice < 200) return;
+        if (buyPrice < 200) return;
 
         this.#insertRecord(TX_BUY_NAME, item, buyPrice, id => this.getBuyByItemId(id));
     }
@@ -179,7 +182,7 @@ export class TransactionsStore {
 
     async insertSell(item, sellPrice) {
         if (!this.#db) return;
-        if(sellPrice < 200) return;
+        if (sellPrice < 200) return;
 
         this.#insertRecord(TX_SELL_NAME, item, sellPrice, id => this.getSellByItemId(id));
     }
