@@ -13,9 +13,6 @@ export function show(elem) {
         }
     }
     else {
-        if (elem.getRootElement) {
-            elem = elem.getRootElement();
-        }
         removeClass(elem, "hide");
         if(elem.style.display === "none"){
             elem.style.display = "";
@@ -32,10 +29,6 @@ export function hide(elem) {
         addClass(elem, "hide");
     }
     else {
-        if (elem.getRootElement) {
-            elem = elem.getRootElement();
-        }
-
         addClass(elem, "hide");
     }
 

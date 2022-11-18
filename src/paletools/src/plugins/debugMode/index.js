@@ -81,7 +81,7 @@ function run() {
 
 
 
-    append(header, css(hide(debugModeBtn.getRootElement()), { float: "left " }));
+    append(header, css(hide(debugModeBtn), { float: "left", lineHeight: "50px" }));
 
     enableDebugMode();
 
