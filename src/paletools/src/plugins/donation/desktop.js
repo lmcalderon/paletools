@@ -5,7 +5,7 @@ import VERSION from "../../version";
 import { addStyle } from "../../utils/styles";
 import styles from "./styles.css";
 import localize from "../../localization";
-import { createElem } from "../../utils/dom";
+import { createElem, insertAfter, select } from "../../utils/dom";
 
 let version = VERSION;
 
@@ -22,7 +22,7 @@ function run() {
 
         var donationDiv = createElem("div", { id: "paletools-donation-ui", className: "paletools-element" }, html);
 
-        document.querySelector(".ut-fifa-header-view").appendChild(donationDiv);
+        insertAfter(donationDiv, select(".ut-fifa-header-view > .fifa")); 
 
         addStyle('paletools-donation', styles);
     }

@@ -79,8 +79,9 @@
 }
 
 .ut-transfer-list-view .alternative-positions, .ut-watch-list-view .alternative-positions,
-.ut-transfer-list-view .stars, .ut-watch-list-view .stars  {
-    display: none;
+.ut-transfer-list-view .stars, .ut-watch-list-view .stars,
+.ut-transfer-list-view .player-contracts, .ut-watch-list-view .player-contracts {
+    display: none !important;
 }
 
 .ut-squad-slot-chemistry-points-view.item {

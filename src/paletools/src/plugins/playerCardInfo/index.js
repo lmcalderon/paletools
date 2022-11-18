@@ -21,13 +21,10 @@ function removeStyles() {
 
 
 function run() {
-
     const UTPlayerItemView_renderItem = UTPlayerItemView.prototype.renderItem;
-
-
     UTPlayerItemView.prototype.renderItem = function (player, t) {
         const result = UTPlayerItemView_renderItem.call(this, player, t);
-        if (settings.enabled && cfg.enabled && !this._alternativePositionsGenerated) {
+        if (settings.enabled && cfg.enabled) {
             const starsContainer = createElem("div", { className: "stars" });
 
             const colors = t.getExpColorMap(player.getTier()).header;
@@ -40,12 +37,12 @@ function run() {
             }
 
             if (cfg.skillMoves) {
-                append(starsContainer, createElem("div", { className: "skill-moves", style: colorStyle }, player.getMetaData().skillMoves + 1));
+                append(starsContainer, createElem("div", { className: "skill-moves", style: colorStyle }, player.getSkillMoves()));
             }
 
             if (cfg.weakFoot) {
                 const wfText = player.getMetaData().isLeftFoot ? localize("cards.cardfront.weakFootRightAbbr") : localize("cards.cardfront.weakFootLeftAbbr");
-                append(starsContainer, createElem("div", { className: `weak-foot ${(player.getMetaData().isLeftFoot ? "" : "weak-foot-left")}`, style: colorStyle }, `${wfText} ${player.getMetaData().weakFoot}`));
+                append(starsContainer, createElem("div", { className: `weak-foot ${(player.isLeftFoot() ? "" : "weak-foot-left")}`, style: colorStyle }, `${wfText} ${player.getWeakFoot()}`));
             }
 
             if (cfg.skillMoves || cfg.weakFoot) {
@@ -56,11 +53,9 @@ function run() {
                 addClass(this.getRootElement(), "pristine-player");
             }
 
-            if(cfg.contracts && player.loans === -1) {
-                if (this.__loanInfoTab) {
-                    addClass(this.__loanInfoTab, "player-contracts");
-                    this.__loanInfoTab.textContent = player.contract;
-                }
+            if (cfg.contracts && player.loans === -1 && this.__loanInfoTab) {
+                addClass(this.__loanInfoTab, "player-contracts");
+                this.__loanInfoTab.textContent = player.contract;
             }
 
             const altPosContainer = createElem("div", { className: "alternative-positions" });
@@ -77,8 +72,6 @@ function run() {
 
             on(EVENTS.APP_ENABLED, () => { show(altPosContainer); show(starsContainer); show(untradeableContainer); addStyles(); });
             on(EVENTS.APP_DISABLED, () => { hide(altPosContainer); hide(starsContainer); hide(untradeableContainer); removeStyles(); });
-
-            this._alternativePositionsGenerated = true;
         }
 
         return result;

@@ -15,8 +15,7 @@
 }
 
 .listFUTItem .auction {
-	display: block !important;
-	left: 32% !important;
+	left: 44% !important;
 	z-index: 1 !important;
 	width: 60% !important;
 }
@@ -31,21 +30,7 @@
 	max-width: 100% !important;
 }
 
-
-/* .ut-transfer-list-view .listFUTItem .entityContainer .name,
-.ut-navigation-container-view--content .listFUTItem .entityContainer .name {
-	max-width: 100%  !important;
-	width: 100% !important;
-	position: absolute !important;
-} */
-
-.ui-layout-left .listFUTItem .auction .auctionValue {
-	float: left !important;
-	width: 100% !important;
-}
-
 .listFUTItem .auction .label {
-	display: inline-block !important;
 	overflow: hidden !important;
 	white-space: nowrap !important;
 	font-size: .75rem !important;
@@ -54,16 +39,13 @@
 
 .listFUTItem .auction .value {
 	font-size: 14px !important;
-	float: right !important;
 }
 
 .listFUTItem .auction .time {
 	font-size: 14px !important;
-	float: right !important;
 }
 
 .listFUTItem .auction .auction-state {
-	float: right !important;
 	width: 100% !important;
 }
 
