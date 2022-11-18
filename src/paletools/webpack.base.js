@@ -28,8 +28,6 @@ module.exports = {
     XML_HTTP_REQUESTS: true,
     INCREASE_ALLOWED_AUCTIONS: true,
     SELL_MULTIPLE: true,
-    PRISTINE_PLAYERS: true,
-    SHOW_PLAYER_CONTRACTS: true,
     DEBUG_MODE: true,
     SELL_PROFIT: true,
     TRACK_TRANSACTIONS: true,

@@ -171,7 +171,9 @@ let settings = {
             alternatePositions: true,
             skillMoves: true,
             weakFoot: true,
-            untradeable: true
+            untradeable: true,
+            pristine: true,
+            contracts: true
         },
         transactionsHistory: {
             enabled: true

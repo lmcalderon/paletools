@@ -29,8 +29,6 @@ import clubSearchEnhacer from "./clubSearchEnhacer";
 import keepPlayerSellValues from "./keepPlayerSellValues";
 import sellMultiple from "./sellMultiple";
 import xmlHttpRequest from "./xmlHttpRequest";
-import pristinePlayers from "./pristinePlayers";
-import showPlayerContracts from "./showPlayerContracts";
 import incrementAllowedActions from "./incrementAllowedAuctions";
 import warningScreen from "./warningScreen";
 import debugMode from "./debugMode";
@@ -71,8 +69,6 @@ const plugins = [
     sellMultiple,
     xmlHttpRequest,
     incrementAllowedActions,
-    pristinePlayers,
-    showPlayerContracts,
     warningScreen,
     sellProfit,
     trackTransactions,

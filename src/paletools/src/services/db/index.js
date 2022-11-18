@@ -2,6 +2,20 @@ import { logDebug } from "../log";
 import getWindow from "../window";
 import { TransactionsStore } from "./transactions";
 
+IDBRequest.prototype.toPromise = function (){
+    const request = this;
+
+    return new Promise((resolve, reject) => {
+        request.addEventListener("success", ev => {
+            resolve(ev);
+        });
+
+        request.addEventListener("error", ev => {
+            reject(ev);
+        });
+    });
+}
+
 class Database {
     #db;
 
@@ -39,11 +53,15 @@ class Database {
         return this.#db.deleteObjectStore(storeName);
     }
 
+    clearStore(storeName) {
+        return this.#db.transaction(storeName, "readwrite").objectStore(storeName).clear().toPromise();
+    }
+
     addRecord(storeName, record) {
         return this.#db
-        .transaction(storeName, "readwrite")
-        .objectStore(storeName)
-        .add(record);
+            .transaction(storeName, "readwrite")
+            .objectStore(storeName)
+            .add(record);
     }
 
     isSupported() {
@@ -75,7 +93,7 @@ class Database {
 
         return this.initPromise;
     }
-   
+
 }
 
 

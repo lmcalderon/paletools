@@ -72,8 +72,9 @@ TransactionsHistoryController.prototype._reindex = async function() {
 }
 
 TransactionsHistoryController.prototype._dropDatabase = async function() {
-    await db.transactions.drop();
-    await db.transactions.build();
+    await db.transactions.clearBuy();
+    await db.transactions.clearSell();
+    await db.transactions.scan();
     await this.loadTransactions();
     triggerEvent(EVENTS.TRANSACTIONS_RELOADED);
 }

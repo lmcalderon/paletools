@@ -69,9 +69,9 @@ TransactionsHistoryView.prototype._createdDashboardActionsMenu = function (conta
     const menu = new ButtonGroup({
         id: "tx-dashboard-commands",
         buttons: [
-            { label: "Re-index", onClick: () => self.onReIndexClicked.notify() },
-            { label: "Export", onClick: () => self.onExportCsvClicked.notify() },
-            { label: "Delete Database", onClick: () => confirm("Are you sure you want to delete all the transactions?") ? self.onDropDatabaseClicked.notify() : null }
+            { label: loc("view.buttons.reindex"), onClick: () => self.onReIndexClicked.notify() },
+            { label: loc("view.buttons.exportCsv"), onClick: () => self.onExportCsvClicked.notify() },
+            { label: loc("view.buttons.clear"), onClick: () => confirm(localize("confirm")) ? self.onDropDatabaseClicked.notify() : null }
         ]
     });
 

@@ -10,23 +10,25 @@ const cfg = settings.plugins.trackTransactions;
 function run() {
 
     on(EVENTS.ITEM_WON, ev => {
-        if(!settings.enabled || !cfg.enabled || ev.detail.item) return;
+        if (!settings.enabled || !cfg.enabled || ev.detail.item) return;
 
-        db.transactions.insertBuy(ev.detail.item, ev.detail.bid);
+        if (ev.detail.item.getAuctionData().isWon()) {
+            db.transactions.insertBuy(ev.detail.item, ev.detail.bid);
+        }
     });
 
     on(EVENTS.ITEMS_SOLD, ev => {
-        if(!settings.enabled || !cfg.enabled) return;
+        if (!settings.enabled || !cfg.enabled) return;
 
-        for(let item of ev.detail.items){
+        for (let item of ev.detail.items.filter(x => x.getAuctionData().isSold())) {
             db.transactions.insertSell(item);
         }
     });
 
     on(EVENTS.ITEMS_WON, ev => {
-        if(!settings.enabled || !cfg.enabled) return;
+        if (!settings.enabled || !cfg.enabled) return;
 
-        for(let item of ev.detail.items) {
+        for (let item of ev.detail.items.filter(x => x.getAuctionData().isWon())) {
             db.transactions.insertBuy(item);
         }
     })

@@ -6,6 +6,7 @@ export default {
     "plugins.dangerous": "WARNING: Enabling this plugin could eventually lead to a potential BAN from EA, are you sure you want to continue?",
     "page.restart": "Please reload the page and re-execute Paletools for the changes to take effect",
     "market.itemBuy.success": "Item bought succesfully! - {COINS}",
+    "confirm": "Are you sure you want to proceed?",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Grid Mode",
@@ -224,20 +225,14 @@ export default {
     "plugins.increaseAllowedAuctions.settings.title": "Increase Allowed Auctions",
     /// #endif
 
-    /// #if process.env.PRISTINE_PLAYERS
-    "plugins.pristinePlayers.title": "Highlight Pristine Players (1 owner, 7 contracts)",
-    /// #endif
-
-    /// #if process.env.SHOW_PLAYER_CONTRACTS
-    "plugins.showPlayerContracts.title": "Show Player Contracts on Transfer Market",
-    /// #endif
-
     /// #if process.env.PLAYER_CARD_INFO
     "plugins.playerCardInfo.settings.title": "Display Extra Card Information",
     "plugins.playerCardInfo.settings.alternatePositions": "Display alternative positions",
     "plugins.playerCardInfo.settings.skillMoves": "Display skill moves",
     "plugins.playerCardInfo.settings.weakFoot": "Display weak foot",
     "plugins.playerCardInfo.settings.untradeable": "Display untradeable icon",
+    "plugins.playerCardInfo.settings.pristine": "Display if a card is pristine (7 contracts, 1 owner) only on search results",
+    "plugins.playerCardInfo.settings.contracts": "Display contracts",
     /// #endif
 
     /// #if process.env.TRACK_TRANSACTIONS
@@ -265,6 +260,9 @@ export default {
     "plugins.transactionsHistory.view.buttons.filterMonth": "This Month",
     "plugins.transactionsHistory.view.buttons.filterAnyMonth": "-- Select Month --",
     "plugins.transactionsHistory.view.dashboard.month": "Month",
+    "plugins.transactionsHistory.view.buttons.reindex": "Re-Index Database",
+    "plugins.transactionsHistory.view.buttons.exportCsv": "Export as CSV",
+    "plugins.transactionsHistory.view.buttons.clear": "Reset Database",
     /// #endif
 
     "plugins.warningScreen.title": "PALETOOLS - USAGE WARNING",

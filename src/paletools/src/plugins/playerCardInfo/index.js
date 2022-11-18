@@ -4,7 +4,7 @@ import styles from "./styles.css";
 import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
 import settings, { saveConfiguration } from "../../settings";
-import { append, createElem } from "../../utils/dom";
+import { addClass, append, createElem } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 import { addStyle, removeStyle } from "../../utils/styles";
 import localize from "../../localization";
@@ -35,7 +35,7 @@ function run() {
 
 
             const untradeableContainer = createElem("div", { className: "untradeable" });
-            if(cfg.untradeable){
+            if (cfg.untradeable && player.untradeable) {
                 append(this.__mainViewDiv, untradeableContainer);
             }
 
@@ -48,8 +48,19 @@ function run() {
                 append(starsContainer, createElem("div", { className: `weak-foot ${(player.getMetaData().isLeftFoot ? "" : "weak-foot-left")}`, style: colorStyle }, `${wfText} ${player.getMetaData().weakFoot}`));
             }
 
-            if(cfg.skillMoves || cfg.weakFoot){
+            if (cfg.skillMoves || cfg.weakFoot) {
                 append(this.__mainViewDiv, starsContainer);
+            }
+
+            if (cfg.pristine && player.contract === 7 && player.owners === 1 && player.loans === -1) {
+                addClass(this.getRootElement(), "pristine-player");
+            }
+
+            if(cfg.contracts && player.loans === -1) {
+                if (this.__loanInfoTab) {
+                    addClass(this.__loanInfoTab, "player-contracts");
+                    this.__loanInfoTab.textContent = player.contract;
+                }
             }
 
             const altPosContainer = createElem("div", { className: "alternative-positions" });
@@ -78,7 +89,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
-    ["enabled", "alternatePositions", "skillMoves", "weakFoot", "untradeable"].forEach(x => {
+    ["enabled", "alternatePositions", "skillMoves", "weakFoot", "untradeable", "pristine", "contracts"].forEach(x => {
         addLabelWithToggle(container, x === "enabled" ? x : `plugins.playerCardInfo.settings.${x}`, cfg[x], toggleState => {
             cfg[x] = toggleState;
             saveConfiguration();

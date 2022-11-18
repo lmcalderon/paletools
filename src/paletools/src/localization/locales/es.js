@@ -6,6 +6,7 @@ export default {
     "plugins.dangerous": "CUIDADO: Habilitar este plugin puede llevar eventualmente a un BAN por parte de EA de tu cuenta, ¿ESTAS SEGURO DE QUERER CONTINUAR?",
     "page.restart": "Por favor recarga la página y re ejecuta Paletools para que los cambios tomen efecto",
     "market.itemBuy.success": "¡Compra realizada correctamente! - {COINS}",
+    "confirm": "¿Estas seguro de querer continuar?",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Modo grilla",
@@ -220,20 +221,14 @@ export default {
     "plugins.increaseAllowedAuctions.settings.title": "Incrementar Ventas Permitidas",
     /// #endif
 
-    /// #if process.env.PRISTINE_PLAYERS
-    "plugins.pristinePlayers.title": "Remarcar jugadores pristinos (1 dueño y 7 contratos)",
-    /// #endif
-
-    /// #if process.env.SHOW_PLAYER_CONTRACTS
-    "plugins.showPlayerContracts.title": "Mostrar contratos de jugadores en el mercado",
-    /// #endif
-
     /// #if process.env.PLAYER_CARD_INFO
     "plugins.playerCardInfo.settings.title": "Información Extra en Cartas",
     "plugins.playerCardInfo.settings.alternatePositions": "Mostrar posiciones alternativas",
     "plugins.playerCardInfo.settings.skillMoves": "Mostrar filigranas",
     "plugins.playerCardInfo.settings.weakFoot": "Mostrar pierna mala",
     "plugins.playerCardInfo.settings.untradeable": "Mostrar si es intransferible",
+    "plugins.playerCardInfo.settings.pristine": "Mostrar si es pristino (7 contratos, 1 dueño), solo en resultados de búsqueda",
+    "plugins.playerCardInfo.settings.contracts": "Mostrar contratos",
     /// #endif
 
     /// #if process.env.TRACK_TRANSACTIONS
@@ -261,6 +256,9 @@ export default {
     "plugins.transactionsHistory.view.buttons.filterMonth": "Este mes",
     "plugins.transactionsHistory.view.buttons.filterAnyMonth": "-- Elija un mes --",
     "plugins.transactionsHistory.view.dashboard.month": "Mes",
+    "plugins.transactionsHistory.view.buttons.reindex": "Re-Indexar la Base de Datos",
+    "plugins.transactionsHistory.view.buttons.exportCsv": "Exportar como CSV",
+    "plugins.transactionsHistory.view.buttons.clear": "Resetear la Base de Datos",
     /// #endif
 
     "plugins.warningScreen.title": "PALETOOLS - ADVERTENCIA DE USO",

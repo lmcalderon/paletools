@@ -101,3 +101,27 @@
     right: 19px;
     top: 0;
 }
+
+.pristine-player .ut-item-view--main::after {
+    font-family:"UltimateTeam-Icons";
+    content: "\E00C";
+    margin-right: 4px;
+    color: #b9f2ff;
+    font-size: 11px;
+    display: none;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+.SearchResults .pristine-player .ut-item-view--main::after {
+    display: inline-block;
+}
+
+
+.player .ut-item-player-status--loan.player-contracts:not(.timeLimited) {
+    display: block;
+    background: white;
+    color: #0099CC;
+    border: 1px solid #0099CC;
+}

@@ -1,10 +1,12 @@
+import getWindow from "../services/window";
+
 export function dispatchMouseEvent(target, eventName) {
     if(!target) return false;
 
     const mouseEvent = new MouseEvent(eventName, {
         bubbles: true,
         cancelable: true,
-        view: window
+        view: getWindow()
     });
     target.dispatchEvent(mouseEvent);
     return true;

@@ -174,6 +174,14 @@ export class TransactionsStore {
         return this.#db.executeQuery(TX_SELL_NAME, store => store.get(itemId));
     }
 
+    clearBuy() {
+        return this.#db.clearStore(TX_BUY_NAME);
+    }
+
+    clearSell() {
+        return this.#db.clearStore(TX_SELL_NAME);
+    }
+
     async insertMultipleBuy(items) {
         for (let item of items) {
             this.insertBuy(item);
