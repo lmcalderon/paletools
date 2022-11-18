@@ -38,7 +38,7 @@ TransactionsHistoryController.prototype.init = function () {
     }
 }
 
-TransactionsHistoryController.prototype._exportCsv = async function(){
+TransactionsHistoryController.prototype._exportCsv = async function () {
     const buys = await db.transactions.getAllBuy();
     const sells = await db.transactions.getAllSell();
 
@@ -47,31 +47,49 @@ TransactionsHistoryController.prototype._exportCsv = async function(){
     function getItem(record) {
         if (record.itemType === ItemType.PLAYER) {
             var staticData = repositories.Item.getStaticDataByDefId(record.staticDataId);
-            return `${staticData.firstName} ${staticData.lastName} (${record.rating})`;
+            return `${staticData.firstName} ${staticData.lastName}`;
         }
 
         return record.itemType;
     }
 
 
-    for(let buy of buys){
-        all.push([intToDate(buy.timestamp), getItem(buy), buy.price, 'BUY']);
+    for (let buy of buys) {
+        all.push([
+            buy.itemId,
+            buy.staticDataId,
+            buy.definitionId,
+            buy.itemType,
+            intToDate(buy.timestamp).toISOString(), 
+            getItem(buy), 
+            buy.price, 
+            buy.rating,
+            'BUY']);
     }
 
-    for(let sell of sells){
-        all.push([intToDate(sell.timestamp), getItem(sell), sell.price, 'SELL']);
+    for (let sell of sells) {
+        all.push([
+            sell.itemId, 
+            sell.staticDataId, 
+            sell.definitionId, 
+            sell.itemType, 
+            intToDate(sell.timestamp).toISOString(), 
+            getItem(sell), 
+            sell.price, 
+            sell.rating,
+            'SELL']);
     }
 
-    exportCsv(["Date", "Item", "Price", "Type"],all, "transactions.csv");
+    exportCsv(["ItemId", "PlayerId", "DefinitionId", "ItemType", "Date", "Item", "Price", "Rating", "Type"], all, "transactions.csv");
 }
 
-TransactionsHistoryController.prototype._reindex = async function() {
+TransactionsHistoryController.prototype._reindex = async function () {
     await db.transactions.scan();
     await this.loadTransactions();
     triggerEvent(EVENTS.TRANSACTIONS_RELOADED);
 }
 
-TransactionsHistoryController.prototype._dropDatabase = async function() {
+TransactionsHistoryController.prototype._dropDatabase = async function () {
     await db.transactions.clearBuy();
     await db.transactions.clearSell();
     await db.transactions.scan();
@@ -108,7 +126,7 @@ TransactionsHistoryController.prototype.loadTransactions = async function (searc
     while (date < historyTo) {
         this._viewmodel.counts.month[date] = {
             buy: await db.transactions.getBuyCountByDateRange(getFirstDayOfMonth(date), getLastDayOfMonth(date)),
-            sell:  await db.transactions.getSellCountByDateRange(getFirstDayOfMonth(date), getLastDayOfMonth(date))
+            sell: await db.transactions.getSellCountByDateRange(getFirstDayOfMonth(date), getLastDayOfMonth(date))
         };
         date.setMonth(date.getMonth() + 1);
     }
