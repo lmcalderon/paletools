@@ -2,6 +2,7 @@ import { getAllClubPlayers } from "../club";
 import { updateBanner } from "../../utils/banner";
 import localize from "../../localization";
 import { EVENTS, on } from "../../events";
+import db from "../db";
 
 let _clubCache;
 let _clubLoaded = false;
@@ -24,6 +25,8 @@ export function watchForPlayersMovement() {
             if(!_clubCache[ev.detail.item.definitionId]){
                 _clubCache[ev.detail.item.definitionId] = ev.detail.item;
             }
+
+            db.transactions.insertBuy(ev.detail.item);
         }
         else {
             if(_clubCache[ev.detail.item.definitionId]){

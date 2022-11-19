@@ -33,6 +33,7 @@ export class TransactionsStore {
 
         price = price || item.lastSalePrice || auctionData.currentBid;
 
+        if(!price) return;
         if(price < 200) return;
 
         try {
