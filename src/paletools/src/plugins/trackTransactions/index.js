@@ -10,7 +10,7 @@ const cfg = settings.plugins.trackTransactions;
 function run() {
 
     on(EVENTS.ITEM_WON, ev => {
-        if (!settings.enabled || !cfg.enabled || ev.detail.item) return;
+        if (!settings.enabled || !cfg.enabled || !ev.detail.item) return;
 
         if (ev.detail.item.getAuctionData().isWon()) {
             db.transactions.insertBuy(ev.detail.item, ev.detail.bid);

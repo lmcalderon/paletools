@@ -1,4 +1,5 @@
 import { executeItemDetailsOverrides } from "./ItemDetailsOverrides";
+import executeServicesOverrides from "./ServicesOverrides";
 import { executeAuctionActionPanelViewOverrides } from "./UTAuctionActionPanelViewOverrides";
 import executeDefaultActionPanelViewOverrides from "./UTDefaultActionPanelViewOverrides";
 import executeDropDownControlOverrides from "./UTDropDownControlOverrides";
@@ -28,4 +29,5 @@ export default function runOverrides(){
     executeTransferListViewControllerOverrides();
     executeWatchListViewControllerOverrides();
     executeUnassignedItemsViewControllerOverrides();
+    executeServicesOverrides();
 }
