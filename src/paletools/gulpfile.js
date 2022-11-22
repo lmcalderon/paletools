@@ -7,6 +7,11 @@ const userscript = require("gulp-userscript");
 const tampermonkeyHeader = require("./build/tampermonkey-header");
 const { series } = require('gulp');
 
+const tampermonkeyHederDev = JSON.parse(JSON.stringify(tampermonkeyHeader));
+
+tampermonkeyHederDev.updateURL = "https://pale.tools/fifa/dist/latest/paletools.development.user.js";
+tampermonkeyHederDev.downloadURL = "https://pale.tools/fifa/dist/latest/paletools.development.user.js";
+
 function getJsCode(filePath, vinylFile) {
         return vinylFile.contents;
 }
@@ -24,7 +29,7 @@ function base64Encode(getCode) {
 const deploySteps = [
         { from: ['./dist/paletools-mobile*.js'], to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\` },
         { from: ['./dist/paletools-mobile.prod.js'], transform: base64Encode(getJsCode), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\mobile` },
-        { from: ['./dist/paletools.development.user.js'], transform: userscript(tampermonkeyHeader), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\latest` },
+        { from: ['./dist/paletools.development.user.js'], transform: userscript(tampermonkeyHederDev), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\latest` },
         { from: ['./dist/paletools.user.js'], transform: userscript(tampermonkeyHeader), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\latest` },
         { from: ['./dist/paletools.prod.js'], transform: base64Encode(getJsCode), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\` }
 
