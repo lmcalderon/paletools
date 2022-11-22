@@ -24,6 +24,7 @@ function base64Encode(getCode) {
 const deploySteps = [
         { from: ['./dist/paletools-mobile*.js'], to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\` },
         { from: ['./dist/paletools-mobile.prod.js'], transform: base64Encode(getJsCode), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\mobile` },
+        { from: ['./dist/paletools.development.user.js'], transform: userscript(tampermonkeyHeader), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\latest` },
         { from: ['./dist/paletools.user.js'], transform: userscript(tampermonkeyHeader), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\latest` },
         { from: ['./dist/paletools.prod.js'], transform: base64Encode(getJsCode), to: `d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\` }
 
@@ -49,6 +50,7 @@ function deploy() {
 
 function postDeploy(){
         fs.writeFileSync("d:\\code\\eallegretta.github.io\\fifa\\version.txt", VERSION);
+        fs.copyFileSync('d:\\code\\eallegretta.github.io\\fifa\\dist\\latest\\paletools.development.user.js', `d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\paletools.development.user.js`);
         fs.copyFileSync('d:\\code\\eallegretta.github.io\\fifa\\dist\\latest\\paletools.user.js', `d:\\code\\eallegretta.github.io\\fifa\\dist\\${VERSION}\\paletools.user.js`);
         return Promise.resolve("DONE");
 }
