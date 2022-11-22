@@ -120,7 +120,7 @@
 }
 
 
-.player .ut-item-player-status--loan.player-contracts:not(.timeLimited) {
+.player:not(.timeLimited) .ut-item-player-status--loan.player-contracts {
     display: block;
     background: white;
     color: #0099CC;

@@ -119,7 +119,7 @@ export async function findLowestMarketPrice(definitionId, itemType = SearchType.
 
 	updateSearchCriteriaFromItemType(searchCriteria, itemType);
 	searchCriteria.defId = [definitionId];
-	searchModel.searchFeature = enums.ItemSearchFeature.MARKET;
+	searchModel.searchFeature = ItemSearchFeature.MARKET;
 	searchModel.defaultSearchCriteria.type = searchCriteria.type;
 	searchModel.defaultSearchCriteria.category = searchCriteria.category;
 
