@@ -40,8 +40,8 @@ function run() {
                 append(starsContainer, createElem("div", { className: "skill-moves", style: colorStyle }, player.getSkillMoves()));
             }
 
-            if (cfg.weakFoot && player.getMetaData()) {
-                const wfText = player.getMetaData().isLeftFoot ? localize("cards.cardfront.weakFootRightAbbr") : localize("cards.cardfront.weakFootLeftAbbr");
+            if (cfg.weakFoot) {
+                const wfText = player.isLeftFoot() ? localize("cards.cardfront.weakFootRightAbbr") : localize("cards.cardfront.weakFootLeftAbbr");
                 append(starsContainer, createElem("div", { className: `weak-foot ${(player.isLeftFoot() ? "" : "weak-foot-left")}`, style: colorStyle }, `${wfText} ${player.getWeakFoot()}`));
             }
 
