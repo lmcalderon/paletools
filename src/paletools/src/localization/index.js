@@ -26,6 +26,10 @@ export function localizeDate(date) {
     return services.Localization.localizeDate(date);
 }
 
+export function localizePosition(positionId){
+    return UTLocalizationUtil.positionIdToName(positionId, services.Localization);
+}
+
 const monthKeys = ["january", "february", "march", "april", "june", "july", "august", "september", "october", "november", "december"];
 
 export function localizeMonthAbbr(date) {

@@ -7,7 +7,7 @@ import settings, { saveConfiguration } from "../../settings";
 import { addClass, append, createElem } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 import { addStyle, removeStyle } from "../../utils/styles";
-import localize from "../../localization";
+import localize, { localizePosition } from "../../localization";
 
 const cfg = settings.plugins.playerCardInfo;
 
@@ -40,7 +40,7 @@ function run() {
                 append(starsContainer, createElem("div", { className: "skill-moves", style: colorStyle }, player.getSkillMoves()));
             }
 
-            if (cfg.weakFoot) {
+            if (cfg.weakFoot && player.getMetaData()) {
                 const wfText = player.getMetaData().isLeftFoot ? localize("cards.cardfront.weakFootRightAbbr") : localize("cards.cardfront.weakFootLeftAbbr");
                 append(starsContainer, createElem("div", { className: `weak-foot ${(player.isLeftFoot() ? "" : "weak-foot-left")}`, style: colorStyle }, `${wfText} ${player.getWeakFoot()}`));
             }
@@ -63,7 +63,7 @@ function run() {
                 for (let position of player.possiblePositions || []) {
                     if (player.preferredPosition === position) continue;
 
-                    const positionDiv = createElem("div", { className: "alternative-position" }, PlayerPosition[position]);
+                    const positionDiv = createElem("div", { className: "alternative-position" }, localizePosition(position));
                     append(altPosContainer, positionDiv);
                 }
 
