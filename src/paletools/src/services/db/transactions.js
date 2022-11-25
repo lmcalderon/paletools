@@ -31,7 +31,7 @@ export class TransactionsStore {
 
         const auctionData = item.getAuctionData();
 
-        price = price || item.lastSalePrice || auctionData.currentBid;
+        price = price || auctionData.currentBid ||  item.lastSalePrice;
 
         if(!price) return;
         if(price < 200) return;

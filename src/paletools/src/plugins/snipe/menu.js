@@ -18,13 +18,12 @@ export default function menu() {
     function toggle(container, path, displayWarning) {
         const value = getObjectPropertyValueByPath(cfg, path)
         addLabelWithToggle(container, `plugins.snipe.settings.${path.replace('buttons.', '')}`, value, toggleState => {
-            if (toggleState) {
-                if (displayWarning && !confirm(localize("plugins.dangerous"))) {
-                    return false;
-                }
-                setObjectPropertyByPath(cfg, path, toggleState);
-                saveConfiguration();
+            if (toggleState && displayWarning && !confirm(localize("plugins.dangerous"))) {
+                return false;
             }
+
+            setObjectPropertyByPath(cfg, path, toggleState);
+            saveConfiguration();
         });
     }
 
