@@ -21,6 +21,7 @@ module.exports = (env) => {
         CLUB_SEARCH_ENHACER: false,
         TRANSACTIONS_HISTORY: false,
         EA_BUG_FIXER: false,
+        KEY_LISTENER: false,
         ...env
     };
 

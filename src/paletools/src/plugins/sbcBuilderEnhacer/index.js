@@ -61,11 +61,17 @@ function run() {
             this._maxPlayers.init();
             this._maxPlayers.setLabel(localize("plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label"));
 
+
+            this._playersFromSameClub = new UTLabelWithTextInputControl();
+            this._playersFromSameClub.init();
+            this._playersFromSameClub.setLabel(localize("plugins.sbcBuilderEnhacer.filter.settings.playersFromSameClub.label"));
+
             this.__sortContainer.appendChild(this._settingsTitle);
 
             const searchOptions = document.createElement("div");
             searchOptions.classList.add("sbc-settings");
             searchOptions.appendChild(this._maxPlayers.getRootElement());
+            searchOptions.appendChild(this._playersFromSameClub.getRootElement());
 
 
             this._searchToggles = new UTToggleControlGroupView();
@@ -104,6 +110,13 @@ function run() {
         this._maxPlayers.onKeyDown(() => callback(this._maxPlayers.value));
     }
 
+    UTSquadBuilderView.prototype.onPlayersFromSameClubChange = function (callback) {
+        if (!this._playersFromSameClub) return;
+        if (!callback) return;
+
+        this._playersFromSameClub.onKeyDown(() => callback(this._playersFromSameClub.value));
+    }
+
     UTSquadBuilderView.prototype.onMinRatingChange = function (callback) {
         if (!this._minRating) return;
         if (!callback) return;
@@ -125,6 +138,11 @@ function run() {
         this._maxPlayers.setInputValue(value);
     }
 
+    UTSquadBuilderView.prototype.setPlayerFromSameClub = function (value) {
+        if (!this._playersFromSameClub) return;
+        this._playersFromSameClub.setInputValue(value);
+    }
+
     UTSquadBuilderView.prototype.getMinRating = function () {
         if (!this._minRating) return;
         return parseInt(this._minRating.getInputValue()) || null;
@@ -138,6 +156,11 @@ function run() {
     UTSquadBuilderView.prototype.getMaxPlayers = function () {
         if (!this._maxPlayers) return;
         return parseInt(this._maxPlayers.getInputValue()) || null;
+    }
+
+    UTSquadBuilderView.prototype.getPlayersFromSameClub = function () {
+        if (!this._playersFromSameClub) return;
+        return parseInt(this._playersFromSameClub.getInputValue()) || null;
     }
 
     UTSquadBuilderView.prototype.getSearchToggles = function () {
@@ -170,6 +193,7 @@ function run() {
                 this.getView().setMinRating(searchSettings.minRating || "");
                 this.getView().setMaxRating(searchSettings.maxRating || "");
                 this.getView().setMaxPlayers(searchSettings.maxPlayers || "");
+                this.getView().setPlayerFromSameClub(searchSettings.playersFromSameClub || "");
                 if (searchSettings.ignorePlayerPos) {
                     this.getView().getSearchToggles().toggleById('ignore-positions');
                 }
@@ -222,6 +246,11 @@ function run() {
             storeSettings();
         }, EventType.CHANGE);
 
+        this.getView()._playersFromSameClub.addTarget(this, () => {
+            searchSettings.playersFromSameClub = this.getView().getPlayersFromSameClub();
+            storeSettings();
+        });
+
         this.getView()._searchToggles.addTarget(this, (_, __, opt) => {
             if (opt.id === "ignore-positions") {
                 searchSettings.ignorePlayerPos = opt.checked;
@@ -247,11 +276,14 @@ function run() {
     const UTSquadBuilderViewController_onClubSearchComplete = UTSquadBuilderViewController.prototype.onClubSearchComplete;
     UTSquadBuilderViewController.prototype.onClubSearchComplete = function onClubSearchComplete(t, e) {
 
+        const playersByClub = {};
+
         if (cfg.enabled) {
             this.viewModel.searchSettings = this.viewModel.searchSettings || {};
             this.viewModel.searchSettings.minRating = this.getView().getMinRating();
             this.viewModel.searchSettings.maxRating = this.getView().getMaxRating();
             this.viewModel.searchSettings.maxPlayers = this.getView().getMaxPlayers();
+            this.viewModel.searchSettings.playersFromSameClub = this.getView().getPlayersFromSameClub();
 
             e.response.items = e.response.items.filter(x => {
                 if (this.viewModel.searchSettings.minRating && x.rating < this.viewModel.searchSettings.minRating) {
@@ -268,6 +300,19 @@ function run() {
 
                 if (UTItemEntity.isStoryMode(x.id)) {
                     return false;
+                }
+
+                if(this.viewModel.searchSettings.playersFromSameClub) {
+                    if(!playersByClub[x.teamId]){
+                        playersByClub[x.teamId] = 1;
+                    }
+                    else {
+                        playersByClub[x.teamId]++; 
+                    }
+
+                    if(playersByClub[x.teamId] > this.viewModel.searchSettings.playersFromSameClub){
+                        return false;
+                    }
                 }
 
                 return true;

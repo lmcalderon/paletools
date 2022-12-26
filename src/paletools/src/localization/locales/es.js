@@ -194,6 +194,7 @@ export default {
     "plugins.sbcBuilderEnhacer.filter.settings.title": "Configuración",
     "plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label": "Cant. de Jugadores",
     "plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos": "Ignorar Posición del Jugador",
+    "plugins.sbcBuilderEnhacer.filter.settings.playersFromSameClub.label": "Max. Cant. de Jugadores del mismo club",
     /// #endif
 
     /// #if process.env.SBC_SMART_BUILDER

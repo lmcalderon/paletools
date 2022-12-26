@@ -33,7 +33,7 @@ module.exports = {
     TRACK_TRANSACTIONS: true,
     TRANSACTIONS_HISTORY: true,
     PLAYER_CARD_INFO: true,
-
+    KEY_LISTENER: true,
     SBC_SMART_BUILDER: false,
     CLUB_SEARCH_ENHACER: false,
     EA_BUG_FIXER: false

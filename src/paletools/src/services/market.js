@@ -4,10 +4,20 @@ import sendPinEvents from "./pinEvents";
 
 const itemActionController = new UTItemActionController();
 
+const playerSellValues = {};
+
+export function setPlayerSellValue(definitionId, minValue) {
+	playerSellValues[definitionId] = minValue;
+}
+
+export function getPlayerSellValue(definitionId) {
+	return playerSellValues[definitionId];
+}
+
 export function getTransferListItems() {
 	return new Promise((resolve, reject) => {
 		services.Item.requestTransferItems().observe(this, (e, response) => {
-			if(response.success){
+			if (response.success) {
 				resolve(response.response.items);
 			}
 			else {
@@ -20,7 +30,7 @@ export function getTransferListItems() {
 export function getWatchedItems() {
 	return new Promise((resolve, reject) => {
 		services.Item.requestWatchedItems().observe(this, (e, response) => {
-			if(response.success){
+			if (response.success) {
 				resolve(response.response.items);
 			}
 			else {
@@ -79,33 +89,33 @@ export async function listItemOnTransferMarket(item, sellPrice, startPrice, igno
 	return sellPrice;
 };
 
-function updateSearchCriteriaFromItemType(searchCriteria, itemType){
+function updateSearchCriteriaFromItemType(searchCriteria, itemType) {
 	searchCriteria.type = null;
 	searchCriteria.category = null;
 
-	if(itemType === ItemType.BADGE || itemType === ItemType.KIT){
+	if (itemType === ItemType.BADGE || itemType === ItemType.KIT) {
 		searchCriteria.category = itemType;
 		searchCriteria.type = SearchType.CLUB_INFO;
 		return;
 	}
 
-	if(itemType === ItemType.HEALTH || itemType === ItemType.CONTRACT) {
+	if (itemType === ItemType.HEALTH || itemType === ItemType.CONTRACT) {
 		searchCriteria.type = SearchType.CONSUMABLES_DEVELOPMENT;
 		searchCriteria.category = itemType === ItemType.HEALTH ? SearchCategory.HEALING : SearchCategory.CONTRACT;
 		return;
 	}
 
-	if(itemType === ItemType.TRAINING){
+	if (itemType === ItemType.TRAINING) {
 		searchCriteria.type = SearchType.CONSUMABLES_TRAINING;
 		return;
 	}
 
-	if(itemType === ItemType.MANAGER){
+	if (itemType === ItemType.MANAGER) {
 		searchCriteria.type = SearchType.STAFF;
 		return;
 	}
 
-	if(itemType === ItemType.NONE){
+	if (itemType === ItemType.NONE) {
 		searchCriteria.type = SearchType.ANY;
 		return;
 	}
@@ -126,7 +136,7 @@ export async function findLowestMarketPrice(definitionId, itemType = SearchType.
 	let minBuyNowArr = [];
 	let iteration = 0;
 	while (true) {
-		if(++iteration === 10){
+		if (++iteration === 10) {
 			break;
 		}
 
@@ -135,7 +145,7 @@ export async function findLowestMarketPrice(definitionId, itemType = SearchType.
 		searchModel.updateSearchCriteria(searchCriteria);
 
 		let items = await performMarketSearch(searchModel.searchCriteria);
-		if(items.length === 0){
+		if (items.length === 0) {
 			break;
 		}
 
@@ -143,14 +153,18 @@ export async function findLowestMarketPrice(definitionId, itemType = SearchType.
 		minBuyNowArr.unshift({ value: minBuyNow, count: items.filter(x => x._auction.buyNowPrice === minBuyNow).length });
 		searchCriteria.maxBuy = roundOffPrice(getSellBidPrice(minBuyNow));
 
-		if(items.length < searchModel.searchCriteria.count){
+		if (items.length < searchModel.searchCriteria.count) {
 			break;
 		}
 
 		await delay(100, 300);
 	}
 
-	if(pricesCount <= 1){
+	if (minBuyNowArr.length > 0) {
+		setPlayerSellValue(definitionId, minBuyNowArr[0]);
+	}
+
+	if (pricesCount <= 1) {
 		return minBuyNowArr[0];
 	}
 
@@ -170,7 +184,8 @@ function performMarketSearch(criteria) {
 					resolve([]);
 				}
 			}
-		)});
+		)
+	});
 }
 
 function computeSellPrice(sellPrice, item) {

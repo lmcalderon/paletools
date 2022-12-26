@@ -1,18 +1,18 @@
 let plugin;
 
 // #if process.env.MARKET_SEARCH_FILTERS
+import { addLabelWithToggle } from "../../controls";
+import { addMarketSearchFilter } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
+import { on } from "../../events";
+import localize from "../../localization";
+import { loadClubPlayers } from "../../services/ui/club";
 import settings, { saveConfiguration } from "../../settings";
 import getCurrentController from "../../utils/controller";
+import { addClass, append, createElem, insertBefore, select } from "../../utils/dom";
 import { notifySuccess } from "../../utils/notifications";
 import { addStyle } from "../../utils/styles";
+import { hide, show } from "../../utils/visibility";
 import styles from "./styles.css";
-import { addLabelWithToggle } from "../../controls";
-import localize from "../../localization";
-import { on } from "../../events";
-import { show, hide } from "../../utils/visibility";
-import { loadClubPlayers } from "../../services/ui/club";
-import { addClass, append, createElem, insertBefore, select } from "../../utils/dom";
-import { addMarketSearchFilter } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
 
 
 const cfg = settings.plugins.marketSearchFilters;
@@ -30,7 +30,7 @@ function run() {
 
     UTTransfersHubViewController.prototype._requestTransferTargetData = function () {
         if (settings.enabled && cfg.hideDuplicates) {
-            loadClubPlayers().then(currentClub => {club = currentClub});
+            loadClubPlayers().then(currentClub => { club = currentClub });
         }
 
         UTTransfersHubViewController_requestTransferTargetData_.call(this);
@@ -164,7 +164,7 @@ function run() {
             const name = this._filterName.getValue();
             const key = name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             const filters = this.getStoredFilters();
-            if(this._playerRating){
+            if (this._playerRating) {
                 searchCriteria.rating = this._playerRating.getValue();
             }
             filters[key] = { name: name, criteria: searchCriteria };
@@ -178,8 +178,8 @@ function run() {
         const controller = getCurrentController();
         if (controller instanceof UTMarketSearchFiltersViewController) {
             const filterKey = this._savedFilters.getValue();
-            if (!filterKey) return;
             const filters = this.getStoredFilters();
+            if (!filters[filterKey]) return;
             delete filters[filterKey];
             this.saveFilters(filters);
             this.loadSavedFilters();

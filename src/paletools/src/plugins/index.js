@@ -36,6 +36,7 @@ import sellProfit from "./sellProfit";
 import trackTransactions from "./trackTransactions";
 import playerCardInfo from "./playerCardInfo";
 import transactionsHistory from "./transactionsHistory";
+import keyListener from "./keyListener";
 
 const plugins = [
     minMaxPrices,
@@ -74,7 +75,8 @@ const plugins = [
     trackTransactions,
     debugMode,
     playerCardInfo,
-    transactionsHistory
+    transactionsHistory,
+    keyListener
 ].filter(x => x);
 
 const menus = [];

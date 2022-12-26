@@ -4,8 +4,13 @@ import promiseState from "../utils/promiseState";
 import { randomInt } from "../utils/random";
 import http from "./http";
 import sendPinEvents from "./pinEvents";
+import { toPromise } from "../utils/observable";
 
 const MAX_ITEMS_REQUEST = 150;
+
+export function getUserCoins() {
+    return toPromise(services.User.requestCurrencies());
+}
 
 export function getClubPlayersCount() {
     return new Promise(resolve => {

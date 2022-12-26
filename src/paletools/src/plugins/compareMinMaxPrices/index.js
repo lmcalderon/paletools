@@ -8,7 +8,7 @@ import localize from "../../localization";
 import { on } from "../../events";
 import { addClass, append, createElem, insertBefore } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
-import { getSellBidPrice } from "../../services/market"
+import { getSellBidPrice, setPlayerSellValue } from "../../services/market"
 
 const cfg = settings.plugins.compareMinMaxPrices;
 
@@ -81,7 +81,7 @@ function run() {
                     this._minPriceText.textContent = this._minBuyNowPrice;
                     this._maxPriceText.textContent = this._maxBuyNowPrice;
 
-                    playerSellValues[definitionId] = this._minBuyNowPrice;
+                    setPlayerSellValue(definitionId, this._minBuyNowPrice);
                     
                     show(this._minMaxPriceContainer);
                 }
@@ -95,18 +95,6 @@ function run() {
         }
 
         UTMarketSearchView_setItems.call(this, e, t);
-    }
-
-    const UTQuickListPanelViewController_renderView = UTQuickListPanelViewController.prototype.renderView;
-    UTQuickListPanelViewController.prototype.renderView = function () {
-        UTQuickListPanelViewController_renderView.call(this);
-
-        if (settings.enabled && cfg.enabled && playerSellValues[this.item.definitionId]) {
-            let buyAmount = playerSellValues[this.item.definitionId];
-            let bidAmount = getSellBidPrice(buyAmount);
-            this.getView().setBuyNowValue(buyAmount);
-            this.getView().setBidValue(bidAmount);
-        }
     }
 
     addStyle('paletools-compare-min-max-prices', styles);
