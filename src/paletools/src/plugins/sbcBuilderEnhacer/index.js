@@ -275,10 +275,19 @@ function run() {
 
     const UTSquadBuilderViewController_onClubSearchComplete = UTSquadBuilderViewController.prototype.onClubSearchComplete;
     UTSquadBuilderViewController.prototype.onClubSearchComplete = function onClubSearchComplete(t, e) {
-
-        const playersByClub = {};
-
         if (cfg.enabled) {
+            const playersByClub = {};
+        
+            for(let slot of this.squad.getPlayers()){
+                const player = slot.getItem();
+                if(!playersByClub[player.teamId]){
+                    playersByClub[player.teamId] = 1;
+                }
+                else {
+                    playersByClub[player.teamId]++;
+                }
+            }
+
             this.viewModel.searchSettings = this.viewModel.searchSettings || {};
             this.viewModel.searchSettings.minRating = this.getView().getMinRating();
             this.viewModel.searchSettings.maxRating = this.getView().getMaxRating();
