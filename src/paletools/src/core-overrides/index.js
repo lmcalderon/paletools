@@ -9,6 +9,7 @@ import executeItemTableCellViewOverrides from "./UTItemTableCellViewOverrides";
 import executeMarketSearchFiltersViewControllerOverrides from "./UTMarketSearchFiltersViewControllerOverrides";
 import executeMarketSearchFiltersViewOverrides from "./UTMarketSearchFiltersViewOverrides";
 import executeMarketSearchResultsViewControllerOverrides from "./UTMarketSearchResultsViewControllerOverrides";
+import executeQuickListPanelViewControllerOverrides from "./UTQuickListPanelViewControllerOverrides";
 import executeSlotActionPanelViewOverrides from "./UTSlotActionPanelViewOverrides";
 import executeTransferListViewControllerOverrides from "./UTTransferListViewControllerOverrides";
 import executeUnassignedItemsViewControllerOverrides from "./UTUnaassignedItemsViewControllerOverrides";
@@ -30,4 +31,5 @@ export default function runOverrides(){
     executeWatchListViewControllerOverrides();
     executeUnassignedItemsViewControllerOverrides();
     executeServicesOverrides();
+    executeQuickListPanelViewControllerOverrides();
 }

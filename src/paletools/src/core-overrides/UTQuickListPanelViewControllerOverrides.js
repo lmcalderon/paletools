@@ -1,4 +1,4 @@
-import { getPlayerSellValue } from "../services/market";
+import { getPlayerSellValue, getSellBidPrice } from "../services/market";
 
 export default function executeQuickListPanelViewControllerOverrides() {
     const UTQuickListPanelViewController_renderView = UTQuickListPanelViewController.prototype.renderView;
