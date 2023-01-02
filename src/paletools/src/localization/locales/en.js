@@ -234,6 +234,7 @@ export default {
     "plugins.playerCardInfo.settings.untradeable": "Display untradeable icon",
     "plugins.playerCardInfo.settings.pristine": "Display if a card is pristine (7 contracts, 1 owner) only on search results",
     "plugins.playerCardInfo.settings.contracts": "Display contracts",
+    "plugins.playerCardInfo.settings.league": "Display League",
     /// #endif
 
     /// #if process.env.TRACK_TRANSACTIONS

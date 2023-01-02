@@ -7,7 +7,7 @@ import settings, { saveConfiguration } from "../../settings";
 import { addClass, append, createElem } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 import { addStyle, removeStyle } from "../../utils/styles";
-import localize, { localizePosition } from "../../localization";
+import localize, { localizePosition, getLeagueAbbr5 } from "../../localization";
 
 const cfg = settings.plugins.playerCardInfo;
 
@@ -26,6 +26,7 @@ function run() {
         const result = UTPlayerItemView_renderItem.call(this, player, t);
         if (settings.enabled && cfg.enabled) {
             const starsContainer = createElem("div", { className: "stars" });
+            const leagueContainer = createElem("div", { className: "league" });
 
             const colors = t.getExpColorMap(player.getTier()).header;
             const colorStyle = `color: rgba(${colors.r},${colors.g},${colors.b},1)`;
@@ -58,6 +59,12 @@ function run() {
                 this.__loanInfoTab.textContent = player.contract;
             }
 
+            if (cfg.league) {
+                leagueContainer.textContent = getLeagueAbbr5(player.leagueId);;
+                addClass(leagueContainer, `league-${player.leagueId}`);
+                append(this.__mainViewDiv, leagueContainer);
+            }
+
             const altPosContainer = createElem("div", { className: "alternative-positions" });
             if (cfg.alternatePositions) {
                 for (let position of player.possiblePositions || []) {
@@ -70,8 +77,8 @@ function run() {
                 append(this.__mainViewDiv, altPosContainer);
             }
 
-            on(EVENTS.APP_ENABLED, () => { show(altPosContainer); show(starsContainer); show(untradeableContainer); addStyles(); });
-            on(EVENTS.APP_DISABLED, () => { hide(altPosContainer); hide(starsContainer); hide(untradeableContainer); removeStyles(); });
+            on(EVENTS.APP_ENABLED, () => { show(altPosContainer); show(starsContainer); show(untradeableContainer); show(leagueContainer);addStyles(); });
+            on(EVENTS.APP_DISABLED, () => { hide(altPosContainer); hide(starsContainer); hide(untradeableContainer); hide(leagueContainer); removeStyles(); });
         }
 
         return result;
@@ -82,7 +89,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
-    ["enabled", "alternatePositions", "skillMoves", "weakFoot", "untradeable", "pristine", "contracts"].forEach(x => {
+    ["enabled", "alternatePositions", "skillMoves", "weakFoot", "untradeable", "pristine", "contracts", "league"].forEach(x => {
         addLabelWithToggle(container, x === "enabled" ? x : `plugins.playerCardInfo.settings.${x}`, cfg[x], toggleState => {
             cfg[x] = toggleState;
             saveConfiguration();

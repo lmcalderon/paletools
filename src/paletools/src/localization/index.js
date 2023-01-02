@@ -1,5 +1,6 @@
 import localeEn from './locales/en';
 import localeEs from "./locales/es";
+import getWindow from "../services/window";
 
 const dictionary = {
     'en': localeEn,
@@ -34,4 +35,8 @@ const monthKeys = ["january", "february", "march", "april", "june", "july", "aug
 
 export function localizeMonthAbbr(date) {
     return localize(`date.${monthKeys[date.getMonth() - 1]}`);
+}
+
+export function getLeagueAbbr5(id) {
+    return localize(`global.leagueabbr5.${getWindow().APP_YEAR}.league${id}`);
 }
