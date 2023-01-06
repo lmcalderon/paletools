@@ -173,7 +173,8 @@ let settings = {
             weakFoot: true,
             untradeable: true,
             pristine: true,
-            contracts: true
+            contracts: true,
+            league: true
         },
         transactionsHistory: {
             enabled: true
