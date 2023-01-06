@@ -230,6 +230,7 @@ export default {
     "plugins.playerCardInfo.settings.untradeable": "Mostrar si es intransferible",
     "plugins.playerCardInfo.settings.pristine": "Mostrar si es pristino (7 contratos, 1 dueño), solo en resultados de búsqueda",
     "plugins.playerCardInfo.settings.contracts": "Mostrar contratos",
+    "plugins.playerCardInfo.settings.league": "Mostrar Liga",
     /// #endif
 
     /// #if process.env.TRACK_TRANSACTIONS
