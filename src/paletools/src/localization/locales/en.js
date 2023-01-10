@@ -108,6 +108,12 @@ export default {
     "plugins.duplicatedToSbc.button.textLoading": "Loading players from club... {count} loaded",
     /// #endif
 
+    // #if process.env.TRANSFER_LIST_TO_SBC
+    "plugins.transferListToSbc.button.text": "Use Transfer List players",
+    "plugins.transferListToSbc.settings.title": "Transfer List to SBC",
+    "plugins.transferListToSbc.button.textLoading": "Loading players from club... {count} loaded",
+    /// #endif
+
     /// #if process.env.SELECT_CHEAPEST
     "plugins.selectCheapest.settings.title": "Select cheapest player automatically",
     "plugins.selectCheapest.banner.text": "Mas Barato: {name} - {minBuyNow}",

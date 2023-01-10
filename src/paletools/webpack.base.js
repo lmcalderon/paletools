@@ -2,6 +2,7 @@ module.exports = {
     DONATION: true,
     COMPARE_MIN_MAX_PRICES: true,
     DUPLICATED_TO_SBC: true,
+    TRANSFER_LIST_TO_SBC: true,
     FILL_SBC_FROM_FUTBIN: true,
     GRID_MODE: true,
     WIDE_MODE: true,

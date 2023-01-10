@@ -105,7 +105,13 @@ export default {
     // #if process.env.DUPLICATED_TO_SBC
     "plugins.duplicatedToSbc.button.text": "Usar jugadores duplicados",
     "plugins.duplicatedToSbc.settings.title": "Duplicados a SBC",
-    "plugins.duplicatedToSbc.button.textLoading": "Cargado club... {count} jugadores cargados",
+    "plugins.duplicatedToSbc.button.textLoading": "Cargando club... {count} jugadores cargados",
+    /// #endif
+
+    // #if process.env.TRANSFER_LIST_TO_SBC
+    "plugins.transferListToSbc.button.text": "Usar jugadores de la lista de transferencia",
+    "plugins.transferListToSbc.settings.title": "Lista de Transferencia a SBC",
+    "plugins.transferListToSbc.button.textLoading": "Cargando club... {count} jugadores cargados",
     /// #endif
 
     /// #if process.env.SELECT_CHEAPEST
