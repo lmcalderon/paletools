@@ -27,6 +27,22 @@ export function getTransferListItems() {
 	});
 }
 
+export function getTransferListAvailableItems() {
+	return new Promise((resolve, reject) => {
+		services.Item.requestTransferItems().observe(this, (e, response) => {
+			if (response.success) {
+				var availableItems = (JSUtils.isObject(response.response) ? response.response.items : []).filter(function(e) {
+					return !e.getAuctionData().isValid()
+				});
+				resolve(availableItems);
+			}
+			else {
+				reject(response.error);
+			}
+		});
+	});
+}
+
 export function getWatchedItems() {
 	return new Promise((resolve, reject) => {
 		services.Item.requestWatchedItems().observe(this, (e, response) => {

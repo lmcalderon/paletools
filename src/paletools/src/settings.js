@@ -87,6 +87,9 @@ let settings = {
         duplicatedToSbc: {
             enabled: true
         },
+        transferListToSbc: {
+            enabled: true
+        },
         selectCheapest: {
             enabled: false
         },
