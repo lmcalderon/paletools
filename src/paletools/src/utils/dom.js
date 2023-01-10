@@ -1,4 +1,4 @@
-import { nodeListToArray } from "./array";
+import { toArray } from "./array";
 import { isIterable } from "./iterable";
 
 function getRealElement(elem) {
@@ -18,13 +18,13 @@ export function select(query, parent = document) {
 export function selectAll(query, parent = document) {
     if (!query) return;
 
-    return nodeListToArray(getRealElement(parent).querySelectorAll(query));
+    return toArray(getRealElement(parent).querySelectorAll(query));
 }
 
 export function append(parent, ...children) {
     if (!parent) return;
 
-    for (let child of children) {
+    for (let child of [].concat(...children)) {
         if (!child) continue;
 
         getRealElement(parent).append(getRealElement(child));
@@ -36,7 +36,7 @@ export function append(parent, ...children) {
 export function prepend(parent, ...children) {
     if (!parent) return;
 
-    for (let child of children) {
+    for (let child of [].concat(...children)) {
         if (!child) continue;
 
         getRealElement(parent).prepend(getRealElement(child));

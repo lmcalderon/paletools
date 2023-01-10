@@ -194,6 +194,8 @@ export default {
     "plugins.sbcBuilderEnhacer.filter.settings.title": "Configuración",
     "plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label": "Cant. de Jugadores",
     "plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos": "Ignorar Posición del Jugador",
+    "plugins.sbcBuilderEnhacer.filter.search.importantLeaguesOnly": "Important Leagues Only",
+    "plugins.sbcBuilderEnhacer.filter.search.unimportantLeaguesOnly": "Not Important Leagues Only",
     "plugins.sbcBuilderEnhacer.filter.settings.playersFromSameClub.label": "Max. Cant. de Jugadores del mismo club",
     /// #endif
 
@@ -231,6 +233,7 @@ export default {
     "plugins.playerCardInfo.settings.pristine": "Mostrar si es pristino (7 contratos, 1 dueño), solo en resultados de búsqueda",
     "plugins.playerCardInfo.settings.contracts": "Mostrar contratos",
     "plugins.playerCardInfo.settings.league": "Mostrar Liga",
+    "plugins.playerCardInfo.settings.importantLeague": "Destacar Liga Importante",
     /// #endif
 
     /// #if process.env.TRACK_TRANSACTIONS
@@ -261,6 +264,10 @@ export default {
     "plugins.transactionsHistory.view.buttons.reindex": "Re-Indexar la Base de Datos",
     "plugins.transactionsHistory.view.buttons.exportCsv": "Exportar como CSV",
     "plugins.transactionsHistory.view.buttons.clear": "Resetear la Base de Datos",
+    /// #endif
+
+    /// #if process.env.IMPORTANT_LEAGUES
+    'plugins.importantLeagues.settings.title': "Ligas Importantes",
     /// #endif
 
     "plugins.warningScreen.title": "PALETOOLS - ADVERTENCIA DE USO",

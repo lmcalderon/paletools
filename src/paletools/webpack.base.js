@@ -36,6 +36,7 @@ module.exports = {
     KEY_LISTENER: true,
     SBC_SMART_BUILDER: false,
     CLUB_SEARCH_ENHACER: false,
-    EA_BUG_FIXER: false
+    EA_BUG_FIXER: false,
+    IMPORTANT_LEAGUES: true
 
 };

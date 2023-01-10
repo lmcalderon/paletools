@@ -174,7 +174,12 @@ let settings = {
             untradeable: true,
             pristine: true,
             contracts: true,
-            league: true
+            league: true,
+            importantLeague: true
+        },
+        importantLeagues: {
+            enabled: true,
+            leagueIds: []
         },
         transactionsHistory: {
             enabled: true

@@ -4,10 +4,11 @@ import styles from "./styles.css";
 import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
 import settings, { saveConfiguration } from "../../settings";
-import { addClass, append, createElem } from "../../utils/dom";
+import { addClass, append, createElem, remove, select } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 import { addStyle, removeStyle } from "../../utils/styles";
 import localize, { localizePosition, getLeagueAbbr5 } from "../../localization";
+import { getImportantLeagueIds, getUnimportantLeagueIds } from "../../services/league";
 
 const cfg = settings.plugins.playerCardInfo;
 
@@ -21,6 +22,36 @@ function removeStyles() {
 
 
 function run() {
+    if (settings.enabled && cfg.enabled) {
+
+
+        function setupImportantLeaguesCss() {
+            if (!cfg.importantLeague) {
+                remove(select("#paletools-player-card-info-league"));
+                return;
+            }
+
+            const leaguesCss = [];
+            for (let league of getImportantLeagueIds()) {
+                leaguesCss.push(`.league.league-${league.id}`);
+            }
+
+            const style = select("#paletools-player-card-info-league") || createElem("style", { id: "paletools-player-card-info-league" });
+            style.textContent = `${leaguesCss.join(',')} { background-color: white !important; color: #0099cc !important; border: 1px solid #0099cc !important; }`;
+
+            if (!document.head.contains(style)) {
+                document.head.appendChild(style);
+            }
+        }
+
+        on(EVENTS.CONFIGURATION_SAVED, () => {
+            setupImportantLeaguesCss();
+        });
+
+        setupImportantLeaguesCss();
+    }
+
+
     const UTPlayerItemView_renderItem = UTPlayerItemView.prototype.renderItem;
     UTPlayerItemView.prototype.renderItem = function (player, t) {
         const result = UTPlayerItemView_renderItem.call(this, player, t);
@@ -77,7 +108,7 @@ function run() {
                 append(this.__mainViewDiv, altPosContainer);
             }
 
-            on(EVENTS.APP_ENABLED, () => { show(altPosContainer); show(starsContainer); show(untradeableContainer); show(leagueContainer);addStyles(); });
+            on(EVENTS.APP_ENABLED, () => { show(altPosContainer); show(starsContainer); show(untradeableContainer); show(leagueContainer); addStyles(); });
             on(EVENTS.APP_DISABLED, () => { hide(altPosContainer); hide(starsContainer); hide(untradeableContainer); hide(leagueContainer); removeStyles(); });
         }
 
@@ -89,7 +120,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
-    ["enabled", "alternatePositions", "skillMoves", "weakFoot", "untradeable", "pristine", "contracts", "league"].forEach(x => {
+    ["enabled", "alternatePositions", "skillMoves", "weakFoot", "untradeable", "pristine", "contracts", "league", "importantLeague"].forEach(x => {
         addLabelWithToggle(container, x === "enabled" ? x : `plugins.playerCardInfo.settings.${x}`, cfg[x], toggleState => {
             cfg[x] = toggleState;
             saveConfiguration();

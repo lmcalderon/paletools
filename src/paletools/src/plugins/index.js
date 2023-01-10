@@ -29,7 +29,6 @@ import clubSearchEnhacer from "./clubSearchEnhacer";
 import keepPlayerSellValues from "./keepPlayerSellValues";
 import sellMultiple from "./sellMultiple";
 import xmlHttpRequest from "./xmlHttpRequest";
-import incrementAllowedActions from "./incrementAllowedAuctions";
 import warningScreen from "./warningScreen";
 import debugMode from "./debugMode";
 import sellProfit from "./sellProfit";
@@ -37,6 +36,7 @@ import trackTransactions from "./trackTransactions";
 import playerCardInfo from "./playerCardInfo";
 import transactionsHistory from "./transactionsHistory";
 import keyListener from "./keyListener";
+import importantLeagues from "./importantLeagues";
 
 const plugins = [
     minMaxPrices,
@@ -69,14 +69,14 @@ const plugins = [
     keepPlayerSellValues,
     sellMultiple,
     xmlHttpRequest,
-    incrementAllowedActions,
     warningScreen,
     sellProfit,
     trackTransactions,
     debugMode,
     playerCardInfo,
     transactionsHistory,
-    keyListener
+    keyListener,
+    importantLeagues
 ].filter(x => x);
 
 const menus = [];

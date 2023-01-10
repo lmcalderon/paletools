@@ -23,31 +23,23 @@
     display: table-cell;
 }
 
-#paletools-settings-snipe-container > div {
+#paletools-settings-snipe-container > div, #paletools-settings-important-leagues-container > div {
     display: flex;
     width: 100%;
 }
 
-#paletools-settings-snipe-container > div > div {
+#paletools-settings-snipe-container > div > div, #paletools-settings-important-leagues-container > div > div {
     display: table;
     float: left;
     margin-right: 40px;
 }
 
-#paletools-settings-snipe-container > div > div > div {
+#paletools-settings-snipe-container > div > div > div, #paletools-settings-important-leagues-container > div > div > div {
     display: table-row;
     height: 50px;
 }
 
-.reset-settings {
-    margin-right: 0;
-    margin-left: auto;
-    background-color: red;
-    color: white;
-}
-
-
-#paletools-settings-snipe-container > div > div > div > label {
+#paletools-settings-snipe-container > div > div > div > label, #paletools-settings-important-leagues-container > div > div > div > label {
     display: table-cell;
     width: 70%;
 }
@@ -61,6 +53,15 @@
     color: red;
 }
 
-#paletools-settings-snipe-container > div > div > div > .ut-toggle-control {
+#paletools-settings-snipe-container > div > div > div > .ut-toggle-control, #paletools-settings-important-leagues-container > div > div > div > .ut-toggle-control {
     display: table-cell;
 }
+
+.reset-settings {
+    margin-right: 0;
+    margin-left: auto;
+    background-color: red;
+    color: white;
+}
+
+

@@ -1,3 +1,3 @@
-export function nodeListToArray(nodeList){
-    return Array.prototype.slice.call(nodeList);
+export function toArray(enumerable){
+    return Array.prototype.slice.call(enumerable);
 }

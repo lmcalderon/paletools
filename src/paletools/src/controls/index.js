@@ -55,4 +55,6 @@ export function addLabelWithToggle(container, labelLocaleKey, toggled, onToggleC
     } ;
 
     container.appendChild(labelWithToggle.getRootElement());
+
+    return labelWithToggle;
 }

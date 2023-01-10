@@ -11,6 +11,7 @@ import { hide, show } from "../../utils/visibility";
 import { addStyle, removeStyle } from "../../utils/styles";
 import storage from "../../services/storage";
 import getCurrentController, { findControllerByType } from "../../utils/controller";
+import { getImportantLeagueIds } from "../../services/league";
 
 
 const cfg = settings.plugins.sbcBuilderEnhacer;
@@ -44,8 +45,6 @@ function run() {
             this._maxRating.init();
             this._maxRating.setLabel(localize("plugins.sbcBuilderEnhacer.filter.ratings.max.label"));
 
-
-
             const ratingContainer = document.createElement("div");
             ratingContainer.classList.add("sbc-ratings-container");
             ratingContainer.appendChild(this._minRating.getRootElement());
@@ -77,6 +76,9 @@ function run() {
             this._searchToggles = new UTToggleControlGroupView();
             this._searchToggles.init();
             this._searchToggles.addToggleCell("ignore-positions", localize("plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos"));
+            this._searchToggles.addToggleCell("important-leagues-only", localize("plugins.sbcBuilderEnhacer.filter.search.importantLeaguesOnly"))
+            this._searchToggles.addToggleCell("unimportant-leagues-only", localize("plugins.sbcBuilderEnhacer.filter.search.unimportantLeaguesOnly"))
+
             this._searchToggles.layoutSubviews();
 
             searchOptions.appendChild(this._searchToggles.getRootElement());
@@ -198,6 +200,10 @@ function run() {
                     this.getView().getSearchToggles().toggleById('ignore-positions');
                 }
 
+                if(searchSettings.importantLeaguesOnly) {
+                    this.getView().getSearchToggles().toggleById("important-leagues-only");
+                }
+
                 if (searchSettings.filterBy) {
                     if (searchSettings.filterBy[enums.UISortOptionType.CONCEPT]) {
                         this.getView().getSortOptions().toggleById(enums.UISortOptionType.CONCEPT);
@@ -255,6 +261,12 @@ function run() {
             if (opt.id === "ignore-positions") {
                 searchSettings.ignorePlayerPos = opt.checked;
             }
+            else if(opt.id === "imporant-leagues-only") {
+                searchSettings.importantLeaguesOnly = opt.checked;
+            }
+            else if(opt.id == "unimportant-leagues-only") {
+                searchSettings.unimportantLeaguesOnly = opt.checked;
+            }
             storeSettings();
         }, EventType.CHANGE);
 
@@ -288,11 +300,15 @@ function run() {
                 }
             }
 
+            const importantLeagueIds = getImportantLeagueIds();
+
             this.viewModel.searchSettings = this.viewModel.searchSettings || {};
             this.viewModel.searchSettings.minRating = this.getView().getMinRating();
             this.viewModel.searchSettings.maxRating = this.getView().getMaxRating();
             this.viewModel.searchSettings.maxPlayers = this.getView().getMaxPlayers();
             this.viewModel.searchSettings.playersFromSameClub = this.getView().getPlayersFromSameClub();
+            this.viewModel.searchSettings.importantLeaguesOnly = this.getView().getSearchToggles().get("important-leagues-only").getToggleState();
+            this.viewModel.searchSettings.unimportantLeaguesOnly = this.getView().getSearchToggles().get("unimportant-leagues-only").getToggleState();
 
             e.response.items = e.response.items.filter(x => {
                 if (this.viewModel.searchSettings.minRating && x.rating < this.viewModel.searchSettings.minRating) {
@@ -300,6 +316,14 @@ function run() {
                 }
 
                 if (this.viewModel.searchSettings.maxRating && x.rating > this.viewModel.searchSettings.maxRating) {
+                    return false;
+                }
+
+                if(this.viewModel.searchSettings.importantLeaguesOnly && importantLeagueIds.length > 0 && importantLeagueIds.indexOf(x.leagueId) === -1){
+                    return false;
+                }
+
+                if(this.viewModel.searchSettings.unimportantLeaguesOnly && importantLeagueIds.length > 0 && importantLeagueIds.indexOf(x.leagueId) >= -1){
                     return false;
                 }
 

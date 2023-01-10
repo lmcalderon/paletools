@@ -140,31 +140,12 @@
     height: 16px;
     line-height: 16px;
     margin-bottom: 1px;
-    background-color: white;
-    color: #0099CC;
-    border: 1px solid #0099CC
+    background-color: #0099cc;
+    color: white;
+    border: 1px solid white
 }
 
 .large .league {
     top: -128px;
     left: 60px;
-}
-
-.league-13,
-.league-14,
-.league-16,
-.league-31,
-.league-19,
-.league-53,
-.league-4,
-.league-2012,
-.league-10,
-.league-1003,
-.league-39,
-.league-350,
-.league-1014,
-.league-68 {
-    background-color: #0099cc;
-    color: white;
-    border: 1px solid white;
 }

@@ -194,6 +194,8 @@ export default {
     "plugins.sbcBuilderEnhacer.filter.settings.title": "Settings",
     "plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label": "Players Count",
     "plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos": "Ignore Players Positions",
+    "plugins.sbcBuilderEnhacer.filter.search.importantLeaguesOnly": "Important Leagues Only",
+    "plugins.sbcBuilderEnhacer.filter.search.unimportantLeaguesOnly": "Not Important Leagues Only",
     "plugins.sbcBuilderEnhacer.filter.settings.playersFromSameClub.label": "Max Players From Same Club",
     /// #endif
 
@@ -235,6 +237,7 @@ export default {
     "plugins.playerCardInfo.settings.pristine": "Display if a card is pristine (7 contracts, 1 owner) only on search results",
     "plugins.playerCardInfo.settings.contracts": "Display contracts",
     "plugins.playerCardInfo.settings.league": "Display League",
+    "plugins.playerCardInfo.settings.importantLeague": "Highlight Important League",
     /// #endif
 
     /// #if process.env.TRACK_TRANSACTIONS
@@ -265,6 +268,10 @@ export default {
     "plugins.transactionsHistory.view.buttons.reindex": "Re-Index Database",
     "plugins.transactionsHistory.view.buttons.exportCsv": "Export as CSV",
     "plugins.transactionsHistory.view.buttons.clear": "Reset Database",
+    /// #endif
+
+    /// #if process.env.UNIMPORTANT_LEAGUES
+    'plugins.importantLeagues.settings.title': "Important Leagues",
     /// #endif
 
     "plugins.warningScreen.title": "PALETOOLS - USAGE WARNING",
