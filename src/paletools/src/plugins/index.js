@@ -20,6 +20,7 @@ import wideMode from "./wideMode";
 import countMyPacks from "./countMyPacks";
 import groupMyPacks from "./groupMyPacks";
 import transferListSendAllToClub from "./transferListSendAllToClub";
+import transferListToSbc from "./transferListToSbc";
 import sbcBuilderEnhacer from "./sbcBuilderEnhacer";
 import eaBugFixer from "./eaBugFixer";
 import snipeMobile from "./snipeMobile";
@@ -60,6 +61,7 @@ const plugins = [
     countMyPacks,
     groupMyPacks,
     transferListSendAllToClub,
+    transferListToSbc,
     sbcBuilderEnhacer,
     eaBugFixer,
     snipeMobile,
@@ -87,7 +89,7 @@ export default function runPlugins() {
     });
     for (let plugin of plugins) {
         if(!plugin.run) continue;
-        
+
         plugin.run();
         if (plugin.settings) {
             menus.push(plugin.settings);
