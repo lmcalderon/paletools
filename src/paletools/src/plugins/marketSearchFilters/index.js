@@ -3,7 +3,7 @@ let plugin;
 // #if process.env.MARKET_SEARCH_FILTERS
 import { addLabelWithToggle } from "../../controls";
 import { addMarketSearchComplete, addMarketSearchFilter } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
-import { on } from "../../events";
+import { EVENTS, on } from "../../events";
 import localize from "../../localization";
 import { isFastClubSearchEnabled } from "../../services/experimental";
 import { findPlayersInClub, loadClubPlayers } from "../../services/ui/club";
@@ -22,6 +22,21 @@ function run() {
     if (settings.enabled && cfg.hideDuplicates) {
         loadClubPlayers();
     }
+
+    addMarketSearchFilter((items, controller) => {
+        if (!settings.enabled || !cfg.hideDuplicates) return items;
+
+        return new Promise(async (resolve, reject) => {
+            const foundPlayers = await findPlayersInClub(items, null, true);
+            return resolve(items.filter(x => !foundPlayers[x.definitionId]));
+        });
+    });
+
+    on(EVENTS.CONFIGURATION_SAVED, () => {
+        if (!isFastClubSearchEnabled()) {
+            loadClubPlayers();
+        }
+    });
 
     const UTTransfersHubViewController_requestTransferTargetData_ = UTTransfersHubViewController.prototype._requestTransferTargetData;
 
@@ -356,7 +371,7 @@ function menu() {
     add('savedFilters');
     add('playerId');
     add('playerRating');
-    //add('hideDuplicates');
+    add('hideDuplicates');
 
     return container;
 }

@@ -60,7 +60,7 @@ let settings = {
             playerId: false,
             playerRating: true,
             savedFilters: true,
-            //hideDuplicates: false
+            hideDuplicates: false
         },
         donation: {
             enabled: true
@@ -196,6 +196,9 @@ let settings = {
         experimental: {
             fastClubSearch: false,
             fastConceptSearch: false
+        },
+        refreshCoins: {
+            enabled: true
         }
     }
 };

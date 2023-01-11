@@ -39,6 +39,7 @@ module.exports = {
     CLUB_SEARCH_ENHACER: false,
     EA_BUG_FIXER: false,
     IMPORTANT_LEAGUES: true,
-    EXPERIMENTAL: true
+    EXPERIMENTAL: true,
+    REFRESH_COINS: true
 
 };

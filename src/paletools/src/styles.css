@@ -61,4 +61,8 @@ input[type="number"] {
     .double-column {
         flex: 2
     }
+
+    .triple-column {
+        flex: 3
+    }
 }

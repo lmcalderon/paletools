@@ -18,25 +18,25 @@ function run() {
 
     if (settings.enabled && cfg.enabled) {
         loadClubPlayers();
-
-        addMarketSearchComplete(async (items, controller) => {
-            if (!settings.enabled || !cfg.enabled) return;
-
-            const foundPlayers = await findPlayersInClub(items, null, true);
-
-            for (let itemCell of controller.getView()._list.listRows) {
-                if (foundPlayers[itemCell.data.definitionId]) {
-                    addClass(itemCell.__entityContainer, "club-duplicated");
-                }
-            }
-        });
-
-        on(EVENTS.CONFIGURATION_SAVED, () => {
-            if (!isFastClubSearchEnabled()) {
-                loadClubPlayers();
-            }
-        });
     }
+
+    addMarketSearchComplete(async (items, controller) => {
+        if (!settings.enabled || !cfg.enabled) return;
+
+        const foundPlayers = await findPlayersInClub(items, null, true);
+
+        for (let itemCell of controller.getView()._list.listRows) {
+            if (foundPlayers[itemCell.data.definitionId]) {
+                addClass(itemCell.__entityContainer, "club-duplicated");
+            }
+        }
+    });
+
+    on(EVENTS.CONFIGURATION_SAVED, () => {
+        if (!isFastClubSearchEnabled()) {
+            loadClubPlayers();
+        }
+    });
 
     const UTItemTableCellView_render = UTItemTableCellView.prototype.render;
     UTItemTableCellView.prototype.render = function (e) {

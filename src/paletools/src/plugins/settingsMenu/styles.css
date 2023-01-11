@@ -1,59 +1,57 @@
-.paletools-settings-wrapper .tile > div {
+.paletools-settings-wrapper .tile>div {
     display: table;
-    width: 300px;
     padding-left: 10px;
-    
 }
 
-.paletools-settings-wrapper .tile > div > div {
+.paletools-settings-wrapper .tile>div>div {
     display: table-row;
     height: 40px;
 }
 
-.paletools-settings-wrapper .tile > div > div > label {
+.paletools-settings-wrapper .tile>div>div>label {
     display: table-cell;
     width: 80%;
 }
 
-.paletools-settings-wrapper .tile > div > div > input {
+.paletools-settings-wrapper .tile>div>div>input {
     display: table-cell;
 }
 
-.paletools-settings-wrapper .tile > div > div > .ut-toggle-control {
+.paletools-settings-wrapper .tile>div>div>.ut-toggle-control {
     display: table-cell;
 }
 
-#paletools-settings-snipe-container > div, #paletools-settings-important-leagues-container > div {
+#paletools-settings-snipe-container>div {
     display: flex;
     width: 100%;
 }
 
-#paletools-settings-snipe-container > div > div, #paletools-settings-important-leagues-container > div > div {
+#paletools-settings-snipe-container>div>div {
     display: table;
     float: left;
     margin-right: 40px;
 }
 
-#paletools-settings-snipe-container > div > div > div, #paletools-settings-important-leagues-container > div > div > div {
+#paletools-settings-snipe-container>div>div>div {
     display: table-row;
     height: 50px;
 }
 
-#paletools-settings-snipe-container > div > div > div > label, #paletools-settings-important-leagues-container > div > div > div > label {
+#paletools-settings-snipe-container>div>div>div>label {
     display: table-cell;
     width: 70%;
 }
 
-#paletools-settings-snipe-container > div > div > div > input {
+#paletools-settings-snipe-container>div>div>div>input {
     display: table-cell;
 }
 
-#paletools-settings-snipe-container > div > div > div > i {
+#paletools-settings-snipe-container>div>div>div>i {
     display: table-cell;
     color: red;
 }
 
-#paletools-settings-snipe-container > div > div > div > .ut-toggle-control, #paletools-settings-important-leagues-container > div > div > div > .ut-toggle-control {
+#paletools-settings-snipe-container>div>div>div>.ut-toggle-control {
     display: table-cell;
 }
 
@@ -64,4 +62,26 @@
     color: white;
 }
 
+#paletools-settings-important-leagues-container .column>div {
+    margin-bottom: 10px;
+}
 
+#paletools-settings-important-leagues-container label {
+    float: left;
+}
+
+#paletools-settings-important-leagues-container div.ut-toggle-control {
+    float: right;
+}
+
+
+
+@media screen and (min-width: 800px) {
+    #paletools-settings-important-leagues-container>div {
+        width: 99%;
+    }
+
+    .paletools-settings-wrapper .tile>div {
+        width: 300px;
+    }
+}

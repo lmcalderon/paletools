@@ -276,8 +276,12 @@ export default {
     "plugins.transactionsHistory.view.buttons.clear": "Reset Database",
     /// #endif
 
-    /// #if process.env.UNIMPORTANT_LEAGUES
+    /// #if process.env.IMPORTANT_LEAGUES
     'plugins.importantLeagues.settings.title': "Important Leagues",
+    /// #endif
+
+    /// #if process.env.REFRESH_COINS
+    'plugins.refreshCoins.settings.title': "Refresh Coins",
     /// #endif
 
     /// #if process.env.EXPERIMENTAL

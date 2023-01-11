@@ -16,7 +16,12 @@ export default function localize(key) {
         return dict[key];
     }
 
-    return services.Localization.localize(key);
+    const localized = services.Localization.localize(key);
+    if(localized.length > 1 && localized.charAt(0) === "*"){
+        return localized.substring(1);
+    }
+
+    return localized;
 }
 
 export function localizeNumber(number) {

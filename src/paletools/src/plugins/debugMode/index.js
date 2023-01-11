@@ -106,6 +106,7 @@ function menu() {
 
 plugin = {
     run: run,
+    order: Number.MAX_SAFE_INTEGER,
     settings: {
         title: 'DEBUG',
         menu: menu

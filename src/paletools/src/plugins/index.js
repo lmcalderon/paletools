@@ -39,6 +39,7 @@ import transactionsHistory from "./transactionsHistory";
 import keyListener from "./keyListener";
 import importantLeagues from "./importantLeagues";
 import experimental from "./experimental";
+import refreshCoins from "./refreshCoins";
 
 const plugins = [
     minMaxPrices,
@@ -80,7 +81,8 @@ const plugins = [
     transactionsHistory,
     keyListener,
     importantLeagues,
-    experimental
+    experimental,
+    refreshCoins
 ].filter(x => x);
 
 const menus = [];

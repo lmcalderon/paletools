@@ -4,6 +4,7 @@ let plugin;
 
 /// #if process.env.IMPORTANT_LEAGUES
 import { addLabelWithToggle } from "../../controls";
+import TableLayout from "../../controls/TableLayout";
 import { getLeagues, getRequiredLeagueIdsInSbcs } from "../../services/league";
 import settings, { saveConfiguration } from "../../settings";
 import { append, createElem } from "../../utils/dom";
@@ -34,9 +35,13 @@ function menu() {
 
     //append(container, autoPopulateFromSbcButton);
 
-    const leagueContainers = [createElem("div"), createElem("div"), createElem("div")];
+    const leagueLayout = new TableLayout();
 
-    append(container, leagueContainers);
+    const leagueLayoutRow = leagueLayout.addRow();
+
+    const leagueContainers = [leagueLayoutRow.addColumn(), leagueLayoutRow.addColumn(), leagueLayoutRow.addColumn()];
+
+    append(container, leagueLayout);
 
     let containerIndex = 0;
 

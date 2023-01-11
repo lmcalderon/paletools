@@ -202,6 +202,10 @@ function run() {
                     this.getView().getSearchToggles().toggleById("important-leagues-only");
                 }
 
+                if(searchSettings.unimportantLeaguesOnly) {
+                    this.getView().getSearchToggles().toggleById("unimportant-leagues-only");
+                }
+
                 if (searchSettings.filterBy) {
                     if (searchSettings.filterBy[enums.UISortOptionType.CONCEPT]) {
                         this.getView().getSortOptions().toggleById(enums.UISortOptionType.CONCEPT);

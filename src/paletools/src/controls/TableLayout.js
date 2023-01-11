@@ -36,7 +36,7 @@ class RowBuilder {
 class ColumnBuilder {
     #columnDiv;
     constructor(container, colSpan) {
-        this.#columnDiv = createElem("div", { className: colSpan > 1 ? "double-column" : "column" });
+        this.#columnDiv = createElem("div", { className: colSpan > 2 ? "tripe-column" : colSpan > 1 ? "double-column" : "column" });
         append(container, this.#columnDiv);
     }
 

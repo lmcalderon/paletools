@@ -276,6 +276,10 @@ export default {
     'plugins.importantLeagues.settings.title': "Ligas Importantes",
     /// #endif
 
+    /// #if process.env.REFRESH_COINS
+    'plugins.refreshCoins.settings.title': "Refrescar Monedas",
+    /// #endif
+
     /// #if process.env.EXPERIMENTAL
     'plugins.experimental.settings.title': "Zona Experimental - Usar bajo tu propio riesgo",
     'plugins.experimental.settings.fastClubSearch': 'Búsqueda del club rápida',

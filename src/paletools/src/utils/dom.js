@@ -1,7 +1,7 @@
 import { toArray } from "./array";
 import { isIterable } from "./iterable";
 
-function getRealElement(elem) {
+export function getRealElement(elem) {
     if (elem.getRootElement) {
         return elem.getRootElement();
     }
@@ -24,10 +24,12 @@ export function selectAll(query, parent = document) {
 export function append(parent, ...children) {
     if (!parent) return;
 
+    parent = getRealElement(parent);
+
     for (let child of [].concat(...children)) {
         if (!child) continue;
 
-        getRealElement(parent).append(getRealElement(child));
+        parent.append(getRealElement(child));
     }
 
     return children;
@@ -36,10 +38,12 @@ export function append(parent, ...children) {
 export function prepend(parent, ...children) {
     if (!parent) return;
 
+    parent = getRealElement(parent);
+
     for (let child of [].concat(...children)) {
         if (!child) continue;
 
-        getRealElement(parent).prepend(getRealElement(child));
+        parent.prepend(getRealElement(child));
     }
 
     return children;

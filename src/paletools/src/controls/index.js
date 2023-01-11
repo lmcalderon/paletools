@@ -3,40 +3,49 @@ import UTLabelWithToggleControl from "./UTLabelWithToggleControl";
 import localize from "../localization";
 import UTLabelWithLinkControl from "./UTLabelWithLinkControl";
 import UTLabelWithTextInputControl from "./UTLabelWithTextInputControl";
+import { append } from "../utils/dom";
+
+
+function loc(key) {
+    const value = localize(key);
+    return value.charAt(0) === "*" ? value.substring(1) : value;
+}
 
 export function addLabelWithTextInputWithKeyPress(container, labelLocaleKey, defaultValue, onInputChange, inputId, addClearButton) {
     const labelWithInput = new UTLabelWithTextInputWithKeyPressControl();
     if(addClearButton){
         labelWithInput.addClearButton(addClearButton);
     }
-    labelWithInput.setLabel(localize(labelLocaleKey));
+    labelWithInput.setLabel(loc(labelLocaleKey));
     if(inputId){
         labelWithInput.setInputId(inputId);
     }
 
     labelWithInput.setInputValue(defaultValue);
     labelWithInput.onInputChange(onInputChange);
-    container.appendChild(labelWithInput.getRootElement());
+    append(container, labelWithInput);
 }
 
 export function addLabelWithTextInput(container, lableLocaleKey, onKeyDown){
     const labelWithInput = new UTLabelWithTextInputControl();
-    labelWithInput.setLabel(localize(lableLocaleKey));
+    labelWithInput.setLabel(loc(lableLocaleKey));
     labelWithInput.onKeyDown(onKeyDown);
-    container.appendChild(labelWithInput.getRootElement());
+
+    append(container, labelWithInput);
 }
 
 export function addLabelWithLink(container, labelLocaleKey, linkLocaleKey, linkUrl) {
     const labelWithLink = new UTLabelWithLinkControl();
-    labelWithLink.setLabel(localize(labelLocaleKey));
-    labelWithLink.setLinkText(localize(linkLocaleKey));
+    labelWithLink.setLabel(loc(labelLocaleKey));
+    labelWithLink.setLinkText(loc(linkLocaleKey));
     labelWithLink.setLinkUrl(linkUrl);
-    container.appendChild(labelWithLink.getRootElement());
+
+    append(container, labelWithLink);
 }
 
 export function addLabelWithToggle(container, labelLocaleKey, toggled, onToggleChange, toggleId) {
     const labelWithToggle = new UTLabelWithToggleControl();
-    labelWithToggle.setLabel(localize(labelLocaleKey));
+    labelWithToggle.setLabel(loc(labelLocaleKey));
     if(toggleId){
         labelWithToggle.setToggleId(toggleId);
     }
@@ -52,9 +61,9 @@ export function addLabelWithToggle(container, labelLocaleKey, toggled, onToggleC
                 labelWithToggle.toggle(false);
             }
         }
-    } ;
+    };
 
-    container.appendChild(labelWithToggle.getRootElement());
+    append(container, labelWithToggle);
 
     return labelWithToggle;
 }
