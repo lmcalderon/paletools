@@ -3,7 +3,7 @@ import { getPlayerAlternativePositions, getPlayerSecondaryAlternativePositions }
 import { findPlayersInClub } from "./ui/club";
 
 export async function fillSbc(sbcChallenge, playersToUse, onClubBatchLoadedCallback) {
-    const club = (await findPlayersInClub(playersToUse.filter(x => x.isDuplicate()), onClubBatchLoadedCallback)).slice(0, 23);
+    const club = (await findPlayersInClub(playersToUse, onClubBatchLoadedCallback)).slice(0, 23);
     const squad = sbcChallenge.squad;
     const positionIndexes = squad.getSBCSlots().reduce((acc, curr) => {
         if (!curr.position) return acc;

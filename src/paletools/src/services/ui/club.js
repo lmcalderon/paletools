@@ -53,8 +53,10 @@ export function watchForPlayersMovement() {
 }
 
 export async function findPlayersInClub(players, callback, asDictionary = false) {
+    const playerIds = players.filter(x => x instanceof UTStaticPlayerDataDTO || x.isPlayer()).map(x => x instanceof UTStaticPlayerDataDTO ? x.id : x.definitionId);
+
     if (isFastClubSearchEnabled()) {
-        const playerIds = players.filter(x => x instanceof UTStaticPlayerDataDTO || x.isPlayer()).map(x => x instanceof UTStaticPlayerDataDTO ? x.id : x.definitionId);
+        
         let foundPlayers = asDictionary ? {} : [];
         let missingPlayerIds = [];
 
@@ -97,15 +99,28 @@ export async function findPlayersInClub(players, callback, asDictionary = false)
     }
     else {
         await loadClubPlayers(callback);
-        players = players.filter(x => _clubCache[x.definitionId]);
-        return asDictionary ? toPlayersDictionary(players) : players;
+        const foundPlayers = asDictionary ? {} : [];
+
+        for (let playerId of playerIds) {
+            const foundPlayer = _clubCache[playerId];
+            if (foundPlayer) {
+                if (asDictionary) {
+                    foundPlayers[foundPlayer.definitionId] = foundPlayer;
+                }
+                else {
+                    foundPlayers.push(foundPlayer);
+                }
+            }
+        }
+
+        return foundPlayers;
     }
 }
 
 export async function loadClubPlayers(callback, avoidFastSearchCheck = false, clearCache = false) {
     if (!avoidFastSearchCheck && isFastClubSearchEnabled()) return new Promise(resolve => resolve({}));
 
-    if(clearCache){
+    if (clearCache) {
         _clubLoaded = false;
         _clubCache = {};
     }
