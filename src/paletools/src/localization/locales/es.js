@@ -200,8 +200,8 @@ export default {
     "plugins.sbcBuilderEnhacer.filter.settings.title": "Configuración",
     "plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label": "Cant. de Jugadores",
     "plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos": "Ignorar Posición del Jugador",
-    "plugins.sbcBuilderEnhacer.filter.search.importantLeaguesOnly": "Important Leagues Only",
-    "plugins.sbcBuilderEnhacer.filter.search.unimportantLeaguesOnly": "Not Important Leagues Only",
+    "plugins.sbcBuilderEnhacer.filter.search.importantLeaguesOnly": "Solo Ligas Importantes",
+    "plugins.sbcBuilderEnhacer.filter.search.unimportantLeaguesOnly": "Solo Ligas No Importantes",
     "plugins.sbcBuilderEnhacer.filter.settings.playersFromSameClub.label": "Max. Cant. de Jugadores del mismo club",
     /// #endif
 
@@ -274,6 +274,11 @@ export default {
 
     /// #if process.env.IMPORTANT_LEAGUES
     'plugins.importantLeagues.settings.title': "Ligas Importantes",
+    /// #endif
+
+    /// #if process.env.EXPERIMENTAL
+    'plugins.experimental.settings.title': "Zona Experimental - Usar bajo tu propio riesgo",
+    'plugins.experimental.settings.fastClubSearch': 'Búsqueda del club rápida',
     /// #endif
 
     "plugins.warningScreen.title": "PALETOOLS - ADVERTENCIA DE USO",

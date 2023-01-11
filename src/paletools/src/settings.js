@@ -43,6 +43,9 @@ const buttons = {
 let settings = {
     enabled: true,
     appVersion: VERSION,
+    requests: {
+        maxItemsCount: 150,
+    },
     plugins: {
         gridMode: {
             enabled: false
@@ -57,7 +60,7 @@ let settings = {
             playerId: false,
             playerRating: true,
             savedFilters: true,
-            hideDuplicates: false
+            //hideDuplicates: false
         },
         donation: {
             enabled: true
@@ -189,6 +192,10 @@ let settings = {
         },
         debugMode: {
             enabled: false
+        },
+        experimental: {
+            fastClubSearch: false,
+            fastConceptSearch: false
         }
     }
 };

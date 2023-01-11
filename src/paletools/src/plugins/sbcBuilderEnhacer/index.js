@@ -1,17 +1,19 @@
 let plugin;
 
 // #if process.env.SBC_BUILDER_ENHACER
-import styles from "./styles.css";
-import UTLabelWithTextInputControl from "../../controls/UTLabelWithTextInputControl";
-import localize from "../../localization";
-import settings, { saveConfiguration } from "../../settings";
 import { addLabelWithToggle } from "../../controls";
+import TableLayout from "../../controls/TableLayout";
+import UTLabelWithTextInputControl from "../../controls/UTLabelWithTextInputControl";
 import { EVENTS, on } from "../../events";
-import { hide, show } from "../../utils/visibility";
-import { addStyle, removeStyle } from "../../utils/styles";
-import storage from "../../services/storage";
-import getCurrentController, { findControllerByType } from "../../utils/controller";
+import localize from "../../localization";
 import { getImportantLeagueIds } from "../../services/league";
+import storage from "../../services/storage";
+import settings, { saveConfiguration } from "../../settings";
+import { findControllerByType } from "../../utils/controller";
+import { append } from "../../utils/dom";
+import { addStyle, removeStyle } from "../../utils/styles";
+import { hide, show } from "../../utils/visibility";
+import styles from "./styles.css";
 
 
 const cfg = settings.plugins.sbcBuilderEnhacer;
@@ -55,38 +57,30 @@ function run() {
 
             this._settingsTitle = document.createElement("h4");
             this._settingsTitle.textContent = localize("plugins.sbcBuilderEnhacer.filter.settings.title");
+            this.__sortContainer.appendChild(this._settingsTitle);
 
+
+            const searchOptionsLayout = new TableLayout(this.__sortContainer, { className: "sbc-settings" });
             this._maxPlayers = new UTLabelWithTextInputControl();
             this._maxPlayers.init();
             this._maxPlayers.setLabel(localize("plugins.sbcBuilderEnhacer.filter.settings.maxPlayers.label"));
-
-
+            append(searchOptionsLayout.addRow().addColumn(), this._maxPlayers);
             this._playersFromSameClub = new UTLabelWithTextInputControl();
             this._playersFromSameClub.init();
             this._playersFromSameClub.setLabel(localize("plugins.sbcBuilderEnhacer.filter.settings.playersFromSameClub.label"));
-
-            this.__sortContainer.appendChild(this._settingsTitle);
-
-            const searchOptions = document.createElement("div");
-            searchOptions.classList.add("sbc-settings");
-            searchOptions.appendChild(this._maxPlayers.getRootElement());
-            searchOptions.appendChild(this._playersFromSameClub.getRootElement());
-
-
+            append(searchOptionsLayout.addRow().addColumn(), this._playersFromSameClub);
             this._searchToggles = new UTToggleControlGroupView();
             this._searchToggles.init();
             this._searchToggles.addToggleCell("ignore-positions", localize("plugins.sbcBuilderEnhacer.filter.search.ignorePlayersPos"));
             this._searchToggles.addToggleCell("important-leagues-only", localize("plugins.sbcBuilderEnhacer.filter.search.importantLeaguesOnly"))
             this._searchToggles.addToggleCell("unimportant-leagues-only", localize("plugins.sbcBuilderEnhacer.filter.search.unimportantLeaguesOnly"))
-
             this._searchToggles.layoutSubviews();
+            append(searchOptionsLayout.addRow().addColumn(), this._searchToggles);
 
-            searchOptions.appendChild(this._searchToggles.getRootElement());
+            append(this.__sortContainer, searchOptionsLayout);
 
-            this.__sortContainer.appendChild(searchOptions);
-
-            on(EVENTS.APP_ENABLED, () => { addStyles(); show(ratingContainer); });
-            on(EVENTS.APP_DISABLED, () => { removeStyles(); hide(ratingContainer); });
+            on(EVENTS.APP_ENABLED, () => { addStyles(); show(searchOptionsLayout); show(ratingContainer); });
+            on(EVENTS.APP_DISABLED, () => { removeStyles(); hide(searchOptionsLayout); hide(ratingContainer); });
 
             addStyles();
 
@@ -169,6 +163,10 @@ function run() {
         return this._searchToggles;
     }
 
+    UTSquadBuilderView.prototype.getSearchToggleState = function (toggleId) {
+        return this._searchToggles.toggles.get(toggleId).getToggleState();
+    }
+
     const UTSquadBuilderView_destroyGeneratedElements = UTSquadBuilderView.prototype.destroyGeneratedElements;
     UTSquadBuilderView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
         UTSquadBuilderView_destroyGeneratedElements.call(this);
@@ -200,7 +198,7 @@ function run() {
                     this.getView().getSearchToggles().toggleById('ignore-positions');
                 }
 
-                if(searchSettings.importantLeaguesOnly) {
+                if (searchSettings.importantLeaguesOnly) {
                     this.getView().getSearchToggles().toggleById("important-leagues-only");
                 }
 
@@ -261,10 +259,10 @@ function run() {
             if (opt.id === "ignore-positions") {
                 searchSettings.ignorePlayerPos = opt.checked;
             }
-            else if(opt.id === "imporant-leagues-only") {
+            else if (opt.id === "imporant-leagues-only") {
                 searchSettings.importantLeaguesOnly = opt.checked;
             }
-            else if(opt.id == "unimportant-leagues-only") {
+            else if (opt.id == "unimportant-leagues-only") {
                 searchSettings.unimportantLeaguesOnly = opt.checked;
             }
             storeSettings();
@@ -289,10 +287,10 @@ function run() {
     UTSquadBuilderViewController.prototype.onClubSearchComplete = function onClubSearchComplete(t, e) {
         if (cfg.enabled) {
             const playersByClub = {};
-        
-            for(let slot of this.squad.getPlayers()){
+
+            for (let slot of this.squad.getPlayers()) {
                 const player = slot.getItem();
-                if(!playersByClub[player.teamId]){
+                if (!playersByClub[player.teamId]) {
                     playersByClub[player.teamId] = 1;
                 }
                 else {
@@ -307,8 +305,8 @@ function run() {
             this.viewModel.searchSettings.maxRating = this.getView().getMaxRating();
             this.viewModel.searchSettings.maxPlayers = this.getView().getMaxPlayers();
             this.viewModel.searchSettings.playersFromSameClub = this.getView().getPlayersFromSameClub();
-            this.viewModel.searchSettings.importantLeaguesOnly = this.getView().getSearchToggles().get("important-leagues-only").getToggleState();
-            this.viewModel.searchSettings.unimportantLeaguesOnly = this.getView().getSearchToggles().get("unimportant-leagues-only").getToggleState();
+            this.viewModel.searchSettings.importantLeaguesOnly = this.getView().getSearchToggleState("important-leagues-only");
+            this.viewModel.searchSettings.unimportantLeaguesOnly = this.getView().getSearchToggleState("unimportant-leagues-only");
 
             e.response.items = e.response.items.filter(x => {
                 if (this.viewModel.searchSettings.minRating && x.rating < this.viewModel.searchSettings.minRating) {
@@ -319,11 +317,11 @@ function run() {
                     return false;
                 }
 
-                if(this.viewModel.searchSettings.importantLeaguesOnly && importantLeagueIds.length > 0 && importantLeagueIds.indexOf(x.leagueId) === -1){
+                if (this.viewModel.searchSettings.importantLeaguesOnly && importantLeagueIds.length > 0 && importantLeagueIds.indexOf(x.leagueId) === -1) {
                     return false;
                 }
 
-                if(this.viewModel.searchSettings.unimportantLeaguesOnly && importantLeagueIds.length > 0 && importantLeagueIds.indexOf(x.leagueId) >= -1){
+                if (this.viewModel.searchSettings.unimportantLeaguesOnly && importantLeagueIds.length > 0 && importantLeagueIds.indexOf(x.leagueId) > -1) {
                     return false;
                 }
 
@@ -335,15 +333,15 @@ function run() {
                     return false;
                 }
 
-                if(this.viewModel.searchSettings.playersFromSameClub) {
-                    if(!playersByClub[x.teamId]){
+                if (this.viewModel.searchSettings.playersFromSameClub) {
+                    if (!playersByClub[x.teamId]) {
                         playersByClub[x.teamId] = 1;
                     }
                     else {
-                        playersByClub[x.teamId]++; 
+                        playersByClub[x.teamId]++;
                     }
 
-                    if(playersByClub[x.teamId] > this.viewModel.searchSettings.playersFromSameClub){
+                    if (playersByClub[x.teamId] > this.viewModel.searchSettings.playersFromSameClub) {
                         return false;
                     }
                 }

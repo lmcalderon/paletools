@@ -5,8 +5,10 @@ import { randomInt } from "../utils/random";
 import http from "./http";
 import sendPinEvents from "./pinEvents";
 import { toPromise } from "../utils/observable";
+import { flattenArray } from "../utils/array";
+import settings from "../settings";
 
-const MAX_ITEMS_REQUEST = 150;
+const MAX_ITEMS_REQUEST = settings.requests.maxItemsCount;
 
 export function getUserCoins() {
     return toPromise(services.User.requestCurrencies());
@@ -18,6 +20,30 @@ export function getClubPlayersCount() {
             resolve(stats.stat.find(x => x.type == "players").typeValue);
         });
     });
+}
+
+export async  function getClubPlayersByDefId(playerDefIds) {
+    if(playerDefIds.length === 0){
+        return [];
+    }
+    
+    if (MAX_ITEMS_REQUEST < playerDefIds.length) {
+        const iterations = Math.ceil(playerDefIds.length / MAX_ITEMS_REQUEST);
+        const players = [];
+        for(let iteration = 0; iteration < iterations; iteration++){
+            players.push(await getClubPlayersByDefId(playerDefIds.slice(0, MAX_ITEMS_REQUEST)));
+            playerDefIds = playerDefIds.slice(MAX_ITEMS_REQUEST, playerDefIds.length);
+        }
+
+        return flattenArray(players);
+    }
+    else {
+        const searchCriteria = new UTItemSearchViewModel().searchCriteria;
+        searchCriteria.count = MAX_ITEMS_REQUEST;
+        searchCriteria.defId = playerDefIds;
+        const response = await toPromise(services.Club.search(searchCriteria));
+        return response.response.items;
+    }
 }
 
 export function getClubPlayers(playerIds) {
@@ -64,7 +90,7 @@ export function quickRefreshClub() {
         searchCriteria.count = MAX_ITEMS_REQUEST;
         searchCriteria.defId = [randomInt(1000, 10000)];
         const search = () => {
-            services.Item.searchClub(searchCriteria).observe(
+            services.Club.search(searchCriteria).observe(
                 this,
                 async function (sender, response) {
                     resolve();

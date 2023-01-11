@@ -38,6 +38,7 @@ module.exports = {
     SBC_SMART_BUILDER: false,
     CLUB_SEARCH_ENHACER: false,
     EA_BUG_FIXER: false,
-    IMPORTANT_LEAGUES: true
+    IMPORTANT_LEAGUES: true,
+    EXPERIMENTAL: true
 
 };

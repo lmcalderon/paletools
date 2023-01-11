@@ -11,6 +11,7 @@ import { addStyle } from "../../utils/styles";
 import { getConceptPlayers } from "../../services/players";
 import { notifyFailure } from "../../utils/notifications";
 import { hide, show } from "../../utils/visibility";
+import { findPlayersInClub } from "../../services/ui/club";
 
 const cfg = settings.plugins.fillSbcFromFutbin;
 
@@ -27,8 +28,9 @@ function run() {
             this._fillSbcFromFutbinButton.init();
             this._fillSbcFromFutbinButton.setText(localize('plugins.fillSbcFromFutbin.button.text'));
             this._fillSbcFromFutbinButton.addTarget(this, () => {
+                this._fillSbcFromFutbinButton.setInteractionState(false);
+                this._fillSbcFromFutbinButton.setText(localize('plugins.fillSbcFromFutbin.button.textLoading').replace("{count}", ""));
                 fillSbcFromFutbin(count => {
-                    this._fillSbcFromFutbinButton.setInteractionState(false);
                     this._fillSbcFromFutbinButton.setText(localize('plugins.fillSbcFromFutbin.button.textLoading').replace("{count}", count));
                 }).then(() => {
                     this._fillSbcFromFutbinButton.setInteractionState(true);
@@ -74,39 +76,30 @@ function run() {
         });
     }
 
-    function fillSbcFromFutbin(onClubBatchLoadedCallback) {
-        return new Promise((resolve, reject) => {
-            getExportedSbcFromClipboard().then(sbcData => {
+    async function fillSbcFromFutbin(onClubBatchLoadedCallback) {
+        const sbcData = await getExportedSbcFromClipboard();
+        const sbcPlayers = sbcData.map(x => factories.Item.createItem({ resourceId: parseInt(x[1]) }));
 
-                const playerIds = sbcData.map(x => parseInt(x[1]));
+        const { _squad, _challenge } = getCurrentController()._leftController;
 
-                getAllClubPlayers(false, null, onClubBatchLoadedCallback).then(club => {
-                    const { _squad, _challenge } = getCurrentController()._leftController;
+        const foundPlayers = await findPlayersInClub(sbcPlayers, onClubBatchLoadedCallback, true);
 
-                    let foundPlayers = club.filter(x => playerIds.includes(x.definitionId));
+        let conceptPlayerIds = sbcPlayers.filter(x => !foundPlayers[x.definitionId]).map(x => x.definitionId);
 
-                    let conceptPlayerIds = playerIds.filter(x => foundPlayers.filter(x => x.definitionId == x).length == 0);
+        const conceptPlayers = await getConceptPlayers(conceptPlayerIds);
+        for (let conceptPlayer of conceptPlayers) {
+            foundPlayers[conceptPlayer.definitionId] = conceptPlayer;
+        }
 
-                    getConceptPlayers(conceptPlayerIds).then(conceptPlayers => {
-                        for (let conceptPlayer of conceptPlayers) {
-                            foundPlayers.push(conceptPlayer);
-                        }
+        const players = new Array(11);
+        for (let sbcIndex = 0; sbcIndex < sbcData.length; sbcIndex++) {
+            players[sbcIndex] = foundPlayers[sbcData[sbcIndex][1]];
+        }
 
-                        const players = new Array(11);
-                        for (let sbcIndex = 0; sbcIndex < sbcData.length; sbcIndex++) {
-                            players[sbcIndex] = foundPlayers.find(x => x.definitionId === parseInt(sbcData[sbcIndex][1]));
-                        }
-
-                        _squad.setPlayers(players, true);
-                        services.SBC.saveChallenge(_challenge);
-                        repositories.Item.unassigned.expiryTimestamp = 0;
-                        repositories.Item.transfer.expiryTimestamp = 0;
-                        resolve();
-                    });
-                });
-            }).catch(reject);
-        });
-
+        _squad.setPlayers(players, true);
+        services.SBC.saveChallenge(_challenge);
+        repositories.Item.unassigned.expiryTimestamp = 0;
+        repositories.Item.transfer.expiryTimestamp = 0;
     }
 
     addStyle("paletools-fill-sbc-from-futbin", styles);

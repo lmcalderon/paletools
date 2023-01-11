@@ -2,38 +2,41 @@
 let plugin;
 
 /// #if process.env.MARK_DUPLICATED
-import styles from "./styles.css";
-import settings, { saveConfiguration } from "../../settings";
-import { addStyle, removeStyle } from "../../utils/styles";
-import { EVENTS, on } from "../../events";
 import { addLabelWithToggle } from "../../controls";
+import { addMarketSearchComplete, addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
+import { EVENTS, on } from "../../events";
+import { isFastClubSearchEnabled } from "../../services/experimental";
+import { findPlayersInClub, loadClubPlayers, toPlayersDictionary } from "../../services/ui/club";
+import settings, { saveConfiguration } from "../../settings";
 import getCurrentController from "../../utils/controller";
-import { loadClubPlayers } from "../../services/ui/club";
 import { addClass } from "../../utils/dom";
+import { addStyle, removeStyle } from "../../utils/styles";
+import styles from "./styles.css";
 const cfg = settings.plugins.markDuplicated;
 
 function run() {
 
-    let _club = null;
-
-
     if (settings.enabled && cfg.enabled) {
-        loadClubPlayers().then(currentClub => {
-            _club = currentClub;
+        loadClubPlayers();
+
+        addMarketSearchComplete(async (items, controller) => {
+            if (!settings.enabled || !cfg.enabled) return;
+
+            const foundPlayers = await findPlayersInClub(items, null, true);
+
+            for (let itemCell of controller.getView()._list.listRows) {
+                if (foundPlayers[itemCell.data.definitionId]) {
+                    addClass(itemCell.__entityContainer, "club-duplicated");
+                }
+            }
+        });
+
+        on(EVENTS.CONFIGURATION_SAVED, () => {
+            if (!isFastClubSearchEnabled()) {
+                loadClubPlayers();
+            }
         });
     }
-
-    const UTTransfersHubViewController_requestTransferTargetData = UTTransfersHubViewController.prototype._requestTransferTargetData;
-
-    UTTransfersHubViewController.prototype._requestTransferTargetData = function () {
-        if (settings.enabled && cfg.enabled) {
-            loadClubPlayers().then(currentClub => {
-                _club = currentClub;
-            });
-        }
-
-        UTTransfersHubViewController_requestTransferTargetData.call(this);
-    };
 
     const UTItemTableCellView_render = UTItemTableCellView.prototype.render;
     UTItemTableCellView.prototype.render = function (e) {
@@ -41,13 +44,6 @@ function run() {
         if (settings.enabled && cfg.enabled) {
             if (this.data.duplicateId) {
                 addClass(this.__entityContainer, "club-duplicated");
-            } else {
-                const controller = getCurrentController();
-                if (controller instanceof UTMarketSearchResultsSplitViewController) {
-                    if (_club && _club[this.data.definitionId]) {
-                        addClass(this.__entityContainer, "club-duplicated");
-                    }
-                }
             }
         }
     }
@@ -57,18 +53,19 @@ function run() {
         UTPlayerSearchControl_updateList.call(this, e, t);
 
         if (settings.enabled && cfg.enabled) {
-            loadClubPlayers().then(club => {
-                for (let index = 0; index < e.length; index++) {
-                    if (!t[index]) continue;
+            (async () => {
+                const foundPlayers = await findPlayersInClub(t, null, true);
+
+                for (let index = 0; index < t.length; index++) {
                     const player = t[index];
-                    if (club[player.id]) {
+                    if (foundPlayers[player.id]) {
                         this.__playerResultsList.children[index].classList.add('club-duplicated');
-                        if (club[player.id].untradeable) {
+                        if (foundPlayers[player.id].untradeable) {
                             this.__playerResultsList.children[index].classList.add('club-untradeable');
                         }
                     }
                 }
-            });
+            })();
         }
     }
 

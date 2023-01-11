@@ -2,10 +2,11 @@ let plugin;
 
 // #if process.env.MARKET_SEARCH_FILTERS
 import { addLabelWithToggle } from "../../controls";
-import { addMarketSearchFilter } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
+import { addMarketSearchComplete, addMarketSearchFilter } from "../../core-overrides/UTMarketSearchResultsViewControllerOverrides";
 import { on } from "../../events";
 import localize from "../../localization";
-import { loadClubPlayers } from "../../services/ui/club";
+import { isFastClubSearchEnabled } from "../../services/experimental";
+import { findPlayersInClub, loadClubPlayers } from "../../services/ui/club";
 import settings, { saveConfiguration } from "../../settings";
 import getCurrentController from "../../utils/controller";
 import { addClass, append, createElem, insertBefore, select } from "../../utils/dom";
@@ -18,21 +19,13 @@ import styles from "./styles.css";
 const cfg = settings.plugins.marketSearchFilters;
 
 function run() {
-    let club = {};
-
     if (settings.enabled && cfg.hideDuplicates) {
-        loadClubPlayers().then(currentClub => {
-            club = currentClub
-        });
+        loadClubPlayers();
     }
 
     const UTTransfersHubViewController_requestTransferTargetData_ = UTTransfersHubViewController.prototype._requestTransferTargetData;
 
     UTTransfersHubViewController.prototype._requestTransferTargetData = function () {
-        if (settings.enabled && cfg.hideDuplicates) {
-            loadClubPlayers().then(currentClub => { club = currentClub });
-        }
-
         UTTransfersHubViewController_requestTransferTargetData_.call(this);
     };
 
@@ -295,18 +288,9 @@ function run() {
         UTMarketSearchFiltersViewController__eResetSelected.call(this);
     }
 
-    const UTMarketSearchResultsViewController_requestItems = UTMarketSearchResultsViewController.prototype._requestItems;
-
-
-    addMarketSearchFilter((items, controller) => {
+    addMarketSearchFilter(async (items, controller) => {
         if (cfg.playerRating) {
             items = items.filter(x => shouldRenderItem(x, controller._searchCriteria)); // added .filter;
-        }
-
-        if (cfg.hideDuplicates
-            && Object.keys(club).length
-            && getCurrentController() instanceof UTMarketSearchResultsSplitViewController) {
-            items = items.filter(item => !club[item.definitionId]);
         }
 
         return items;
@@ -372,7 +356,7 @@ function menu() {
     add('savedFilters');
     add('playerId');
     add('playerRating');
-    add('hideDuplicates');
+    //add('hideDuplicates');
 
     return container;
 }

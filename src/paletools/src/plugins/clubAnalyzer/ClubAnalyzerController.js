@@ -121,7 +121,7 @@ function analyzeClub(loadingCallback) {
 
     return new Promise(async (resolve) => {
         loadingCallback("players", 0);
-        players = await loadClubPlayers(count => loadingCallback("players", count));
+        players = await loadClubPlayers(count => loadingCallback("players", count), true);
         loadingCallback("usermassinfo");
         usermassinfo = await http('usermassinfo');
         loadingCallback("tradepile");

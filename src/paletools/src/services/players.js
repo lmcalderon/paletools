@@ -1,15 +1,19 @@
+import settings from "../settings";
+import { flattenArray } from "../utils/array";
 import delay from "../utils/delay";
+import { isFastConceptSearchEnabled } from "./experimental";
+import { toPromise } from "../utils/observable";
 
 export function getPlayerAlternativePositions(preferredPosition) {
   switch (preferredPosition) {
     case PlayerPosition.ST: return [PlayerPosition.CF];
     case PlayerPosition.CF: return [PlayerPosition.ST, PlayerPosition.CAM];
-    case PlayerPosition.CAM: return [PlayerPosition.CM,PlayerPosition.CF];
+    case PlayerPosition.CAM: return [PlayerPosition.CM, PlayerPosition.CF];
     case PlayerPosition.CM: return [PlayerPosition.CAM, PlayerPosition.CDM];
     case PlayerPosition.CDM: return [PlayerPosition.CM];
     case PlayerPosition.LM: return [PlayerPosition.LW, PlayerPosition.LF];
     case PlayerPosition.LF: return [PlayerPosition.LW, PlayerPosition.LM];
-    case PlayerPosition.LW: return  [PlayerPosition.LF, PlayerPosition.LM];
+    case PlayerPosition.LW: return [PlayerPosition.LF, PlayerPosition.LM];
     case PlayerPosition.RM: return [PlayerPosition.RW, PlayerPosition.RF];
     case PlayerPosition.RF: return [PlayerPosition.RW, PlayerPosition.RM];
     case PlayerPosition.RW: return [PlayerPosition.RF, PlayerPosition.RM];
@@ -22,13 +26,13 @@ export function getPlayerAlternativePositions(preferredPosition) {
   return [];
 }
 
-export function getPlayerSecondaryAlternativePositions(preferredPosition){
+export function getPlayerSecondaryAlternativePositions(preferredPosition) {
   switch (preferredPosition) {
     case PlayerPosition.CB: return [PlayerPosition.LB, PlayerPosition.RB]
     case PlayerPosition.CDM: return [PlayerPosition.CB];
     case PlayerPosition.LM: return [PlayerPosition.LB, PlayerPosition.LWB];
     case PlayerPosition.LF: return [PlayerPosition.ST];
-    case PlayerPosition.LW: return  [PlayerPosition.LWB, PlayerPosition.LB];
+    case PlayerPosition.LW: return [PlayerPosition.LWB, PlayerPosition.LB];
     case PlayerPosition.RM: return [PlayerPosition.RB, PlayerPosition.RWB];
     case PlayerPosition.RF: return [PlayerPosition.ST];
     case PlayerPosition.RW: return [PlayerPosition.RWB, PlayerPosition.RB];
@@ -42,12 +46,32 @@ export function getPlayerSecondaryAlternativePositions(preferredPosition){
 }
 
 export function getConceptPlayers(playerIds) {
-  let promises = [];
-  for (let playerId of playerIds) {
-    promises.push(getConceptPlayer(playerId));
-  }
+  // if (isFastConceptSearchEnabled()) {
+  //   return new Promise((resolve, reject) => {
+  //     const searchCriteria = new UTItemSearchViewModel().searchCriteria;
+  //     searchCriteria.defId = playerIds;
+  //     searchCriteria.count = settings.requests.maxItemsCount;
+  //     services.Item.searchConceptItems(searchCriteria).observe(
+  //       this,
+  //       (sender, response) => {
+  //         if (response.success) {
+  //           resolve(response.response.items);
+  //         }
+  //         else {
+  //           reject();
+  //         }
+  //       }
+  //     );
+  //   });
+  // }
+  // else {
+    let promises = [];
+    for (let playerId of playerIds) {
+      promises.push(getConceptPlayer(playerId));
+    }
 
-  return Promise.all(promises);
+    return Promise.all(promises);
+  // }
 }
 
 export function getConceptPlayer(playerId) {

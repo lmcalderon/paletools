@@ -23,8 +23,6 @@ function removeStyles() {
 
 function run() {
     if (settings.enabled && cfg.enabled) {
-
-
         function setupImportantLeaguesCss() {
             if (!cfg.importantLeague) {
                 remove(select("#paletools-player-card-info-league"));
@@ -32,8 +30,8 @@ function run() {
             }
 
             const leaguesCss = [];
-            for (let league of getImportantLeagueIds()) {
-                leaguesCss.push(`.league.league-${league.id}`);
+            for (let leagueId of getImportantLeagueIds()) {
+                leaguesCss.push(`.league.league-${leagueId}`);
             }
 
             const style = select("#paletools-player-card-info-league") || createElem("style", { id: "paletools-player-card-info-league" });

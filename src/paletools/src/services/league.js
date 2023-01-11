@@ -16,7 +16,7 @@ export function getImportantLeagueIds() {
         }
 
         return settings.plugins.importantLeagues.leagueIds.indexOf(x.id) > -1;
-    });
+    }).map(x => x.id);
 }
 
 export async function getRequiredLeagueIdsInSbcs() {
