@@ -8,7 +8,7 @@ import TableLayout from "../../controls/TableLayout";
 import { getLeagues, getRequiredLeagueIdsInSbcs } from "../../services/league";
 import settings, { saveConfiguration } from "../../settings";
 import { append, createElem } from "../../utils/dom";
-const cfg = settings.plugins.transferListSendAllToClub;
+const cfg = settings.plugins.importantLeagues;
 
 function run() {
 }
@@ -46,13 +46,13 @@ function menu() {
     let containerIndex = 0;
 
     for (let league of getLeagues()) {
-        toggles[league.id] = addLabelWithToggle(leagueContainers[containerIndex++], league.label, settings.plugins.importantLeagues.leagueIds.indexOf(league.id) > -1, toggleState => {
-            const leagueIndex = settings.plugins.importantLeagues.leagueIds.indexOf(league.id);
+        toggles[league.id] = addLabelWithToggle(leagueContainers[containerIndex++], league.label, cfg.leagueIds.indexOf(league.id) > -1, toggleState => {
+            const leagueIndex = cfg.leagueIds.indexOf(league.id);
             if (toggleState && leagueIndex === -1) {
-                settings.plugins.importantLeagues.leagueIds.push(league.id);
+                cfg.leagueIds.push(league.id);
             }
             else if (!toggleState && leagueIndex > -1) {
-                settings.plugins.importantLeagues.leagueIds = settings.plugins.importantLeagues.leagueIds.splice(leagueIndex, 1);
+                cfg.leagueIds.splice(leagueIndex, 1);
             }
 
             saveConfiguration();
