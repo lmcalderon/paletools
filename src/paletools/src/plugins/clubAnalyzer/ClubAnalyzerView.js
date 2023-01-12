@@ -165,14 +165,14 @@ ClubAnalyzerView.prototype._createCountReport = function (id, data) {
 ClubAnalyzerView.prototype._createCountReportTree = function (data, level) {
     let html = "<div>";
     if (data instanceof Array) {
-        html += '<ul class="players hide">';
+        html += '<ul class="players" style="display: none">';
         for (let player of data) {
             html += this._renderPlayer(player);
         }
         html += '</ul>';
     }
     else {
-        html += level === 0 ? "<ul>" : '<ul class="hide">';
+        html += level === 0 ? "<ul>" : '<ul style="display: none">';
         for (let value of Object.keys(data).sort()) {
             html += level === 0 ? '<li class="inline-list">' : "<li>";
             html += `<span class="value">${value}</span>`;

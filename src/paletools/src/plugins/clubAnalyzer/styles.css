@@ -28,7 +28,6 @@
     display: none;
 }
 
-.hide { display: none; }
 .club-analyzer { margin-top: 4px; }
 .club-analyzer .inline-list { padding: 6px; display: inline-block; width: 30%; margin-right: 4px; margin-bottom: 1px; font-size: 14px; }
 .club-analyzer .inline-list li { line-height: 30px; }
