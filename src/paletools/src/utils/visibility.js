@@ -9,10 +9,6 @@ export function show(elem) {
         if(el.style.display.indexOf("none") > -1){
             el.style.removeProperty("display");
         }
-        if(el.dataset.originalDisplay) {
-            el.style.display = el.dataset.originalDisplay;
-            delete el.dataset.originalDisplay;
-        }
     }
 
     if (isIterable(elem)) {
@@ -31,12 +27,7 @@ export function hide(elem) {
     if (!elem) return;
 
     function addDisplayNone(el) {
-        el = getRealElement(el); 
-        const originalDisplay = el.style.getPropertyValue("display");
-        if(originalDisplay){
-            el.dataset.originalDisplay = originalDisplay;
-        }
-        el.style.setProperty("display", "none", "important");
+        getRealElement(el).style.setProperty("display", "none", "important");
     }
 
     if (isIterable(elem)) {
