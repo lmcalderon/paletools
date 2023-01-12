@@ -2,11 +2,6 @@
     max-height: 100% !important;
 }
 
-.hide {
-    display: none !important;
-}
-
-
 input[type="number"] {
     border-radius: 0;
     padding: 0 .5em;
