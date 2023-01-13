@@ -1,9 +1,12 @@
 import extend from "../utils/extend";
+import getWindow from "./window";
 
 export default function http(url, method, body, options = null) {
-    if(!url) throw new Error("Url must be specified");
-    
+    if (!url) throw new Error("Url must be specified");
+
     if (url.indexOf("http") === 0) {
+        if (!isExternalRequestSupported()) new Promise(resolve => resolve());
+
         return externalHttp(url, method, body, options);
     }
     else {
@@ -18,19 +21,21 @@ export default function http(url, method, body, options = null) {
     }
 }
 
+export function isExternalRequestSupported() {
+    return typeof GM_xmlhttpRequest !== "undefined";
+}
+
 function externalHttp(url, method, body, options) {
     return new Promise((resolve, reject) => {
-        if (GM_xmlhttpRequest) {
-            let request = extend({
-                method: method,
-                url: url,
-                onload: response => resolve(response),
-                onerror: response => reject(response),
-                data: body
-            }, options);
+        let request = extend({
+            method: method,
+            url: url,
+            onload: response => resolve(response.responseText),
+            onerror: response => reject(response),
+            data: body
+        }, options);
 
 
-            GM_xmlhttpRequest(request);
-        }
+        GM_xmlhttpRequest(request);
     });
 }

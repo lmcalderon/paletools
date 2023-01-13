@@ -1,0 +1,1 @@
+call webpack --config webpack.config.tampermonkey.js

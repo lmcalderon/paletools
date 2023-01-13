@@ -46,6 +46,16 @@ let settings = {
     requests: {
         maxItemsCount: 150,
     },
+    externalServices: {
+        prices: {
+            providers: ["futbin"],
+            provider: "futbin"
+        },
+        sbc: {
+            providers: ["futbin"],
+            provider: "futbin"
+        }
+    },
     plugins: {
         gridMode: {
             enabled: false
@@ -198,6 +208,9 @@ let settings = {
             fastConceptSearch: false
         },
         refreshCoins: {
+            enabled: true
+        },
+        externalMarketPrices: {
             enabled: true
         }
     }

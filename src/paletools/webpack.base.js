@@ -40,6 +40,7 @@ module.exports = {
     EA_BUG_FIXER: false,
     IMPORTANT_LEAGUES: true,
     EXPERIMENTAL: true,
-    REFRESH_COINS: true
+    REFRESH_COINS: true,
+    EXTERNAL_MARKET_PRICES: false
 
 };

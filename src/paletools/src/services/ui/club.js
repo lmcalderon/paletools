@@ -52,7 +52,7 @@ export function watchForPlayersMovement() {
     });
 }
 
-export async function findPlayersInClub(players, callback, asDictionary = false) {
+export async function findPlayersInClub(players, callback, asDictionary = false, ignoreCache = false) {
     const playerIds = players.filter(x => x instanceof UTStaticPlayerDataDTO || x.isPlayer()).map(x => x instanceof UTStaticPlayerDataDTO ? x.id : x.definitionId);
 
     if (isFastClubSearchEnabled()) {
@@ -61,7 +61,7 @@ export async function findPlayersInClub(players, callback, asDictionary = false)
         let missingPlayerIds = [];
 
         for (let id of playerIds) {
-            const foundPlayer = _clubCache[id];
+            const foundPlayer = ignoreCache ? null : _clubCache[id];
             if (foundPlayer) {
                 if (asDictionary) {
                     foundPlayers[foundPlayer.definitionId] = foundPlayer;

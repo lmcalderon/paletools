@@ -1758,7 +1758,7 @@ function(n) {
     }
     ,
     UTItemEntity.prototype.isLeagueHeroItem = function() {
-        return this.isPlayer() && (this.rareflag === ItemRarity.LEAGUE_HERO || this.rareflag === ItemRarity.LEAGUE_HERO_CAPTAIN || this.rareflag === ItemRarity.LEAGUE_HERO_SHAPESHIFTER)
+        return this.isPlayer() && this.teamId === UTItemEntity.LEAGUE_HERO_CLUB_ID
     }
     ,
     UTItemEntity.prototype.isSuperFuttiesItem = function() {
@@ -1769,8 +1769,8 @@ function(n) {
         return this.isPlayer() && this.rareflag === ItemRarity.LEAGUE_HERO_SHAPESHIFTER
     }
     ,
-    UTItemEntity.prototype.isWorldCupItem = function() {
-        return this.isPlayer() && (this.rareflag === ItemRarity.WORLD_CUP_HERO || this.rareflag === ItemRarity.WORLD_CUP_ICON)
+    UTItemEntity.prototype.isWorldCupPlayer = function() {
+        return this.isPlayer() && this.rareflag === ItemRarity.WORLD_CUP_PLAYER
     }
     ,
     UTItemEntity.prototype.isManager = function() {
@@ -2006,7 +2006,7 @@ function(n) {
     }
     ,
     UTItemEntity.prototype.isLegend = function() {
-        return this.rareflag === ItemRarity.ICON || this.rareflag === ItemRarity.PRIMEICON || this.rareflag === ItemRarity.WORLD_CUP_ICON
+        return this.teamId === UTItemEntity.LEGENDS_CLUB_ID || this.leagueId === UTItemEntity.LEGENDS_LEAGUE_ID
     }
     ,
     UTItemEntity.prototype.isMyStadium = function() {
@@ -2154,6 +2154,9 @@ function(n) {
     UTItemEntity.DEFAULT_BRONZE_ASSET_ID = 20000001,
     UTItemEntity.DEFAULT_SILVER_ASSET_ID = 20000002,
     UTItemEntity.DEFAULT_GOLD_ASSET_ID = 20000003,
+    UTItemEntity.LEGENDS_LEAGUE_ID = 2118,
+    UTItemEntity.LEGENDS_CLUB_ID = 112658,
+    UTItemEntity.LEAGUE_HERO_CLUB_ID = 114605,
     UTItemEntity
 }(EAObject))
   , UTCustomBrickItemEntity = (__extends = this && this.__extends || function() {
@@ -2596,7 +2599,7 @@ var UTItemEntityFactory = function(e) {
             o.attributes = t.attributeArray,
             o.lifetimeStats = t.lifetimeStatsArray,
             o.stats = t.statsArray,
-            o.rareflag === ItemRarity.ICON || o.rareflag === ItemRarity.PRIMEICON || o.rareflag === ItemRarity.WORLD_CUP_ICON) {
+            o.teamId === UTItemEntity.LEGENDS_CLUB_ID || o.leagueId === UTItemEntity.LEGENDS_LEAGUE_ID) {
                 var l = repositories.PlayerIcon.get(o.definitionId & ItemIdMask.DATABASE);
                 l && (o.iconId = l.iconId)
             }
@@ -3994,8 +3997,6 @@ function(r) {
             return t.subtype === ItemSubType.VANITY_STADIUM_BASE_STRUCTURE_COLOR;
         case SearchCategory.VANITY_STADIUM_THEME:
             return t.subtype === ItemSubType.VANITY_STADIUM_THEME;
-        case SearchCategory.VANITY_TIFO_ANIMATED:
-            return t.subtype === ItemSubType.VANITY_TIFO_ANIMATED;
         case SearchCategory.VANITY_TIFO_BASE:
             return t.subtype === ItemSubType.VANITY_TIFO_BASE;
         case SearchCategory.VANITY_TIFO_BIG:
@@ -4054,7 +4055,7 @@ function(r) {
                 }
                 if (-1 !== r.playStyle && t.playStyle !== r.playStyle)
                     return !1;
-                if (0 < r.excludeDefIds.length && -1 < r.excludeDefIds.indexOf(t.definitionId) || 0 < r.defId.length && r.defId.indexOf(t.databaseId) < 0)
+                if (0 < r.excludeDefIds.length && -1 < r.excludeDefIds.indexOf(t.definitionId) || 0 < r.defId.length && r.defId.indexOf(t.definitionId) < 0)
                     return !1
             } else if (r.type === SearchType.STAFF && r.category !== SearchCategory.ANY && t.isManager() && r.category !== SearchCategory.MANAGER)
                 return !1;
@@ -5495,6 +5496,7 @@ function(i) {
         e.objectives = new EAHashTable,
         e.objectivesCompleted = t.objectivesCompleted,
         e.objectivesNumber = t.objectivesCount,
+        e.objectivesReadyToRedeem = t.objectivesReadyToRedeem,
         e.onDataUpdated = new EAObservable,
         e.priority = t.priority,
         e.rewards = t.rewardSet,
@@ -6285,9 +6287,8 @@ function(i) {
     }
     ,
     UTObjectivesFactory.prototype.createGroup = function(t, e) {
-        var i = this
-          , r = this.rewardFactory.createRewardSetFromRewards(e.awardsList ? e.awardsList.map(function(t) {
-            return i.rewardFactory.createRewardFromObjectiveData(t)
+        var i, r = this, n = this.rewardFactory.createRewardSetFromRewards(e.awardsList ? e.awardsList.map(function(t) {
+            return r.rewardFactory.createRewardFromObjectiveData(t)
         }) : []);
         return new UTCampaignGroupEntity({
             categoryIds: [t],
@@ -6296,9 +6297,10 @@ function(i) {
             id: e.groupId,
             lockedBy: e.groupIdsToUnlock ? e.groupIdsToUnlock : [],
             objectivesCompleted: e.objectivesCompleted ? e.objectivesCompleted : 0,
+            objectivesReadyToRedeem: null !== (i = e.objectivesReadyToRedeem) && void 0 !== i ? i : 0,
             objectivesCount: e.objectivesNumber ? e.objectivesNumber : 0,
             priority: e.priority,
-            rewardSet: r,
+            rewardSet: n,
             startTime: e.startTime ? e.startTime : 0,
             state: e.groupState,
             subtitle: e.subTitle,
@@ -7441,6 +7443,10 @@ function(i) {
     ,
     UTRivalsEventEntity.prototype.hasProgression = function() {
         return 0 < this.user.matchesPlayed
+    }
+    ,
+    UTRivalsEventEntity.prototype.isFeatureAccessible = function() {
+        return this.hasProgression() || 0 < this.user.stageId
     }
     ,
     UTRivalsEventEntity.prototype.getUserCurrentRank = function() {
@@ -10586,13 +10592,13 @@ function(i) {
     }
     ,
     EALocalizationService.prototype.addObfuscatedLocalizationStrings = function(t) {
-        function n1(t) {
+        function o1(t) {
             return decodeURIComponent(atob(t).split("").map(function(t) {
                 return "%" + ("00" + t.charCodeAt(0).toString(16)).slice(-2)
             }).join(""))
         }
         for (var e in t)
-            t.hasOwnProperty(e) && this.repository.set(n1(e), n1(t[e]))
+            t.hasOwnProperty(e) && this.repository.set(o1(e), o1(t[e]))
     }
     ,
     EALocalizationService.prototype.requestLocalization = function() {
@@ -11138,7 +11144,7 @@ var UTOnboardingService = function(t) {
     }
     ,
     UTOnboardingService.prototype.createClub = function() {
-        function y4(t, e) {
+        function z4(t, e) {
             t.unobserve(s),
             l.success = e.success,
             l.status = e.status,
@@ -11155,7 +11161,7 @@ var UTOnboardingService = function(t) {
                 var n = e.response
                   , o = null === (r = null === (i = services.Authentication.getUtasSession()) || void 0 === i ? void 0 : i.user) || void 0 === r ? void 0 : r.getSelectedPersona();
                 o ? (o.setLoyaltyRewards(n.rewards),
-                o.createClub(n.name, n.abbr).observe(s, y4)) : (l.success = !1,
+                o.createClub(n.name, n.abbr).observe(s, z4)) : (l.success = !1,
                 l.status = HttpStatusCode.BAD_REQUEST,
                 a.notify(l))
             } else
@@ -12309,7 +12315,7 @@ function(i) {
         s.data = {
             stadium: null
         };
-        function uba(t, e) {
+        function vba(t, e) {
             if (t.unobserve(n),
             s.success = e.success,
             s.status = e.status,
@@ -12327,9 +12333,9 @@ function(i) {
         }
         return this.stadiumRepository.isCacheExpired() ? t && t.isStadiumModified() ? t.saveStadium().observe(this, function(t, e) {
             t.unobserve(n),
-            e.success && n.stadiumDAO.getStadium().observe(n, uba),
+            e.success && n.stadiumDAO.getStadium().observe(n, vba),
             DebugUtils.Assert(e.success, "Failed to save dirty stadium!")
-        }) : this.stadiumDAO.getStadium().observe(this, uba) : (s.success = !0,
+        }) : this.stadiumDAO.getStadium().observe(this, vba) : (s.success = !0,
         s.status = 200,
         s.data.stadium = this.stadiumRepository.getFullStadium(),
         o.notify(s)),
@@ -12339,8 +12345,9 @@ function(i) {
     UTMyStadiumService.prototype.saveStadium = function() {
         var n = this
           , o = new EAObservable
-          , s = new UTServiceResponseDTO;
-        return this.getStadium().observe(this, function(t, e) {
+          , s = new UTServiceResponseDTO
+          , t = this.stadiumRepository.getFullStadium();
+        return (null == t ? void 0 : t.isStadiumModified()) ? this.getStadium().observe(this, function(t, e) {
             var i;
             if (t.unobserve(n),
             s.error = e.error,
@@ -12359,7 +12366,9 @@ function(i) {
                 s.status = e.status,
                 o.notify(s),
                 getDefaultDispatcher().notify(AppNotification.STADIUM_SAVE_FAILED, n)
-        }),
+        }) : (s.success = !0,
+        s.status = HttpStatusCode.NOT_MODIFIED,
+        o.notify(s)),
         o
     }
     ,
@@ -12613,7 +12622,7 @@ function(i) {
             s.data.campaign = a,
             o.notify(s),
             o;
-        function Pca(t, e) {
+        function Rca(t, e) {
             var i;
             t.unobserve(n),
             s.success = e.success,
@@ -12627,8 +12636,8 @@ function(i) {
         }
         return this.isCampaignCacheExpired() && r === ObjectiveCampaignIteration.ACTIVE ? this.requestActiveCampaign().observe(this, function(t, e) {
             t.unobserve(n),
-            n.objectivesDAO.getCampaignDetails(r).observe(n, Pca)
-        }) : this.objectivesDAO.getCampaignDetails(r).observe(this, Pca),
+            n.objectivesDAO.getCampaignDetails(r).observe(n, Rca)
+        }) : this.objectivesDAO.getCampaignDetails(r).observe(this, Rca),
         o
     }
     ,
@@ -12711,7 +12720,7 @@ function(i) {
             a.data.group = t,
             s.notify(a),
             s;
-        function nda(t, e) {
+        function pda(t, e) {
             if (t.unobserve(o),
             a.success = e.success,
             a.status = e.status,
@@ -12725,7 +12734,7 @@ function(i) {
             }
             s.notify(a)
         }
-        return t.isMilestone() || t.isExpiringMilestone() ? this.objectivesDAO.getLearningGroupObjectives(r.id, t.id).observe(this, nda) : this.objectivesDAO.getGroupObjectives(r.id, t.type, t.id).observe(this, nda),
+        return t.isMilestone() || t.isExpiringMilestone() ? this.objectivesDAO.getLearningGroupObjectives(r.id, t.id).observe(this, pda) : this.objectivesDAO.getGroupObjectives(r.id, t.type, t.id).observe(this, pda),
         s
     }
     ,
@@ -13624,7 +13633,7 @@ function(r) {
             c.success = !1,
             l.notify(c),
             l;
-        function kia(t, e) {
+        function mia(t, e) {
             if (t.unobserve(a),
             c.success = e.success,
             c.status = e.status,
@@ -13670,7 +13679,7 @@ function(r) {
         var u = o.squad;
         return this.saveChallenge(o).observe(this, function(t, e) {
             t.unobserve(a),
-            e.success ? a.sbcDAO.submitChallenge(o.id, !!i).observe(a, kia) : (c.success = e.success,
+            e.success ? a.sbcDAO.submitChallenge(o.id, !!i).observe(a, mia) : (c.success = e.success,
             c.status = e.status,
             c.error = e.error,
             l.notify(c))
@@ -14402,7 +14411,7 @@ function(i) {
     }
     ,
     UTSquadService.prototype.addShowOff = function(r) {
-        function gna(t, e) {
+        function ina(t, e) {
             if (t.unobserve(l),
             u.success = e.success,
             u.status = e.status,
@@ -14424,9 +14433,9 @@ function(i) {
             } else
                 c.notify(u)
         }
-        function hna(t, e) {
+        function jna(t, e) {
             t.unobserve(l),
-            e.success ? l.squadDao.createShowOffSquad(r).observe(l, gna) : (u.status = e.status,
+            e.success ? l.squadDao.createShowOffSquad(r).observe(l, ina) : (u.status = e.status,
             c.notify(u))
         }
         var l = this
@@ -14439,9 +14448,9 @@ function(i) {
                     var i = e.response.showOffSquads.map(function(t) {
                         return t.id
                     });
-                    l.deleteShowOff(Math.min.apply(Math, i)).observe(l, hna)
+                    l.deleteShowOff(Math.min.apply(Math, i)).observe(l, jna)
                 } else
-                    l.squadDao.createShowOffSquad(r).observe(l, gna);
+                    l.squadDao.createShowOffSquad(r).observe(l, ina);
             else
                 u.status = e.status,
                 c.notify(u)
@@ -14475,7 +14484,7 @@ function(i) {
             return s.status = HttpStatusCode.BAD_REQUEST,
             o.notify(s),
             o;
-        function Lna(t) {
+        function Nna(t) {
             n.squadDao.getShowOffSquad(t, e).observe(n, function(t, e) {
                 t.unobserve(n),
                 n.unauthenticatedShowOffId = "",
@@ -14491,13 +14500,13 @@ function(i) {
         var e = t[0]
           , a = t[1]
           , i = services.Authentication.getServerShardBySKU(a);
-        return i ? Lna(i) : services.Authentication.requestServerShards().observe(this, function(t, e) {
+        return i ? Nna(i) : services.Authentication.requestServerShards().observe(this, function(t, e) {
             if (t.unobserve(n),
             e.success && JSUtils.isObject(e.data) && 0 < e.data.shards.length) {
                 for (var i in e.data.shards) {
                     var r = e.data.shards[i];
                     if (r.supportsSKU(a))
-                        return void Lna(r)
+                        return void Nna(r)
                 }
                 n.unauthenticatedShowOffId = "",
                 o.notify(s)
@@ -14615,7 +14624,7 @@ function(i) {
     }
     ,
     UTSquadService.prototype.removeItemsFromSquads = function(r) {
-        function uoa(t, e) {
+        function woa(t, e) {
             (e.isPlayer() || e.isManager()) && t.forEach(function(t) {
                 t.containsItem(e, !0) && t.removeItem(e)
             })
@@ -14626,8 +14635,8 @@ function(i) {
             e.success && JSUtils.isObject(e.data)) {
                 var i = e.data.squads;
                 Array.isArray(r) ? r.forEach(function(t) {
-                    return uoa(i, t)
-                }) : uoa(i, r)
+                    return woa(i, t)
+                }) : woa(i, r)
             }
         })
     }
@@ -15716,7 +15725,7 @@ var UTPresentationController = function(r) {
     UTPresentationController.prototype.present = function(t, e) {
         var i = this;
         if (!this.isPresenting) {
-            function Vua() {
+            function Xua() {
                 i.presentationDidEnd(),
                 i.presentingViewController.didPresent(i.presentedViewController),
                 e && e()
@@ -15749,7 +15758,7 @@ var UTPresentationController = function(r) {
                 DebugUtils.Assert(!1, "View controller does not have a supported modal display style.")
             }
             this.presentedViewController.viewDidAppear(),
-            t ? this.presentedViewController.getView().perform(enums.UIAnimation.FADE_IN, Vua) : Vua.call(this)
+            t ? this.presentedViewController.getView().perform(enums.UIAnimation.FADE_IN, Xua) : Xua.call(this)
         }
     }
     ,
@@ -16010,11 +16019,11 @@ function(e) {
     UTViewController.prototype.presentViewController = function(t, e, i) {
         var r = this;
         if (!this._presentationController || this._presentationController.getPresentedViewController() !== t) {
-            function gwa() {
+            function iwa() {
                 r._presentationController = r._getPresentationControllerInstance(t),
                 r._presentationController.present(!!e, i)
             }
-            this._presentationController ? this._presentationController.queuePresentation ? this._presentationController.queue(t, !!e, i) : this.dismissViewController(!!e, gwa.bind(this)) : gwa.call(this)
+            this._presentationController ? this._presentationController.queuePresentation ? this._presentationController.queue(t, !!e, i) : this.dismissViewController(!!e, iwa.bind(this)) : iwa.call(this)
         }
     }
     ,
@@ -16978,10 +16987,6 @@ function(n) {
             e = SearchCategory.VANITY_TIFO_BASE,
             i = this.locDelegate.localize("search.filters.tifos");
             break;
-        case ItemSubType.VANITY_TIFO_ANIMATED:
-            e = SearchCategory.VANITY_TIFO_ANIMATED,
-            i = this.locDelegate.localize("search.filters.tifosAnimated");
-            break;
         case ItemSubType.VANITY_TIFO_MOVING:
             e = SearchCategory.VANITY_TIFO_MOVING,
             i = this.locDelegate.localize("search.filters.tifosMoving");
@@ -17098,8 +17103,8 @@ function(n) {
     }
     ,
     UTDataProviderFactory.prototype.getStandsVanityTypesDP = function(t) {
-        var e = this.getDynamicSubTypesDP([ItemSubType.VANITY_TIFO_BASE, ItemSubType.VANITY_TIFO_BIG, ItemSubType.VANITY_TIFO_MOVING, ItemSubType.VANITY_TINTED_BANNER, ItemSubType.VANITY_POLE_BANNER, ItemSubType.VANITY_CROWD_CARDS]);
-        return t || e.push(this.createItemSubTypeEntry(ItemSubType.VANITY_TIFO_ANIMATED)),
+        var e = this.getDynamicSubTypesDP([ItemSubType.VANITY_TIFO_BASE, ItemSubType.VANITY_TIFO_BIG, ItemSubType.VANITY_TINTED_BANNER, ItemSubType.VANITY_POLE_BANNER, ItemSubType.VANITY_CROWD_CARDS]);
+        return t || e.push(this.createItemSubTypeEntry(ItemSubType.VANITY_TIFO_MOVING)),
         e
     }
     ,
@@ -17176,13 +17181,13 @@ function(n) {
     }
     ,
     UTDataProviderFactory.prototype.getPlayStyleDP = function(t) {
-        function MAa(t) {
+        function OAa(t) {
             return new UTDataProviderEntryDTO(t,t.toString(),UTLocalizationUtil.playStyleIdToName(t, e.locDelegate))
         }
         var e = this
           , i = [new UTDataProviderEntryDTO(-1,"-1",this.locDelegate.localize("roles.defaultRole"))];
-        return JSUtils.isBoolean(t) && t || (i = i.concat(MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_1), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_2), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_3), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_4), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_5), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_6), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_7), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_8), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_9), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_10), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_11), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_12), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_13), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_14), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_15), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_16), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_17), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_18), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_19))),
-        JSUtils.isBoolean(t) && !t || (i = i.concat(MAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_1), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_2), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_3), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_4), MAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_5))),
+        return JSUtils.isBoolean(t) && t || (i = i.concat(OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_1), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_2), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_3), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_4), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_5), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_6), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_7), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_8), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_9), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_10), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_11), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_12), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_13), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_14), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_15), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_16), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_17), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_18), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GENERAL_19))),
+        JSUtils.isBoolean(t) && !t || (i = i.concat(OAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_1), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_2), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_3), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_4), OAa(ItemSubType.TRAINING_PLAYERSTYLE_GOALKEEPER_5))),
         i
     }
     ,
@@ -18034,11 +18039,11 @@ function(i) {
     }
     return __extends(UTSquadChemCalculatorUtils, i),
     UTSquadChemCalculatorUtils.prototype.isRestrictedLeague = function(t) {
-        return t === UTSquadChemCalculatorUtils.LEGENDS_LEAGUE_ID
+        return t === UTItemEntity.LEGENDS_LEAGUE_ID
     }
     ,
     UTSquadChemCalculatorUtils.prototype.isRestrictedClub = function(t) {
-        return t === UTSquadChemCalculatorUtils.LEGENDS_CLUB_ID || t === UTSquadChemCalculatorUtils.LEAGUE_HERO_CLUB_ID
+        return t === UTItemEntity.LEGENDS_CLUB_ID || t === UTItemEntity.LEAGUE_HERO_CLUB_ID
     }
     ,
     UTSquadChemCalculatorUtils.prototype.getContribution = function(t, e) {
@@ -18159,9 +18164,6 @@ function(i) {
     ,
     UTSquadChemCalculatorUtils.FIELD_PLAYERS = 11,
     UTSquadChemCalculatorUtils.SLOT_MAX_CHEMISTRY = 3,
-    UTSquadChemCalculatorUtils.LEGENDS_LEAGUE_ID = 2118,
-    UTSquadChemCalculatorUtils.LEGENDS_CLUB_ID = 112658,
-    UTSquadChemCalculatorUtils.LEAGUE_HERO_CLUB_ID = 114605,
     UTSquadChemCalculatorUtils
 }(EAObject))
   , UTSquadEntity = (__extends = this && this.__extends || function() {
@@ -18852,7 +18854,7 @@ function(n) {
     UTSquadEntity.prototype.isSBCSquadEligible = function() {
         var t = JSUtils.find(this.getNonBrickSlots(), function(t) {
             var e = t.item;
-            return e.isLoaned() || e.concept || e.isWorldCupItem() || UTItemEntity.isStoryMode(e.definitionId)
+            return e.isLoaned() || e.concept || e.isWorldCupPlayer() || UTItemEntity.isStoryMode(e.definitionId)
         });
         return !JSUtils.isValid(t)
     }
@@ -20147,12 +20149,12 @@ function(e) {
     }
     ,
     UTClubRepository.prototype.createConsumables = function(t) {
-        function COa(t) {
+        function EOa(t) {
             var e = i.consumables.get(t.definitionId);
             e ? e.update(t) : i.consumables.set(t.definitionId, t)
         }
         var i = this;
-        Array.isArray(t) ? t.forEach(COa, this) : COa(t)
+        Array.isArray(t) ? t.forEach(EOa, this) : EOa(t)
     }
     ,
     UTClubRepository.prototype.removeItem = function(t) {
@@ -24315,15 +24317,15 @@ var ShowOffLoginControllerStep, UTLicenseViewController = function(e) {
     }
     ,
     UTLicenseViewController.prototype.checkFreeDiskSpace = function() {
-        function Z5a() {
+        function _5a() {
             e.setContinueFlag(UTLicenseViewController.FLAGS.MEMORY)
         }
         var e = this;
-        isChrome() ? Z5a.call(this) : window.plugins.utilities.getFreeDiskSpace(function(t) {
+        isChrome() ? _5a.call(this) : window.plugins.utilities.getFreeDiskSpace(function(t) {
             e.hasLowMemory = t < UTLicenseViewController.LOW_MEMORY_LIMIT,
             e.setContinueFlag(UTLicenseViewController.FLAGS.MEMORY)
         }
-        .bind(this), Z5a.bind(this))
+        .bind(this), _5a.bind(this))
     }
     ,
     UTLicenseViewController.prototype.transitionToLogin = function() {
@@ -24381,35 +24383,35 @@ var UTShowOffLoginController = function(e) {
     }
     return __extends(UTShowOffLoginController, e),
     UTShowOffLoginController.prototype.onPreLoadSquad = function() {
-        function t6a() {
+        function v6a() {
             i.isRunning = !1,
             utils.PopupManager.showAlert(utils.PopupManager.Alerts.ORIGIN_UNAVAILABLE, i.logout.bind(i)),
             gClickShield.hideShield(EAClickShieldView.Shield.LOADING)
         }
-        function u6a(t, e) {
-            t.unobserve(i),
-            e.success ? i.runNextStep() : t6a()
-        }
-        function v6a(t, e) {
-            t.unobserve(i),
-            e.success ? services.Configuration.requestSquadData().observe(i, u6a) : t6a()
-        }
         function w6a(t, e) {
             t.unobserve(i),
-            e.success ? services.Configuration.loadRarityData().observe(i, v6a) : t6a()
+            e.success ? i.runNextStep() : v6a()
         }
         function x6a(t, e) {
             t.unobserve(i),
-            e.success ? services.Configuration.requestPlayerIconData().observe(i, w6a) : t6a()
+            e.success ? services.Configuration.requestSquadData().observe(i, w6a) : v6a()
         }
         function y6a(t, e) {
             t.unobserve(i),
-            e.success ? services.Configuration.requestPlayerMetaData().observe(i, x6a) : t6a()
+            e.success ? services.Configuration.loadRarityData().observe(i, x6a) : v6a()
+        }
+        function z6a(t, e) {
+            t.unobserve(i),
+            e.success ? services.Configuration.requestPlayerIconData().observe(i, y6a) : v6a()
+        }
+        function A6a(t, e) {
+            t.unobserve(i),
+            e.success ? services.Configuration.requestPlayerMetaData().observe(i, z6a) : v6a()
         }
         var i = this;
         services.Configuration.requestTeamConfig().observe(this, function(t, e) {
             t.unobserve(i),
-            e.success ? services.Configuration.requestStaticPlayerData().observe(i, y6a) : t6a()
+            e.success ? services.Configuration.requestStaticPlayerData().observe(i, A6a) : v6a()
         })
     }
     ,
@@ -25387,7 +25389,7 @@ function(i) {
         i[i.RATING = 11] = "RATING",
         i[i.RESOURCE = 12] = "RESOURCE",
         i[i.PLAYERPICK = 13] = "PLAYERPICK";
-        function kab(t, e, i) {
+        function mab(t, e, i) {
             switch (t) {
             case r.RECENCY:
                 return JSUtils.sortCompare(e.timestamp, i.timestamp, n.sort === SearchSortOrder.DESCENDING);
@@ -25432,7 +25434,7 @@ function(i) {
             }
         }
         for (var u = 0; 0 === u && a !== o.length; )
-            u = kab.call(this, o[a], t, e),
+            u = mab.call(this, o[a], t, e),
             a++;
         return u
     }
@@ -29531,17 +29533,17 @@ function(f) {
             DOMKit.findElements(i, ".statValue.Dribbling")[0].innerHTML = o.getAttribute(PlayerAttribute.FOUR).toString(),
             DOMKit.findElements(i, ".statValue.Defending")[0].innerHTML = o.getAttribute(PlayerAttribute.FIVE).toString(),
             DOMKit.findElements(i, ".statValue.Header")[0].innerHTML = o.getAttribute(PlayerAttribute.SIX).toString();
-            function ttb(t, e) {
+            function vtb(t, e) {
                 DOMKit.findElements(i, t).forEach(function(t) {
                     return t.innerHTML = e
                 })
             }
-            if (ttb(".statLabel.Pace", n ? services.Localization.localize("cards.cardfront.divingAbbr") : services.Localization.localize("cards.cardfront.paceAbbr")),
-            ttb(".statLabel.Header", n ? services.Localization.localize("cards.cardfront.positionAbbr") : services.Localization.localize("cards.cardfront.headingAbbr")),
-            ttb(".statLabel.Dribbling", n ? services.Localization.localize("cards.cardfront.reflexAbbr") : services.Localization.localize("cards.cardfront.dribblingAbbr")),
-            ttb(".statLabel.Shooting", n ? services.Localization.localize("cards.cardfront.handlingAbbr") : services.Localization.localize("cards.cardfront.shootingAbbr")),
-            ttb(".statLabel.Defending", n ? services.Localization.localize("cards.cardfront.speedAbbr") : services.Localization.localize("cards.cardfront.defendingAbbr")),
-            ttb(".statLabel.Passing", n ? services.Localization.localize("cards.cardfront.kickAbbr") : services.Localization.localize("cards.cardfront.passingAbbr")),
+            if (vtb(".statLabel.Pace", n ? services.Localization.localize("cards.cardfront.divingAbbr") : services.Localization.localize("cards.cardfront.paceAbbr")),
+            vtb(".statLabel.Header", n ? services.Localization.localize("cards.cardfront.positionAbbr") : services.Localization.localize("cards.cardfront.headingAbbr")),
+            vtb(".statLabel.Dribbling", n ? services.Localization.localize("cards.cardfront.reflexAbbr") : services.Localization.localize("cards.cardfront.dribblingAbbr")),
+            vtb(".statLabel.Shooting", n ? services.Localization.localize("cards.cardfront.handlingAbbr") : services.Localization.localize("cards.cardfront.shootingAbbr")),
+            vtb(".statLabel.Defending", n ? services.Localization.localize("cards.cardfront.speedAbbr") : services.Localization.localize("cards.cardfront.defendingAbbr")),
+            vtb(".statLabel.Passing", n ? services.Localization.localize("cards.cardfront.kickAbbr") : services.Localization.localize("cards.cardfront.passingAbbr")),
             r && (this.applyColors(".playerOverview", r.header),
             this.applyColors(".name", r.name),
             this.applyColors(".ut-item-view--main .statValue", r.attributeValues),
@@ -29609,7 +29611,7 @@ function(f) {
     }
     ,
     UTLargePlayerItemView.prototype.resetRender = function() {
-        function Mtb(t) {
+        function Otb(t) {
             return (t.className.match(/(^|\s)chemstyle\S+/g) || []).join(" ")
         }
         var t = this.getRootElement();
@@ -29617,8 +29619,8 @@ function(f) {
         DOMKit.findElements(t, ".statLabel").forEach(function(t) {
             return DOMKit.removeClass(t, "gold silver bronze")
         }),
-        DOMKit.removeClass(this.__playStyle, Mtb(this.__playStyle)),
-        DOMKit.removeClass(this.__playStyleLarge, Mtb(this.__playStyleLarge))
+        DOMKit.removeClass(this.__playStyle, Otb(this.__playStyle)),
+        DOMKit.removeClass(this.__playStyleLarge, Otb(this.__playStyleLarge))
     }
     ,
     UTLargePlayerItemView.prototype.getAssetDimensions = function(t, e) {
@@ -29961,25 +29963,25 @@ UTLargePlayerItemView.prototype._generate = function _generate() {
         this._bioBadgeImage = new UTImageView,
         q.appendChild(this._bioBadgeImage.getRootElement()),
         H.appendChild(q);
-        var Y = document.createElement("span");
-        Y.classList.add("ut-item-row-label--center"),
-        Y.classList.add("ut-item-row-label"),
+        var z = document.createElement("span");
+        z.classList.add("ut-item-row-label--center"),
+        z.classList.add("ut-item-row-label"),
         this._bioClubPoints = new UTSquadSlotChemistryPointsView,
         this._bioClubPoints.getRootElement().classList.add("ut-player-item-bio-points"),
-        Y.appendChild(this._bioClubPoints.getRootElement()),
-        H.appendChild(Y),
+        z.appendChild(this._bioClubPoints.getRootElement()),
+        H.appendChild(z),
         this.__bioClub = document.createElement("span"),
         this.__bioClub.classList.add("ut-item-row-label--right"),
         this.__bioClub.classList.add("ut-item-row-label"),
         H.appendChild(this.__bioClub),
         this.__bioViewDiv.appendChild(H);
-        var z = document.createElement("div");
-        z.classList.add("ut-item-player-bonuses"),
+        var Y = document.createElement("div");
+        Y.classList.add("ut-item-player-bonuses"),
         this.__biofirstOwner = document.createElement("span"),
         this.__biofirstOwner.classList.add("icon_chemistry_first_owner"),
         this.__biofirstOwner.classList.add("fut_icon"),
-        z.appendChild(this.__biofirstOwner),
-        this.__bioViewDiv.appendChild(z),
+        Y.appendChild(this.__biofirstOwner),
+        this.__bioViewDiv.appendChild(Y),
         t.appendChild(this.__bioViewDiv),
         this.__strengthViewDiv = document.createElement("div"),
         this.__strengthViewDiv.classList.add("ut-item-view--strength"),
@@ -30306,8 +30308,6 @@ var UTVanityItemView = function(t) {
         switch (t) {
         case ItemSubType.VANITY_TIFO_BASE:
             return "vanity--tifo_base";
-        case ItemSubType.VANITY_TIFO_ANIMATED:
-            return "vanity--tifo_animated";
         case ItemSubType.VANITY_TIFO_BIG:
             return "vanity--tifo_big";
         case ItemSubType.VANITY_TIFO_MOVING:
@@ -35747,10 +35747,6 @@ var UTClubSearchResultsView = function(e) {
             e[0].setLocalResource(AssetLocationUtils.getFilterPlaceholderImageUri(ItemSubType.STADIUM)),
             e[0].addClass("activeStadium");
             break;
-        case ItemSubType.VANITY_TIFO_ANIMATED:
-            r = i.localize("FUT_VANITY_TIFO_ANIMATED"),
-            e[0].setLocalResource(AssetLocationUtils.getFilterPlaceholderImageUri(t));
-            break;
         case ItemSubType.VANITY_TIFO_BASE:
             r = i.localize("FUT_VANITY_TIFO_BASIC"),
             e[0].setLocalResource(AssetLocationUtils.getFilterPlaceholderImageUri(t));
@@ -36154,7 +36150,7 @@ var UTSelectItemFromClubViewController = function(i) {
     }
     ,
     UTSelectItemFromClubViewController.prototype.onTableCellActionSelected = function(t, e, i) {
-        function nVb(t) {
+        function pVb(t) {
             var e;
             o.searchCriteria && (o.searchCriteria.defId = []),
             o.addItemToSlot(t),
@@ -36176,11 +36172,11 @@ var UTSelectItemFromClubViewController = function(i) {
                             return t.definitionId === s.definitionId
                         }) : null
                           , n = !((null == r ? void 0 : r.isLoaned()) && (null === (i = o.squad) || void 0 === i ? void 0 : i.isSBC()));
-                        nVb(r && n ? r : s)
+                        pVb(r && n ? r : s)
                     }
                 })
             } else
-                nVb(s)
+                pVb(s)
     }
     ,
     UTSelectItemFromClubViewController.prototype.onModifySearchSelected = function(t) {
@@ -36815,33 +36811,33 @@ function(i) {
     }
     ,
     UTConsumableCategoriesViewModel.prototype.getItems = function(t, e) {
-        function dZb(t) {
+        function fZb(t) {
             return !e || t.canApplyTo(e)
         }
         if (JSUtils.isNumber(t))
             switch (t) {
             case enums.UIConsumableCategory.CONTRACTS:
                 return this.values().filter(function(t) {
-                    return t.isContract() && dZb(t)
+                    return t.isContract() && fZb(t)
                 });
             case enums.UIConsumableCategory.HEALING:
                 return this.values().filter(function(t) {
-                    return t.isInjuryHealing() && dZb(t)
+                    return t.isInjuryHealing() && fZb(t)
                 });
             case enums.UIConsumableCategory.LEAGUEMOD:
                 return this.values().filter(function(t) {
-                    return t.isManagerLeagueModifier() && dZb(t)
+                    return t.isManagerLeagueModifier() && fZb(t)
                 });
             case enums.UIConsumableCategory.PLAYSTYLE:
                 return this.values().filter(function(t) {
-                    return t.isStyleModifier() && dZb(t)
+                    return t.isStyleModifier() && fZb(t)
                 });
             case enums.UIConsumableCategory.POSITION:
                 return this.values().filter(function(t) {
-                    return t.isPlayerPositionModifier() && dZb(t)
+                    return t.isPlayerPositionModifier() && fZb(t)
                 })
             }
-        return e ? this.values().filter(dZb) : this.values()
+        return e ? this.values().filter(fZb) : this.values()
     }
     ,
     UTConsumableCategoriesViewModel
@@ -37032,17 +37028,17 @@ var UTConsumableCategoriesView = function(e) {
     }
     ,
     UTConsumableCategoriesView.prototype.setCategoryValues = function(t) {
-        function YZb(t, e) {
+        function $Zb(t, e) {
             0 !== e ? (t.setStackCount(e),
             t.setDisplay(!0),
             t.addTarget(i, i._eCategorySelected, EventType.TAP)) : t.setDisplay(!1)
         }
         var i = this;
-        0 < t.total ? (YZb.call(this, this._contract, t.contracts),
-        YZb.call(this, this._healing, t.healing),
-        YZb.call(this, this._leaguemod, t.managerLeagueModifier),
-        YZb.call(this, this._chemstyle, t.playStyle),
-        YZb.call(this, this._positioning, t.position)) : (this.noResultsView = new UTListNoResultsView,
+        0 < t.total ? ($Zb.call(this, this._contract, t.contracts),
+        $Zb.call(this, this._healing, t.healing),
+        $Zb.call(this, this._leaguemod, t.managerLeagueModifier),
+        $Zb.call(this, this._chemstyle, t.playStyle),
+        $Zb.call(this, this._positioning, t.position)) : (this.noResultsView = new UTListNoResultsView,
         this.noResultsView.init(),
         this.noResultsView.setText(services.Localization.localize("consumables.empty")),
         DOMKit.empty(this.__categoryList),
@@ -38160,8 +38156,9 @@ var UTPlayerBioView = function(e) {
         this._navigation.addTab(PlayerBioDisplayGroup.INFO, i.localize("extendedPlayerInfo.tab.general")),
         this._navigation.addTab(PlayerBioDisplayGroup.ATTRIBUTES, i.localize("extendedPlayerInfo.tab.stats")),
         this._navigation.addTab(PlayerBioDisplayGroup.TRAITS, i.localize("extendedPlayerInfo.tab.traits"));
-        var r = e.isLeagueHeroItem() && !e.isShapeshifterHeroItem();
-        (e.isLegend() || r) && this._navigation.addTab(PlayerBioDisplayGroup.LEGENDS, i.localize("extendedPlayerInfo.tab.rarityInfo", [i.localize("item.raretype" + e.rareflag)])),
+        var r = e.isLeagueHeroItem() && !e.isShapeshifterHeroItem()
+          , n = getAppMain().getConfigRepository().getConfigArray("disableBioProfileRarityIds");
+        !e.isLegend() && !r || n.includes(e.rareflag) || this._navigation.addTab(PlayerBioDisplayGroup.LEGENDS, i.localize("extendedPlayerInfo.tab.rarityInfo", [i.localize("item.raretype" + e.rareflag)])),
         this._navigation.setActiveTab(PlayerBioDisplayGroup.INFO),
         this._navigation.addTarget(this, t, EventType.TAP),
         this._navigation.layoutSubviews()
@@ -38313,7 +38310,7 @@ var UTPlayerBioView = function(e) {
         this.createHeader(this.__dataDisplay, r.localize("extendedPlayerInfo.legend.claimToFameTitle"), this.headers);
         var o = document.createElement("p");
         o.classList.add(UTPlayerBioView.CLASS.ISOLATED_SECTION),
-        o.textContent = r.localize("FUT_LEGEND_DESCR_" + t.databaseId),
+        o.textContent = r.localize("FUT_LEGEND_DESCR_" + t.definitionId),
         this.__dataDisplay.appendChild(o)
     }
     ,
@@ -39079,7 +39076,7 @@ var _a, EANumberDrawBox = function(i) {
     globalThis.Uint16Array || (globalThis.Uint16Array = Array),
     globalThis.Uint8Array || (globalThis.Uint8Array = Array),
     globalThis.Int32Array || (globalThis.Int32Array = Array);
-    function A7b(t) {
+    function D7b(t) {
         return void 0 !== t && "MacIntel" === t.platform && "number" == typeof t.maxTouchPoints && 1 < t.maxTouchPoints && "undefined" == typeof MSStream
     }
     var a = /iPhone/i
@@ -39097,7 +39094,7 @@ var _a, EANumberDrawBox = function(i) {
       , S = /Opera Mini/i
       , b = /\b(CriOS|Chrome)(?:.+)Mobile/i
       , I = /Mobile(?:.+)Firefox\b/i;
-    var C, U, A, w, O, R, P, D, L, N, x, M, V, B, F, G, k, j, H, q, Y, z, K, X, W, J, Q, Z, $, tt, et, it, nt, ot, st, at, lt, ct, ut = function isMobile$1(t) {
+    var C, U, A, w, O, R, P, D, L, N, x, M, V, B, F, G, k, j, H, q, z, Y, K, X, W, J, Q, Z, $, tt, et, it, nt, ot, st, at, lt, ct, ut = function isMobile$1(t) {
         var e = {
             userAgent: "",
             platform: "",
@@ -39125,9 +39122,9 @@ var _a, EANumberDrawBox = function(i) {
             apple: {
                 phone: n(a) && !n(T),
                 ipod: n(l),
-                tablet: !n(a) && (n(h) || A7b(e)) && !n(T),
+                tablet: !n(a) && (n(h) || D7b(e)) && !n(T),
                 universal: n(d),
-                device: (n(a) || n(l) || n(h) || n(d) || A7b(e)) && !n(T)
+                device: (n(a) || n(l) || n(h) || n(d) || D7b(e)) && !n(T)
             },
             amazon: {
                 phone: n(f),
@@ -39252,9 +39249,9 @@ var _a, EANumberDrawBox = function(i) {
     j[j.UINT = 2] = "UINT",
     (q = H = H || {})[q.NEAREST = 0] = "NEAREST",
     q[q.LINEAR = 1] = "LINEAR",
-    (z = Y = Y || {})[z.CLAMP = 33071] = "CLAMP",
-    z[z.REPEAT = 10497] = "REPEAT",
-    z[z.MIRRORED_REPEAT = 33648] = "MIRRORED_REPEAT",
+    (Y = z = z || {})[Y.CLAMP = 33071] = "CLAMP",
+    Y[Y.REPEAT = 10497] = "REPEAT",
+    Y[Y.MIRRORED_REPEAT = 33648] = "MIRRORED_REPEAT",
     (X = K = K || {})[X.OFF = 0] = "OFF",
     X[X.POW2 = 1] = "POW2",
     X[X.ON = 2] = "ON",
@@ -39324,7 +39321,7 @@ var _a, EANumberDrawBox = function(i) {
         GC_MODE: $.AUTO,
         GC_MAX_IDLE: 3600,
         GC_MAX_CHECK_COUNT: 600,
-        WRAP_MODE: Y.CLAMP,
+        WRAP_MODE: z.CLAMP,
         SCALE_MODE: H.LINEAR,
         PRECISION_VERTEX: et.HIGH,
         PRECISION_FRAGMENT: ut.apple.device ? et.HIGH : et.MEDIUM,
@@ -40013,7 +40010,7 @@ var _a, EANumberDrawBox = function(i) {
             return null == t
         }
     };
-    function a8b(t, e, i, r) {
+    function d8b(t, e, i, r) {
         e = e || "&",
         i = i || "=";
         var n = {};
@@ -40038,7 +40035,7 @@ var _a, EANumberDrawBox = function(i) {
         }
         return n
     }
-    function b8b(t) {
+    function e8b(t) {
         switch (typeof t) {
         case "string":
             return t;
@@ -40050,27 +40047,27 @@ var _a, EANumberDrawBox = function(i) {
             return ""
         }
     }
-    function c8b(i, r, n, t) {
+    function f8b(i, r, n, t) {
         return r = r || "&",
         n = n || "=",
         null === i && (i = void 0),
         "object" == typeof i ? Object.keys(i).map(function(t) {
-            var e = encodeURIComponent(b8b(t)) + n;
+            var e = encodeURIComponent(e8b(t)) + n;
             return Array.isArray(i[t]) ? i[t].map(function(t) {
-                return e + encodeURIComponent(b8b(t))
-            }).join(r) : e + encodeURIComponent(b8b(i[t]))
-        }).join(r) : t ? encodeURIComponent(b8b(t)) + n + encodeURIComponent(b8b(i)) : ""
+                return e + encodeURIComponent(e8b(t))
+            }).join(r) : e + encodeURIComponent(e8b(i[t]))
+        }).join(r) : t ? encodeURIComponent(e8b(t)) + n + encodeURIComponent(e8b(i)) : ""
     }
-    function f8b(t, e) {
+    function i8b(t, e) {
         return urlParse(t, !1, !0).resolve(e)
     }
-    function h8b(t) {
+    function k8b(t) {
         return mt.isString(t) && (t = urlParse(t)),
         t instanceof Url ? t.format() : Url.prototype.format.call(t)
     }
     var Tt = createCommonjsModule(function(t, e) {
-        e.decode = e.parse = a8b,
-        e.encode = e.stringify = c8b
+        e.decode = e.parse = d8b,
+        e.encode = e.stringify = f8b
     })
       , gt = urlParse;
     function Url() {
@@ -40390,7 +40387,7 @@ var _a, EANumberDrawBox = function(i) {
         t && (this.hostname = t)
     }
     ;
-    var Dt, Lt, Nt, xt, Mt, Vt, Bt, Ft, Gt, kt, jt, Ht, qt, Yt, zt, Kt, Xt, Wt, Jt;
+    var Dt, Lt, Nt, xt, Mt, Vt, Bt, Ft, Gt, kt, jt, Ht, qt, zt, Yt, Kt, Xt, Wt, Jt;
     rt.ENV = void 0,
     (Dt = rt.ENV || (rt.ENV = {}))[Dt.WEBGL_LEGACY = 0] = "WEBGL_LEGACY",
     Dt[Dt.WEBGL = 1] = "WEBGL",
@@ -40510,15 +40507,15 @@ var _a, EANumberDrawBox = function(i) {
     qt[qt.PREMULTIPLY_ALPHA = 2] = "PREMULTIPLY_ALPHA",
     qt[qt.PREMULTIPLIED_ALPHA = 2] = "PREMULTIPLIED_ALPHA",
     rt.CLEAR_MODES = void 0,
-    (Yt = rt.CLEAR_MODES || (rt.CLEAR_MODES = {}))[Yt.NO = 0] = "NO",
-    Yt[Yt.YES = 1] = "YES",
-    Yt[Yt.AUTO = 2] = "AUTO",
-    Yt[Yt.BLEND = 0] = "BLEND",
-    Yt[Yt.CLEAR = 1] = "CLEAR",
-    Yt[Yt.BLIT = 2] = "BLIT",
+    (zt = rt.CLEAR_MODES || (rt.CLEAR_MODES = {}))[zt.NO = 0] = "NO",
+    zt[zt.YES = 1] = "YES",
+    zt[zt.AUTO = 2] = "AUTO",
+    zt[zt.BLEND = 0] = "BLEND",
+    zt[zt.CLEAR = 1] = "CLEAR",
+    zt[zt.BLIT = 2] = "BLIT",
     rt.GC_MODES = void 0,
-    (zt = rt.GC_MODES || (rt.GC_MODES = {}))[zt.AUTO = 0] = "AUTO",
-    zt[zt.MANUAL = 1] = "MANUAL",
+    (Yt = rt.GC_MODES || (rt.GC_MODES = {}))[Yt.AUTO = 0] = "AUTO",
+    Yt[Yt.MANUAL = 1] = "MANUAL",
     rt.PRECISION = void 0,
     (Kt = rt.PRECISION || (rt.PRECISION = {})).LOW = "lowp",
     Kt.MEDIUM = "mediump",
@@ -40539,8 +40536,8 @@ var _a, EANumberDrawBox = function(i) {
     Jt[Jt.UNIFORM_BUFFER = 35345] = "UNIFORM_BUFFER";
     var Qt = {
         parse: gt,
-        format: h8b,
-        resolve: f8b
+        format: k8b,
+        resolve: i8b
     };
     pt.RETINA_PREFIX = /@([0-9\.]+)x/;
     var Zt, $t = pt.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = !1, te = "6.3.2";
@@ -42411,7 +42408,7 @@ var _a, EANumberDrawBox = function(i) {
         t.isMask = !1,
         t
     }
-    var Fe, Ge, ke, je, He, qe, Ye, ze, Ke, Xe, We, Je, Qe, Ze, $e, ti, ei, ii, ri, ni, oi, si, ai, li, ci, ui, pi, hi, di, _i, yi, fi, mi, Ti, gi, vi, Ei, Si, bi, Ii = (__extends$j(TemporaryDisplayObject, Fe = Be),
+    var Fe, Ge, ke, je, He, qe, ze, Ye, Ke, Xe, We, Je, Qe, Ze, $e, ti, ei, ii, ri, ni, oi, si, ai, li, ci, ui, pi, hi, di, _i, yi, fi, mi, Ti, gi, vi, Ei, Si, bi, Ii = (__extends$j(TemporaryDisplayObject, Fe = Be),
     TemporaryDisplayObject);
     function TemporaryDisplayObject() {
         var t = null !== Fe && Fe.apply(this, arguments) || this;
@@ -42428,10 +42425,10 @@ var _a, EANumberDrawBox = function(i) {
     (He = je = je || {})[He.UNKNOWN = 0] = "UNKNOWN",
     He[He.WEBGL = 1] = "WEBGL",
     He[He.CANVAS = 2] = "CANVAS",
-    (Ye = qe = qe || {})[Ye.COLOR = 16384] = "COLOR",
-    Ye[Ye.DEPTH = 256] = "DEPTH",
-    Ye[Ye.STENCIL = 1024] = "STENCIL",
-    (Ke = ze = ze || {})[Ke.NORMAL = 0] = "NORMAL",
+    (ze = qe = qe || {})[ze.COLOR = 16384] = "COLOR",
+    ze[ze.DEPTH = 256] = "DEPTH",
+    ze[ze.STENCIL = 1024] = "STENCIL",
+    (Ke = Ye = Ye || {})[Ke.NORMAL = 0] = "NORMAL",
     Ke[Ke.ADD = 1] = "ADD",
     Ke[Ke.MULTIPLY = 2] = "MULTIPLY",
     Ke[Ke.SCREEN = 3] = "SCREEN",
@@ -44171,8 +44168,8 @@ var _a, EANumberDrawBox = function(i) {
         t.prototype = null === e ? Object.create(e) : (__.prototype = e.prototype,
         new __)
     }
-    var Yi = function() {
-        return (Yi = Object.assign || function __assign(t) {
+    var zi = function() {
+        return (zi = Object.assign || function __assign(t) {
             for (var e, i = arguments, r = 1, n = arguments.length; r < n; r++)
                 for (var o in e = i[r])
                     Object.prototype.hasOwnProperty.call(e, o) && (t[o] = e[o]);
@@ -44180,7 +44177,7 @@ var _a, EANumberDrawBox = function(i) {
         }
         ).apply(this, arguments)
     };
-    var zi = (Resource.prototype.bind = function(t) {
+    var Yi = (Resource.prototype.bind = function(t) {
         this.onResize.add(t),
         this.onUpdate.add(t),
         this.onError.add(t),
@@ -44261,7 +44258,7 @@ var _a, EANumberDrawBox = function(i) {
         this.onUpdate = new ji("update"),
         this.onError = new ji("onError")
     }
-    var Ki, Xi = (__extends$h(BufferResource, Ki = zi),
+    var Ki, Xi = (__extends$h(BufferResource, Ki = Yi),
     BufferResource.prototype.upload = function(t, e, i) {
         var r = t.gl;
         r.pixelStorei(r.UNPACK_PREMULTIPLY_ALPHA_WEBGL, e.alphaMode === rt.ALPHA_MODES.UNPACK);
@@ -44502,7 +44499,7 @@ var _a, EANumberDrawBox = function(i) {
           , h = e.target
           , d = e.resolution
           , _ = e.resourceOptions;
-        return !t || t instanceof zi || ((t = autoDetectResource(t, _)).internal = !0),
+        return !t || t instanceof Yi || ((t = autoDetectResource(t, _)).internal = !0),
         i.resolution = d || pt.RESOLUTION,
         i.width = Math.round((a || 0) * i.resolution) / i.resolution,
         i.height = Math.round((l || 0) * i.resolution) / i.resolution,
@@ -44532,10 +44529,10 @@ var _a, EANumberDrawBox = function(i) {
         i.setResource(t),
         i
     }
-    var Zi, $i = (__extends$h(AbstractMultiResource, Zi = zi),
+    var Zi, $i = (__extends$h(AbstractMultiResource, Zi = Yi),
     AbstractMultiResource.prototype.initFromArray = function(t, e) {
         for (var i = 0; i < this.length; i++)
-            t[i] && (t[i].castToBaseTexture ? this.addBaseTextureAt(t[i].castToBaseTexture(), i) : t[i]instanceof zi ? this.addResourceAt(t[i], i) : this.addResourceAt(autoDetectResource(t[i], e), i))
+            t[i] && (t[i].castToBaseTexture ? this.addBaseTextureAt(t[i].castToBaseTexture(), i) : t[i]instanceof Yi ? this.addResourceAt(t[i], i) : this.addResourceAt(autoDetectResource(t[i], e), i))
     }
     ,
     AbstractMultiResource.prototype.dispose = function() {
@@ -44647,7 +44644,7 @@ var _a, EANumberDrawBox = function(i) {
         i && n.initFromArray(i, e),
         n
     }
-    var ir, rr = (__extends$h(BaseImageResource, ir = zi),
+    var ir, rr = (__extends$h(BaseImageResource, ir = Yi),
     BaseImageResource.crossOrigin = function(t, e, i) {
         void 0 === i && 0 !== e.indexOf("data:") ? t.crossOrigin = determineCrossOrigin(e) : !1 !== i && (t.crossOrigin = "string" == typeof i ? i : "anonymous")
     }
@@ -44766,7 +44763,7 @@ var _a, EANumberDrawBox = function(i) {
         return this._load || (void 0 !== t && (this.createBitmap = t),
         this._load = new Promise(function(t, e) {
             var i = r.source;
-            function UOc() {
+            function XOc() {
                 r.destroyed || (i.onload = null,
                 i.onerror = null,
                 r.resize(i.width, i.height),
@@ -44774,7 +44771,7 @@ var _a, EANumberDrawBox = function(i) {
                 r.createBitmap ? t(r.process()) : t(r))
             }
             r.url = i.src,
-            i.complete && i.src ? UOc() : (i.onload = UOc,
+            i.complete && i.src ? XOc() : (i.onload = XOc,
             i.onerror = function(t) {
                 e(t),
                 r.onError.emit(t)
@@ -45122,7 +45119,7 @@ var _a, EANumberDrawBox = function(i) {
     Hi.push(cr, yr, or, dr, pr, Xi, ar, er);
     var fr, mr = {
         __proto__: null,
-        Resource: zi,
+        Resource: Yi,
         BaseImageResource: rr,
         INSTALLED: Hi,
         autoDetectResource: autoDetectResource,
@@ -46103,8 +46100,8 @@ var _a, EANumberDrawBox = function(i) {
         this.transform = null
     }
     var qr = [new me, new me, new me, new me]
-      , Yr = new Ce
-      , zr = (FilterSystem.prototype.push = function(t, e) {
+      , zr = new Ce
+      , Yr = (FilterSystem.prototype.push = function(t, e) {
         for (var i, r, n = this.renderer, o = this.defaultFilterStack, s = this.statePool.pop() || new Hr, a = this.renderer.renderTexture, l = e[0].resolution, c = e[0].multisample, u = e[0].padding, p = e[0].autoFit, h = null === (i = e[0].legacy) || void 0 === i || i, d = 1; d < e.length; d++) {
             var _ = e[d];
             l = Math.min(l, _.resolution),
@@ -46122,7 +46119,7 @@ var _a, EANumberDrawBox = function(i) {
         s.sourceFrame.copyFrom(t.filterArea || t.getBounds(!0)),
         s.sourceFrame.pad(u);
         var y = this.tempRect.copyFrom(a.sourceFrame);
-        n.projection.transform && this.transformAABB(Yr.copyFrom(n.projection.transform).invert(), y),
+        n.projection.transform && this.transformAABB(zr.copyFrom(n.projection.transform).invert(), y),
         p ? (s.sourceFrame.fit(y),
         (s.sourceFrame.width <= 0 || s.sourceFrame.height <= 0) && (s.sourceFrame.width = 0,
         s.sourceFrame.height = 0)) : s.sourceFrame.intersects(y) || (s.sourceFrame.width = 0,
@@ -46319,7 +46316,7 @@ var _a, EANumberDrawBox = function(i) {
                 if ((1e-4 < Math.abs(s) || 1e-4 < Math.abs(a)) && (1e-4 < Math.abs(o) || 1e-4 < Math.abs(l)))
                     return
             }
-            (n = n ? Yr.copyFrom(n) : Yr.identity()).translate(-i.x, -i.y).scale(r.width / i.width, r.height / i.height).translate(r.x, r.y),
+            (n = n ? zr.copyFrom(n) : zr.identity()).translate(-i.x, -i.y).scale(r.width / i.width, r.height / i.height).translate(r.x, r.y),
             this.transformAABB(n, t),
             t.ceil(e),
             this.transformAABB(n.invert(), t)
@@ -48181,7 +48178,7 @@ var _a, EANumberDrawBox = function(i) {
             syncFunc: new Function("ud","uv","renderer","syncData","buffer",o.join("\n"))
         }
     }
-    function Bec() {}
+    function Eec() {}
     var Fn = (GLProgram.prototype.destroy = function() {
         this.uniformData = null,
         this.uniformGroups = null,
@@ -48608,7 +48605,7 @@ var _a, EANumberDrawBox = function(i) {
         this.checkCountMax = pt.GC_MAX_CHECK_COUNT,
         this.mode = pt.GC_MODE
     }
-    var Yn = function GLTexture(t) {
+    var zn = function GLTexture(t) {
         this.texture = t,
         this.width = -1,
         this.height = -1,
@@ -48620,7 +48617,7 @@ var _a, EANumberDrawBox = function(i) {
         this.internalFormat = rt.FORMATS.RGBA,
         this.samplerType = 0
     }
-      , zn = (TextureSystem.prototype.contextChange = function() {
+      , Yn = (TextureSystem.prototype.contextChange = function() {
         var t = this.gl = this.renderer.gl;
         this.CONTEXT_UID = this.renderer.CONTEXT_UID,
         this.webGLVersion = this.renderer.context.webGLVersion,
@@ -48716,11 +48713,11 @@ var _a, EANumberDrawBox = function(i) {
         for (var i = 0; i < e; i++)
             this.boundTextures[i] = null;
         this.emptyTextures = {};
-        var r = new Yn(t.createTexture());
+        var r = new zn(t.createTexture());
         for (t.bindTexture(t.TEXTURE_2D, r.texture),
         t.texImage2D(t.TEXTURE_2D, 0, t.RGBA, 1, 1, 0, t.RGBA, t.UNSIGNED_BYTE, new Uint8Array(4)),
         this.emptyTextures[t.TEXTURE_2D] = r,
-        this.emptyTextures[t.TEXTURE_CUBE_MAP] = new Yn(t.createTexture()),
+        this.emptyTextures[t.TEXTURE_CUBE_MAP] = new zn(t.createTexture()),
         t.bindTexture(t.TEXTURE_CUBE_MAP, this.emptyTextures[t.TEXTURE_CUBE_MAP].texture),
         i = 0; i < 6; i++)
             t.texImage2D(t.TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, t.RGBA, 1, 1, 0, t.RGBA, t.UNSIGNED_BYTE, null);
@@ -48785,7 +48782,7 @@ var _a, EANumberDrawBox = function(i) {
     }
     ,
     TextureSystem.prototype.initTexture = function(t) {
-        var e = new Yn(this.gl.createTexture());
+        var e = new zn(this.gl.createTexture());
         return e.dirtyId = -1,
         t._glTextures[this.CONTEXT_UID] = e,
         this.managedTextures.push(t),
@@ -48872,7 +48869,7 @@ var _a, EANumberDrawBox = function(i) {
     }
     var Kn, Xn = {
         __proto__: null,
-        FilterSystem: zr,
+        FilterSystem: Yr,
         BatchSystem: Xr,
         ContextSystem: Jr,
         FramebufferSystem: $r,
@@ -48885,7 +48882,7 @@ var _a, EANumberDrawBox = function(i) {
         ShaderSystem: jn,
         StateSystem: Hn,
         TextureGCSystem: qn,
-        TextureSystem: zn
+        TextureSystem: Yn
     }, Wn = new Ce, Jn = (__extends$h(AbstractRenderer, Kn = dt),
     AbstractRenderer.prototype.initPlugins = function(t) {
         for (var e in t)
@@ -48940,7 +48937,7 @@ var _a, EANumberDrawBox = function(i) {
         }(e, ["region"]);
         0 === (r = n || t.getLocalBounds(null, !0)).width && (r.width = 1),
         0 === r.height && (r.height = 1);
-        var s = Ar.create(Yi({
+        var s = Ar.create(zi({
             width: r.width,
             height: r.height
         }, o));
@@ -49232,7 +49229,7 @@ var _a, EANumberDrawBox = function(i) {
         e.globalUniforms = new jr({
             projectionMatrix: new Ce
         },!0),
-        e.addSystem(Un, "mask").addSystem(Jr, "context").addSystem(Hn, "state").addSystem(jn, "shader").addSystem(zn, "texture").addSystem(Zn, "buffer").addSystem(en, "geometry").addSystem($r, "framebuffer").addSystem(Rn, "scissor").addSystem(Dn, "stencil").addSystem(Ln, "projection").addSystem(qn, "textureGC").addSystem(zr, "filter").addSystem(Mn, "renderTexture").addSystem(Xr, "batch"),
+        e.addSystem(Un, "mask").addSystem(Jr, "context").addSystem(Hn, "state").addSystem(jn, "shader").addSystem(Yn, "texture").addSystem(Zn, "buffer").addSystem(en, "geometry").addSystem($r, "framebuffer").addSystem(Rn, "scissor").addSystem(Dn, "stencil").addSystem(Ln, "projection").addSystem(qn, "textureGC").addSystem(Yr, "filter").addSystem(Mn, "renderTexture").addSystem(Xr, "batch"),
         e.initPlugins(Renderer.__plugins),
         e.multisample = void 0,
         t.context ? e.context.initFromContext(t.context) : e.context.initFromOptions({
@@ -49689,7 +49686,7 @@ var _a, EANumberDrawBox = function(i) {
     }),
     BatchPluginFactory);
     function BatchPluginFactory() {}
-    function kfc(t) {
+    function nfc(t) {
         Object.defineProperty(mo, t, {
             get: function() {
                 return deprecation("6.0.0", "PIXI.systems." + t + " has moved to PIXI." + t),
@@ -49700,8 +49697,8 @@ var _a, EANumberDrawBox = function(i) {
     var fo = yo.create()
       , mo = {};
     for (var To in mr)
-        kfc(To);
-    function nfc(t) {
+        nfc(To);
+    function qfc(t) {
         Object.defineProperty(go, t, {
             get: function() {
                 return deprecation("6.0.0", "PIXI.resources." + t + " has moved to PIXI." + t),
@@ -49711,7 +49708,7 @@ var _a, EANumberDrawBox = function(i) {
     }
     var go = {};
     for (var To in Xn)
-        nfc(To);
+        qfc(To);
     var vo = (Application.registerPlugin = function(t) {
         Application._plugins.push(t)
     }
@@ -51033,7 +51030,7 @@ var _a, EANumberDrawBox = function(i) {
             }
         }
     }
-    var qo, Yo = (__extends$g(BlobResource, qo = Xi),
+    var qo, zo = (__extends$g(BlobResource, qo = Xi),
     BlobResource.prototype.onBlobLoaded = function(t) {}
     ,
     BlobResource.prototype.load = function() {
@@ -51103,7 +51100,7 @@ var _a, EANumberDrawBox = function(i) {
         n.onBlobLoaded(n.buffer.rawBinaryData)),
         n
     }
-    var zo, Ko = (__extends$g(CompressedTextureResource, zo = Yo),
+    var Yo, Ko = (__extends$g(CompressedTextureResource, Yo = zo),
     CompressedTextureResource.prototype.upload = function(t, e, i) {
         var r = t.gl;
         if (!t.context.extensions[this._extension])
@@ -51154,7 +51151,7 @@ var _a, EANumberDrawBox = function(i) {
     ,
     CompressedTextureResource);
     function CompressedTextureResource(t, e) {
-        var i = zo.call(this, t, e) || this;
+        var i = Yo.call(this, t, e) || this;
         return i.format = e.format,
         i.levels = e.levels || 1,
         i._width = e.width,
@@ -52252,7 +52249,7 @@ var _a, EANumberDrawBox = function(i) {
             s.push(l + 1, l, a)
         }
     }
-      , Ys = {
+      , zs = {
         build: function(t) {
             var e = t.shape
               , i = e.x
@@ -52286,7 +52283,7 @@ var _a, EANumberDrawBox = function(i) {
             0 === _ && a[a.length - 2] === h && a[a.length - 1] === d || a.push(h, d);
         return a
     }
-    var zs = {
+    var Ys = {
         build: function(t) {
             if (pa.nextRoundedRectBehavior)
                 qs.build(t);
@@ -52468,32 +52465,32 @@ var _a, EANumberDrawBox = function(i) {
                           , j = (N * k - M * G) / B
                           , H = (V * G - x * k) / B
                           , q = (j - E) * (j - E) + (H - S) * (H - S)
-                          , Y = E + (j - E) * P
-                          , z = S + (H - S) * P
+                          , z = E + (j - E) * P
+                          , Y = S + (H - S) * P
                           , K = E - (j - E) * D
                           , X = S - (H - S) * D
                           , W = F ? P : D;
-                        q <= Math.min(N * N + x * x, M * M + V * V) + W * W * m ? o.join === rt.LINE_JOIN.BEVEL || T < q / m ? (F ? (h.push(Y, z),
+                        q <= Math.min(N * N + x * x, M * M + V * V) + W * W * m ? o.join === rt.LINE_JOIN.BEVEL || T < q / m ? (F ? (h.push(z, Y),
                         h.push(E + C * D, S + U * D),
-                        h.push(Y, z),
+                        h.push(z, Y),
                         h.push(E + A * D, S + w * D)) : (h.push(E - C * P, S - U * P),
                         h.push(K, X),
                         h.push(E - A * P, S - w * P),
                         h.push(K, X)),
-                        _ += 2) : o.join === rt.LINE_JOIN.ROUND ? F ? (h.push(Y, z),
+                        _ += 2) : o.join === rt.LINE_JOIN.ROUND ? F ? (h.push(z, Y),
                         h.push(E + C * D, S + U * D),
                         _ += round(E, S, E + C * D, S + U * D, E + A * D, S + w * D, h, !0) + 4,
-                        h.push(Y, z),
+                        h.push(z, Y),
                         h.push(E + A * D, S + w * D)) : (h.push(E - C * P, S - U * P),
                         h.push(K, X),
                         _ += round(E, S, E - C * P, S - U * P, E - A * P, S - w * P, h, !1) + 4,
                         h.push(E - A * P, S - w * P),
-                        h.push(K, X)) : (h.push(Y, z),
+                        h.push(K, X)) : (h.push(z, Y),
                         h.push(K, X)) : (h.push(E - C * P, S - U * P),
                         h.push(E + C * D, S + U * D),
                         o.join === rt.LINE_JOIN.BEVEL || T < q / m || (o.join === rt.LINE_JOIN.ROUND ? _ += F ? round(E, S, E + C * D, S + U * D, E + A * D, S + w * D, h, !0) + 2 : round(E, S, E - C * P, S - U * P, E - A * P, S - w * P, h, !1) + 2 : (F ? (h.push(K, X),
-                        h.push(K, X)) : (h.push(Y, z),
-                        h.push(Y, z)),
+                        h.push(K, X)) : (h.push(z, Y),
+                        h.push(z, Y)),
                         _ += 2)),
                         h.push(E - A * P, S - w * P),
                         h.push(E + A * D, S + w * D),
@@ -52652,8 +52649,8 @@ var _a, EANumberDrawBox = function(i) {
     var Zs = ((Js = {})[rt.SHAPES.POLY] = Hs,
     Js[rt.SHAPES.CIRC] = qs,
     Js[rt.SHAPES.ELIP] = qs,
-    Js[rt.SHAPES.RECT] = Ys,
-    Js[rt.SHAPES.RREC] = zs,
+    Js[rt.SHAPES.RECT] = zs,
+    Js[rt.SHAPES.RREC] = Ys,
     Js)
       , $s = []
       , ta = []
@@ -53580,8 +53577,8 @@ var _a, EANumberDrawBox = function(i) {
     var ha = {
         buildPoly: Hs,
         buildCircle: qs,
-        buildRectangle: Ys,
-        buildRoundedRectangle: zs,
+        buildRectangle: zs,
+        buildRoundedRectangle: Ys,
         buildLine: buildLine,
         ArcUtils: Ks,
         BezierUtils: Xs,
@@ -55420,7 +55417,7 @@ var _a, EANumberDrawBox = function(i) {
         this._textureUpdateId = -1,
         this._updateID = 0
     }
-    var Ya, za = new me, Ka = new Se, Xa = (__extends$9(Mesh, Ya = Ui),
+    var za, Ya = new me, Ka = new Se, Xa = (__extends$9(Mesh, za = Ui),
     Object.defineProperty(Mesh.prototype, "geometry", {
         get: function() {
             return this._geometry
@@ -55569,7 +55566,7 @@ var _a, EANumberDrawBox = function(i) {
     Mesh.prototype.containsPoint = function(t) {
         if (!this.getBounds().contains(t.x, t.y))
             return !1;
-        this.worldTransform.applyInverse(t, za);
+        this.worldTransform.applyInverse(t, Ya);
         for (var e = this.geometry.getBuffer("aVertexPosition").data, i = Ka.points, r = this.geometry.getIndex().data, n = r.length, o = 4 === this.drawMode ? 3 : 1, s = 0; s + 2 < n; s += o) {
             var a = 2 * r[s]
               , l = 2 * r[s + 1]
@@ -55580,14 +55577,14 @@ var _a, EANumberDrawBox = function(i) {
             i[3] = e[1 + l],
             i[4] = e[c],
             i[5] = e[1 + c],
-            Ka.contains(za.x, za.y))
+            Ka.contains(Ya.x, Ya.y))
                 return !0
         }
         return !1
     }
     ,
     Mesh.prototype.destroy = function(t) {
-        Ya.prototype.destroy.call(this, t),
+        za.prototype.destroy.call(this, t),
         this._cachedTexture && (this._cachedTexture.destroy(),
         this._cachedTexture = null),
         this.geometry = null,
@@ -55602,7 +55599,7 @@ var _a, EANumberDrawBox = function(i) {
     Mesh);
     function Mesh(t, e, i, r) {
         void 0 === r && (r = rt.DRAW_MODES.TRIANGLES);
-        var n = Ya.call(this) || this;
+        var n = za.call(this) || this;
         return n.geometry = t,
         n.shader = e,
         n.state = i || gn.for2d(),
@@ -56298,29 +56295,29 @@ var _a, EANumberDrawBox = function(i) {
         for (g = 0; g < U; g++) {
             var G, k = (G = n[g]).position.x + I[G.line] * ("justify" === this._align ? G.prevSpaces : 1);
             this._roundPixels && (k = Math.round(k));
-            var j, H = k * i, q = G.position.y * i, Y = A[(j = G.texture).baseTexture.uid], z = j.frame, K = j._uvs, X = Y.index++;
-            Y.indices[6 * X + 0] = 0 + 4 * X,
-            Y.indices[6 * X + 1] = 1 + 4 * X,
-            Y.indices[6 * X + 2] = 2 + 4 * X,
-            Y.indices[6 * X + 3] = 0 + 4 * X,
-            Y.indices[6 * X + 4] = 2 + 4 * X,
-            Y.indices[6 * X + 5] = 3 + 4 * X,
-            Y.vertices[8 * X + 0] = H,
-            Y.vertices[8 * X + 1] = q,
-            Y.vertices[8 * X + 2] = H + z.width * i,
-            Y.vertices[8 * X + 3] = q,
-            Y.vertices[8 * X + 4] = H + z.width * i,
-            Y.vertices[8 * X + 5] = q + z.height * i,
-            Y.vertices[8 * X + 6] = H,
-            Y.vertices[8 * X + 7] = q + z.height * i,
-            Y.uvs[8 * X + 0] = K.x0,
-            Y.uvs[8 * X + 1] = K.y0,
-            Y.uvs[8 * X + 2] = K.x1,
-            Y.uvs[8 * X + 3] = K.y1,
-            Y.uvs[8 * X + 4] = K.x2,
-            Y.uvs[8 * X + 5] = K.y2,
-            Y.uvs[8 * X + 6] = K.x3,
-            Y.uvs[8 * X + 7] = K.y3
+            var j, H = k * i, q = G.position.y * i, z = A[(j = G.texture).baseTexture.uid], Y = j.frame, K = j._uvs, X = z.index++;
+            z.indices[6 * X + 0] = 0 + 4 * X,
+            z.indices[6 * X + 1] = 1 + 4 * X,
+            z.indices[6 * X + 2] = 2 + 4 * X,
+            z.indices[6 * X + 3] = 0 + 4 * X,
+            z.indices[6 * X + 4] = 2 + 4 * X,
+            z.indices[6 * X + 5] = 3 + 4 * X,
+            z.vertices[8 * X + 0] = H,
+            z.vertices[8 * X + 1] = q,
+            z.vertices[8 * X + 2] = H + Y.width * i,
+            z.vertices[8 * X + 3] = q,
+            z.vertices[8 * X + 4] = H + Y.width * i,
+            z.vertices[8 * X + 5] = q + Y.height * i,
+            z.vertices[8 * X + 6] = H,
+            z.vertices[8 * X + 7] = q + Y.height * i,
+            z.uvs[8 * X + 0] = K.x0,
+            z.uvs[8 * X + 1] = K.y0,
+            z.uvs[8 * X + 2] = K.x1,
+            z.uvs[8 * X + 3] = K.y1,
+            z.uvs[8 * X + 4] = K.x2,
+            z.uvs[8 * X + 5] = K.y2,
+            z.uvs[8 * X + 6] = K.x3,
+            z.uvs[8 * X + 7] = K.y3
         }
         for (var g in this._textWidth = h * i,
         this._textHeight = (r.y + e.lineHeight) * i,
@@ -56669,7 +56666,7 @@ var _a, EANumberDrawBox = function(i) {
         new __)
     }
     var fl = "\n    attribute vec2 aVertexPosition;\n\n    uniform mat3 projectionMatrix;\n\n    uniform float strength;\n\n    varying vec2 vBlurTexCoords[%size%];\n\n    uniform vec4 inputSize;\n    uniform vec4 outputFrame;\n\n    vec4 filterVertexPosition( void )\n    {\n        vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;\n\n        return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);\n    }\n\n    vec2 filterTextureCoord( void )\n    {\n        return aVertexPosition * (outputFrame.zw * inputSize.zw);\n    }\n\n    void main(void)\n    {\n        gl_Position = filterVertexPosition();\n\n        vec2 textureCoord = filterTextureCoord();\n        %blur%\n    }";
-    var ml, Tl, gl, vl, El, Sl, bl, Il, Cl, Ul, Al, wl, Ol, Rl, Pl, Dl, Ll, Nl, xl, Ml, Vl, Bl, Fl, Gl, kl, jl, Hl, ql, Yl, zl, Kl, Xl, Wl, Jl, Ql, Zl, $l, tc, ec = {
+    var ml, Tl, gl, vl, El, Sl, bl, Il, Cl, Ul, Al, wl, Ol, Rl, Pl, Dl, Ll, Nl, xl, Ml, Vl, Bl, Fl, Gl, kl, jl, Hl, ql, zl, Yl, Kl, Xl, Wl, Jl, Ql, Zl, $l, tc, ec = {
         5: [.153388, .221461, .250301],
         7: [.071303, .131514, .189879, .214607],
         9: [.028532, .067234, .124009, .179044, .20236],
@@ -56788,8 +56785,8 @@ var _a, EANumberDrawBox = function(i) {
     ql[ql.BLEND = 0] = "BLEND",
     ql[ql.CLEAR = 1] = "CLEAR",
     ql[ql.BLIT = 2] = "BLIT",
-    (zl = Yl = Yl || {})[zl.AUTO = 0] = "AUTO",
-    zl[zl.MANUAL = 1] = "MANUAL",
+    (Yl = zl = zl || {})[Yl.AUTO = 0] = "AUTO",
+    Yl[Yl.MANUAL = 1] = "MANUAL",
     (Xl = Kl = Kl || {}).LOW = "lowp",
     Xl.MEDIUM = "mediump",
     Xl.HIGH = "highp",
@@ -57283,7 +57280,7 @@ var _a, EANumberDrawBox = function(i) {
         }
         )(t, e)
     };
-    var mc, Tc, gc, vc, Ec, Sc, bc, Ic, Cc, Uc, Ac, wc, Oc, Rc, Pc, Dc, Lc, Nc, xc, Mc, Vc, Bc, Fc, Gc, kc, jc, Hc, qc, Yc, zc, Kc, Xc, Wc, Jc, Qc, Zc, $c, tu, eu, iu = (function __extends$2(t, e) {
+    var mc, Tc, gc, vc, Ec, Sc, bc, Ic, Cc, Uc, Ac, wc, Oc, Rc, Pc, Dc, Lc, Nc, xc, Mc, Vc, Bc, Fc, Gc, kc, jc, Hc, qc, zc, Yc, Kc, Xc, Wc, Jc, Qc, Zc, $c, tu, eu, iu = (function __extends$2(t, e) {
         function __() {
             this.constructor = t
         }
@@ -57428,13 +57425,13 @@ var _a, EANumberDrawBox = function(i) {
     Hc[Hc.PREMULTIPLY_ON_UPLOAD = 1] = "PREMULTIPLY_ON_UPLOAD",
     Hc[Hc.PREMULTIPLY_ALPHA = 2] = "PREMULTIPLY_ALPHA",
     Hc[Hc.PREMULTIPLIED_ALPHA = 2] = "PREMULTIPLIED_ALPHA",
-    (Yc = qc = qc || {})[Yc.NO = 0] = "NO",
-    Yc[Yc.YES = 1] = "YES",
-    Yc[Yc.AUTO = 2] = "AUTO",
-    Yc[Yc.BLEND = 0] = "BLEND",
-    Yc[Yc.CLEAR = 1] = "CLEAR",
-    Yc[Yc.BLIT = 2] = "BLIT",
-    (Kc = zc = zc || {})[Kc.AUTO = 0] = "AUTO",
+    (zc = qc = qc || {})[zc.NO = 0] = "NO",
+    zc[zc.YES = 1] = "YES",
+    zc[zc.AUTO = 2] = "AUTO",
+    zc[zc.BLEND = 0] = "BLEND",
+    zc[zc.CLEAR = 1] = "CLEAR",
+    zc[zc.BLIT = 2] = "BLIT",
+    (Kc = Yc = Yc || {})[Kc.AUTO = 0] = "AUTO",
     Kc[Kc.MANUAL = 1] = "MANUAL",
     (Wc = Xc = Xc || {}).LOW = "lowp",
     Wc.MEDIUM = "mediump",
@@ -58305,7 +58302,7 @@ var _a, EANumberDrawBox = function(i) {
     rt.BitmapFontData = tl,
     rt.BitmapFontLoader = pl,
     rt.BitmapText = ul,
-    rt.BlobResource = Yo,
+    rt.BlobResource = zo,
     rt.Bounds = xe,
     rt.Buffer = Pr,
     rt.BufferResource = Xi,
@@ -58326,19 +58323,19 @@ var _a, EANumberDrawBox = function(i) {
     rt.FillStyle = ks,
     rt.Filter = En,
     rt.FilterState = Hr,
-    rt.FilterSystem = zr,
+    rt.FilterSystem = Yr,
     rt.Framebuffer = gr,
     rt.FramebufferSystem = $r,
     rt.GLFramebuffer = Qr,
     rt.GLProgram = Fn,
-    rt.GLTexture = Yn,
+    rt.GLTexture = zn,
     rt.GRAPHICS_CURVES = Gs,
     rt.Geometry = Mr,
     rt.GeometrySystem = en,
     rt.Graphics = pa,
     rt.GraphicsData = ea,
     rt.GraphicsGeometry = oa,
-    rt.IGLUniformData = Bec,
+    rt.IGLUniformData = Eec,
     rt.INSTALLED = Hi,
     rt.INTERNAL_FORMAT_TO_BYTES_PER_PIXEL = jo,
     rt.ImageBitmapResource = yr,
@@ -58377,7 +58374,7 @@ var _a, EANumberDrawBox = function(i) {
     rt.RenderTexturePool = wr,
     rt.RenderTextureSystem = Mn,
     rt.Renderer = to,
-    rt.Resource = zi,
+    rt.Resource = Yi,
     rt.RopeGeometry = cu,
     rt.RoundedRectangle = be,
     rt.Runner = ji,
@@ -58406,7 +58403,7 @@ var _a, EANumberDrawBox = function(i) {
     rt.TextureGCSystem = qn,
     rt.TextureLoader = Bo,
     rt.TextureMatrix = bn,
-    rt.TextureSystem = zn,
+    rt.TextureSystem = Yn,
     rt.TextureUvs = Sr,
     rt.Ticker = Pi,
     rt.TickerPlugin = Di,
@@ -60277,7 +60274,7 @@ var UTSendToSquadViewController = function(i) {
     }
     ,
     UTSendToSquadViewController.prototype.eAddSwap = function(t, o) {
-        function J2d(t, e) {
+        function M2d(t, e) {
             var i;
             t.unobserve(s),
             e.success ? s.defaultedToActiveSquad ? services.Notification.queue([a.localize("notification.item.toActiveSquad"), UINotificationType.NEUTRAL]) : (TelemetryManager.trackEvent(TelemetryManager.Sections.SQUADS, TelemetryManager.Categories.BUTTON_PRESS, "Squad Slot Detail View - Sent to Current Squad"),
@@ -60296,14 +60293,14 @@ var UTSendToSquadViewController = function(i) {
                         var i, r, n;
                         t.unobserve(s),
                         e.success && s.pinnedItem ? (u = null !== (r = null === (i = s.squad) || void 0 === i ? void 0 : i.addItemToSlot(o, s.pinnedItem)) && void 0 !== r ? r : null,
-                        null === (n = s.squad) || void 0 === n || n.save().observe(s, J2d)) : (services.Notification.queue(c),
+                        null === (n = s.squad) || void 0 === n || n.save().observe(s, M2d)) : (services.Notification.queue(c),
                         NetworkErrorManager.handleStatus(e.status),
                         null == l || l.popViewController())
                     });
                 else {
                     var _ = null === (r = this.squad) || void 0 === r ? void 0 : r.addItemToSlot(o, this.pinnedItem);
                     u = _ || null,
-                    null === (n = this.squad) || void 0 === n || n.save().observe(this, J2d)
+                    null === (n = this.squad) || void 0 === n || n.save().observe(this, M2d)
                 }
         } else
             utils.PopupManager.showAlert(utils.PopupManager.Alerts.DUPLICATE_ITEM),

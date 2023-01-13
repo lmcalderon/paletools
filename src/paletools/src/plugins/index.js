@@ -40,6 +40,7 @@ import keyListener from "./keyListener";
 import importantLeagues from "./importantLeagues";
 import experimental from "./experimental";
 import refreshCoins from "./refreshCoins";
+import externalMarketPrices from "./externalMarketPrices";
 
 const plugins = [
     minMaxPrices,
@@ -82,7 +83,8 @@ const plugins = [
     keyListener,
     importantLeagues,
     experimental,
-    refreshCoins
+    refreshCoins,
+    externalMarketPrices
 ].filter(x => x);
 
 const menus = [];

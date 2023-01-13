@@ -454,7 +454,6 @@ var __extends = this && this.__extends || function() {
             return SearchCategoryGroup.CLUB;
         case SearchCategory.VANITY_STADIUM_BASE_PITCH_PROP:
             return SearchCategoryGroup.TROPHIES;
-        case SearchCategory.VANITY_TIFO_ANIMATED:
         case SearchCategory.VANITY_TIFO_BASE:
         case SearchCategory.VANITY_TIFO_BIG:
         case SearchCategory.VANITY_TIFO_MOVING:
@@ -3887,16 +3886,16 @@ var UTDefaultActionPanelView = function(t) {
         this._comparePriceButton.setDisplay(!UTItemEntity.isStoryMode(e.definitionId) && e.isValid() && _ && !T);
         var m = e.getAuctionData()
           , g = e.lastSalePrice
-          , v = m.startingBid
-          , w = m.currentBid
+          , w = m.startingBid
+          , v = m.currentBid
           , y = e.isConsumable() && t && !t.isDream() && e.isValid();
         this._applyConsumableButton.setDisplay(y || e.pile === ItemPile.CLUB && (e.isPlayer() || e.isManager())),
         o ? this._sendToSquadButton.setText(services.Localization.localize("infopanel.button.sendtosquad")) : t.isSBC() ? this._sendToSquadButton.setText(services.Localization.localize("infopanel.button.sendtosbc")) : this._sendToSquadButton.setText(services.Localization.localize("infopanel.button.sendtocurrentsquad")),
         this._sendToSquadButton.setDisplay(t && !t.isSBC() && !l && !d && (e.isPlayer() || e.isManager()) && !t.containsItem(e, !0));
         var C = !0;
-        m && 0 < w && e.isValid() ? (this.__textInfo.textContent = services.Localization.localize("infopanel.label.congratulations"),
-        this.__valueInfo.textContent = services.Localization.localizeNumber(w)) : m.isExpired() ? (this.__textInfo.textContent = services.Localization.localize("infopanel.label.lastListedPrice"),
-        this.__valueInfo.textContent = services.Localization.localizeNumber(v)) : 0 < g && e.isValid() ? (this.__textInfo.textContent = services.Localization.localize("infopanel.label.prevBoughtPrice"),
+        m && 0 < v && e.isValid() ? (this.__textInfo.textContent = services.Localization.localize("infopanel.label.congratulations"),
+        this.__valueInfo.textContent = services.Localization.localizeNumber(v)) : m.isExpired() ? (this.__textInfo.textContent = services.Localization.localize("infopanel.label.lastListedPrice"),
+        this.__valueInfo.textContent = services.Localization.localizeNumber(w)) : 0 < g && e.isValid() ? (this.__textInfo.textContent = services.Localization.localize("infopanel.label.prevBoughtPrice"),
         this.__valueInfo.textContent = services.Localization.localizeNumber(g)) : C = !1,
         DOMKit.toggleDisplayStyle(this.__auctionInfo, C);
         var S = e.isManager() ? "infopanel.label.managerInActiveSquad" : "infopanel.label.inActiveSquad"
@@ -4299,7 +4298,8 @@ var UTTransferActionPanelView = function(t) {
         this._playerBioButton.addTarget(this, this.playerBioCallback, EventType.TAP),
         this.__headerTimeRemaining.textContent = e.localize("auctioninfo.timeremaining"),
         this.__headerCurrentBuyNow.textContent = e.localize("auctioninfo.buynowprice"),
-        this.__strTradeStatus.textContent = e.localize("auctioninfo.currentlylisted")
+        this.__strTradeStatus.textContent = e.localize("auctioninfo.currentlylisted"),
+        this.__headerBoughtFor.textContent = e.localize("auctioninfo.boughtfor")
     }
     ,
     UTTransferActionPanelView.prototype.dealloc = function() {
@@ -4329,6 +4329,10 @@ var UTTransferActionPanelView = function(t) {
         this.__txtBidValue.textContent = i.localizeNumber(t ? e.currentBid : e.startingBid)
     }
     ,
+    UTTransferActionPanelView.prototype.setBoughtForText = function(e) {
+        this.__txtBoughtForValue.textContent = 0 < e ? services.Localization.localizeNumber(e) : BLANK_STR
+    }
+    ,
     UTTransferActionPanelView.prototype.render = function(e) {
         var t = e.getAuctionData();
         this.toggleRemove(t.isClosedTrade()),
@@ -4336,6 +4340,7 @@ var UTTransferActionPanelView = function(t) {
         DOMKit.toggleDisplayStyle(this.__strTradeStatus, !t.isClosedTrade()),
         this.setCurrentBidText(t),
         this.setBuyNowText(t.buyNowPrice),
+        this.setBoughtForText(e.lastSalePrice),
         this.onTimedUpdate(t)
     }
     ,
@@ -4368,6 +4373,7 @@ UTTransferActionPanelView.prototype._generate = function _generate() {
         var t = document.createElement("div");
         t.classList.add("ut-item-details--metadata"),
         this.__activeTrade = document.createElement("div"),
+        this.__activeTrade.classList.add("transferPanel"),
         this.__activeTrade.classList.add("auctionInfo");
         var i = document.createElement("div");
         i.classList.add("column"),
@@ -4397,7 +4403,17 @@ UTTransferActionPanelView.prototype._generate = function _generate() {
         this.__txtBuyValue.classList.add("currency-coins"),
         this.__txtBuyValue.classList.add("subContent"),
         n.appendChild(this.__txtBuyValue),
-        this.__activeTrade.appendChild(n),
+        this.__activeTrade.appendChild(n);
+        var r = document.createElement("div");
+        r.classList.add("column"),
+        this.__headerBoughtFor = document.createElement("span"),
+        this.__headerBoughtFor.classList.add("subHeading"),
+        r.appendChild(this.__headerBoughtFor),
+        this.__txtBoughtForValue = document.createElement("span"),
+        this.__txtBoughtForValue.classList.add("currency-coins"),
+        this.__txtBoughtForValue.classList.add("subContent"),
+        r.appendChild(this.__txtBoughtForValue),
+        this.__activeTrade.appendChild(r),
         t.appendChild(this.__activeTrade),
         e.appendChild(t),
         this.__itemActions = document.createElement("div"),
@@ -4408,12 +4424,12 @@ UTTransferActionPanelView.prototype._generate = function _generate() {
         this._removeButton = new UTStandardButtonControl,
         this._removeButton.getRootElement().classList.add("call-to-action"),
         this.__itemActions.appendChild(this._removeButton.getRootElement());
-        var r = document.createElement("div");
-        r.classList.add("ut-button-group"),
+        var s = document.createElement("div");
+        s.classList.add("ut-button-group"),
         this._playerBioButton = new UTGroupButtonControl,
         this._playerBioButton.getRootElement().classList.add("more"),
-        r.appendChild(this._playerBioButton.getRootElement()),
-        this.__itemActions.appendChild(r),
+        s.appendChild(this._playerBioButton.getRootElement()),
+        this.__itemActions.appendChild(s),
         e.appendChild(this.__itemActions),
         this.__root = e,
         this._generated = !0
@@ -4430,6 +4446,8 @@ UTTransferActionPanelView.prototype.destroyGeneratedElements = function destroyG
     this.__txtBidValue = null,
     this.__headerCurrentBuyNow = null,
     this.__txtBuyValue = null,
+    this.__headerBoughtFor = null,
+    this.__txtBoughtForValue = null,
     this.__itemActions = null,
     this.__strTradeStatus = null,
     this._removeButton.destroy(),
@@ -5261,7 +5279,7 @@ var UTClubSearchResultsViewController = function(s) {
             this.selectedSubType && t.setIndexById(this.selectedSubType),
             t.addTarget(this, this.onDropDownChanged, EventType.CHANGE)
         }
-        function Hu() {
+        function Ju() {
             var e, t;
             i.setupHeader(),
             i.selectedItem && (null === (e = i.clubViewModel) || void 0 === e ? void 0 : e.canShowPage()) ? (i.validateCurrentItems(),
@@ -5279,8 +5297,8 @@ var UTClubSearchResultsViewController = function(s) {
         this.searchCriteria.type === SearchType.PLAYER || this.searchCriteria.type === SearchType.STAFF ? services.Squad.requestSquadByType("active").observe(this, function(e, t) {
             e.unobserve(i),
             t.success && t.data && t.data.squad && i.setActiveSquadData(t.data.squad),
-            Hu.call(i)
-        }) : Hu.call(this),
+            Ju.call(i)
+        }) : Ju.call(this),
         o.onSearch.observe(this, this.onSearch),
         o.addTarget(this, this.onTableCellSelected, enums.UIListEvent.ROW_SELECT),
         o.addTarget(this, this.onTableCellActionSelected, enums.UIListEvent.ROW_ACTION),
@@ -5914,10 +5932,10 @@ var UTTileView = function(i) {
     UTTileView.prototype.setContent = function(e) {
         var t = this;
         DOMKit.empty(this.__tileContent);
-        function Qx(e) {
+        function Sx(e) {
             e instanceof HTMLElement ? t.__tileContent.appendChild(e) : e instanceof UTView ? t.__tileContent.appendChild(e.getRootElement()) : t.__tileContent.textContent = e.toString()
         }
-        Array.isArray(e) ? e.forEach(Qx, this) : e && Qx.call(this, e)
+        Array.isArray(e) ? e.forEach(Sx, this) : e && Sx.call(this, e)
     }
     ,
     UTTileView.prototype.appendContent = function(e) {
@@ -6100,6 +6118,7 @@ UTLabelView.prototype._generate = function _generate() {
         var e = document.createElement("div");
         e.classList.add("ut-label-view"),
         this.__label = document.createElement("span"),
+        this.__label.classList.add("ut-label-view--label"),
         e.appendChild(this.__label),
         this.__root = e,
         this._generated = !0
@@ -6159,7 +6178,7 @@ var UTConsumablesHubView = function(t) {
     }
     ,
     UTConsumablesHubView.prototype.render = function(e) {
-        function Oy(e, t) {
+        function Qy(e, t) {
             var i = services.Localization
               , o = new UTLabelView;
             o.setAngle(UTLabelView.Angle.BOTTOM_RIGHT);
@@ -6170,11 +6189,11 @@ var UTConsumablesHubView = function(t) {
             e.setContent(o)
         }
         services.Localization;
-        Oy(this._contractsTile, e.contracts),
-        Oy(this._healingTile, e.healing),
-        Oy(this._managerLeagueTile, e.managerLeagueModifier),
-        Oy(this._chemistryTile, e.playStyle),
-        Oy(this._positioningTile, e.position)
+        Qy(this._contractsTile, e.contracts),
+        Qy(this._healingTile, e.healing),
+        Qy(this._managerLeagueTile, e.managerLeagueModifier),
+        Qy(this._chemistryTile, e.playStyle),
+        Qy(this._positioningTile, e.position)
     }
     ,
     UTConsumablesHubView.prototype.getContractsTile = function() {
@@ -7731,21 +7750,21 @@ function(t) {
     }
     ,
     UTImageListView.prototype.buildPlaceholderUrl = function() {
-        function kF(e, t) {
+        function mF(e, t) {
             return e.replace(/\d+\.png/, t + ".png")
         }
         var e = this._listImage.path;
         switch (this.itemType) {
         case ItemType.BADGE:
-            return 0 < e.length ? kF(e, UTItemEntity.DEFAULT_ASSET_ID) : AssetLocationUtils.getBadgeImageUri(UTItemEntity.DEFAULT_ASSET_ID, enums.UIThemeVariation.DARK);
+            return 0 < e.length ? mF(e, UTItemEntity.DEFAULT_ASSET_ID) : AssetLocationUtils.getBadgeImageUri(UTItemEntity.DEFAULT_ASSET_ID, enums.UIThemeVariation.DARK);
         case ItemType.BALL:
-            return 0 < e.length ? kF(e, UTItemEntity.DEFAULT_BALL_ASSET_ID) : AssetLocationUtils.getBallImageUri(UTItemEntity.DEFAULT_BALL_ASSET_ID);
+            return 0 < e.length ? mF(e, UTItemEntity.DEFAULT_BALL_ASSET_ID) : AssetLocationUtils.getBallImageUri(UTItemEntity.DEFAULT_BALL_ASSET_ID);
         case ItemType.KIT:
-            return 0 < e.length ? kF(e, UTItemEntity.DEFAULT_ASSET_ID) : AssetLocationUtils.getKitImageUri(KitType.HOME, UTItemEntity.DEFAULT_ASSET_ID);
+            return 0 < e.length ? mF(e, UTItemEntity.DEFAULT_ASSET_ID) : AssetLocationUtils.getKitImageUri(KitType.HOME, UTItemEntity.DEFAULT_ASSET_ID);
         case ItemType.STADIUM:
-            return 0 < e.length ? kF(e, UTItemEntity.DEFAULT_ASSET_ID) : AssetLocationUtils.getStadiumImageUri(UTItemEntity.DEFAULT_ASSET_ID);
+            return 0 < e.length ? mF(e, UTItemEntity.DEFAULT_ASSET_ID) : AssetLocationUtils.getStadiumImageUri(UTItemEntity.DEFAULT_ASSET_ID);
         case ItemType.VANITY:
-            return 0 < e.length ? kF(e, UTItemEntity.DEFAULT_ASSET_ID) : AssetLocationUtils.getVanityImageUri(ItemSubType.NONE, UTItemEntity.DEFAULT_ASSET_ID);
+            return 0 < e.length ? mF(e, UTItemEntity.DEFAULT_ASSET_ID) : AssetLocationUtils.getVanityImageUri(ItemSubType.NONE, UTItemEntity.DEFAULT_ASSET_ID);
         default:
             return DebugUtils.Assert(this.itemType === ItemType.NONE, "Unsupported item type: " + this.itemType),
             e
@@ -10017,11 +10036,11 @@ function(r) {
             this.filtersModal.onFilterSubmit.observe(this, this._onFilterSubmit);
             var i = this.getView();
             i.getTabMenu().addTarget(this, this.eTabSelected, EventType.TAP);
-            function aP() {
+            function cP() {
                 return e.presentViewController(e.filtersModal)
             }
-            i.getFilterButton().addTarget(this, aP, EventType.TAP),
-            i.getFloatingFilterButton().addTarget(this, aP, EventType.TAP)
+            i.getFilterButton().addTarget(this, cP, EventType.TAP),
+            i.getFloatingFilterButton().addTarget(this, cP, EventType.TAP)
         }
     }
     ,
@@ -10838,6 +10857,8 @@ var UTObjectiveEntryView = function(i) {
         this._rewardsInfoBtn.addTarget(this, this.onButtonSelected, EventType.TAP),
         this._rewardsInfoBtn.setInteractionState(!0),
         this._rewardsInfoBtn.setDisplay(!0),
+        this._tag.init(),
+        this._tag.setAngle(UTLabelView.Angle.BOTTOM_RIGHT),
         this.setInteractionState(!0)
     }
     ,
@@ -10887,6 +10908,11 @@ var UTObjectiveEntryView = function(i) {
     ,
     UTObjectiveEntryView.prototype.setRewards = function(e) {
         this.rewards = e
+    }
+    ,
+    UTObjectiveEntryView.prototype.setRewardsTag = function(e) {
+        this._tag.setLabel(e.toString()),
+        this._tag.toggleClass("empty", 0 === e)
     }
     ,
     UTObjectiveEntryView.prototype.renderRewardsFooter = function() {
@@ -11127,7 +11153,10 @@ UTObjectiveEntryView.prototype._generate = function _generate() {
         this.__additionalRewards.classList.add("ut-objective-entry-view--additional-rewards"),
         this.__actionAndSubrewards.appendChild(this.__additionalRewards),
         i.appendChild(this.__actionAndSubrewards),
-        e.appendChild(i);
+        e.appendChild(i),
+        this._tag = new UTLabelView,
+        this._tag.getRootElement().classList.add("ut-objective-entry-view--tag"),
+        e.appendChild(this._tag.getRootElement());
         var n = document.createElement("div");
         n.classList.add("ut-objective-entry-view--footer"),
         this._progressBar = new UTProgressBarView,
@@ -11158,6 +11187,7 @@ UTObjectiveEntryView.prototype.destroyGeneratedElements = function destroyGenera
     this._actionBtn.destroy(),
     this._rewardsFooter.destroy(),
     this.__additionalRewards = null,
+    this._tag.destroy(),
     this._progressBar.destroy(),
     this.__footerCountdown = null,
     this._rewardsInfoBtn.destroy()
@@ -11268,6 +11298,7 @@ var UTObjectiveCategoryView = function(t) {
         i.setId(t.compositeId),
         i.setTitle(t.title),
         i.setDescription(t.subtitle),
+        i.setRewardsTag(t.objectivesReadyToRedeem),
         i.setProgress(t.getProgress()),
         i.setProgressLabel(services.Localization.localize("scmp.group.objectivescompleted", [(t.getNumberOfCompletedObjectives() || 0).toString(), t.objectivesNumber.toString()])),
         t.isMilestone() ? i.toggleCountdown(!1) : t.hasExpired() ? i.setCountdown(services.Localization.localize("objectives.tile.expired")) : i.setCountdown(services.Localization.localize("scmp.group.countdown", [services.Localization.localizeTimeRemaining(t.getTimeRemaining())])),
@@ -11486,7 +11517,7 @@ var UTObjectiveCategoryViewController = function(o) {
     UTObjectiveCategoryViewController.prototype.onSCMPInfoPopupClosed = function(e, t, i) {
         var n = this;
         e.unobserve(this);
-        function vV(e, t) {
+        function yV(e, t) {
             var i;
             e.unobserve(n);
             var o = n.objectivesViewModel.getCurrentCategory();
@@ -11505,7 +11536,7 @@ var UTObjectiveCategoryViewController = function(o) {
                 o.setDescription(r.localize(0 < t.data.rewards.length ? "objective.rewards.claimAlldescription" : "objective.rewards.autoclaimed")),
                 o.setButtonText(r.localize("objective.rewards.claim")),
                 gPopupClickShield.setActivePopup(i),
-                n.objectivesViewModel.requestCategories().observe(n, vV)
+                n.objectivesViewModel.requestCategories().observe(n, yV)
             }
         })
     }
@@ -12320,7 +12351,7 @@ var TierViewState, UTObjectiveGroupViewController = function(o) {
             var e = this.objectivesViewModel.getCampaign()
               , t = this.objectivesViewModel.getCurrentGroup();
             !t || t.isMilestone() || t.hasExpired() || this.getView().updateGroupProgressionTimeRemaining(t.getTimeRemaining());
-            function c$(e) {
+            function f$(e) {
                 i.intervalController.stop();
                 var t = new UTSeasonalCampaignPopupViewController(e);
                 t.onExit.observe(i, i.onSCMPInfoPopupClosed),
@@ -12328,9 +12359,9 @@ var TierViewState, UTObjectiveGroupViewController = function(o) {
                 gPopupClickShield.setActivePopup(t)
             }
             if (e && e.hasEnded() && (e.hasNextCampaignStarted() || e.isLastCampaign()))
-                c$(e.hasUnclaimedRewards() || this.objectivesViewModel.hasUnclaimedGroupRewards() ? "season-rewards" : "season-campaign");
+                f$(e.hasUnclaimedRewards() || this.objectivesViewModel.hasUnclaimedGroupRewards() ? "season-rewards" : "season-campaign");
             else
-                this.objectivesViewModel.hasUnclaimedExpiredGroups() && c$("group-rewards")
+                this.objectivesViewModel.hasUnclaimedExpiredGroups() && f$("group-rewards")
         }
     }
     ,
@@ -15788,7 +15819,7 @@ var UTObjectivesHubViewController = function(o) {
     }
     ,
     UTObjectivesHubViewController.prototype.loadData = function() {
-        function Tea(e, t) {
+        function Wea(e, t) {
             var i;
             e.unobserve(n),
             t.success ? (n.setupFilterTabs(),
@@ -15797,7 +15828,7 @@ var UTObjectivesHubViewController = function(o) {
             n.intervalController.start()) : (services.Notification.queue([services.Localization.localize("notification.scmp.categories.loadFailed"), UINotificationType.NEGATIVE]),
             null === (i = n.getNavigationController()) || void 0 === i || i.popViewController())
         }
-        function Uea(e, t) {
+        function Xea(e, t) {
             e.unobserve(n);
             var o = services.Localization;
             t.success ? t.success && JSUtils.isObject(t.data) && (n.objectivesViewModel && t.data.needsAutoClaim && n.objectivesViewModel.claimExpiredWorldRewards().observe(n, function(e, t) {
@@ -15813,14 +15844,14 @@ var UTObjectivesHubViewController = function(o) {
             }),
             !t.data.campaign && n.objectivesViewModel && n.objectivesViewModel.currentCategoryId === UTObjectivesViewModel.TabId.WORLD && (n.objectivesViewModel.currentCategoryId = UTObjectivesViewModel.TabId.SEASON)) : services.Notification.queue([o.localize("notification.wcmp.loadfail"), UINotificationType.NEGATIVE]),
             DebugUtils.Assert(JSUtils.isValid(n.objectivesViewModel), "Missing objectives view model when loading view data."),
-            n.objectivesViewModel && n.objectivesViewModel.requestCategories().observe(n, Tea)
+            n.objectivesViewModel && n.objectivesViewModel.requestCategories().observe(n, Wea)
         }
         var n = this;
         this.objectivesViewModel && this.objectivesViewModel.requestActiveCampaignDetails().observe(this, function(e, t) {
             var i;
             e.unobserve(n),
             DebugUtils.Assert(JSUtils.isValid(n.objectivesViewModel), "Missing objectives view model when loading view data."),
-            t.success && n.objectivesViewModel ? n.objectivesViewModel.requestActiveWorldCampaign().observe(n, Uea) : t.success || (services.Notification.queue([services.Localization.localize("notification.scmp.campaign.loadFailed"), UINotificationType.NEGATIVE]),
+            t.success && n.objectivesViewModel ? n.objectivesViewModel.requestActiveWorldCampaign().observe(n, Xea) : t.success || (services.Notification.queue([services.Localization.localize("notification.scmp.campaign.loadFailed"), UINotificationType.NEGATIVE]),
             null === (i = n.getNavigationController()) || void 0 === i || i.popViewController())
         })
     }
@@ -18109,7 +18140,7 @@ var UTTacticsPositionAdjustmentView = function(i) {
         }
         ),
         u)) {
-            function zqa() {
+            function Cqa() {
                 n.removeClass("empty"),
                 n.setItemView(c),
                 r.setItemView(l),
@@ -18118,7 +18149,7 @@ var UTTacticsPositionAdjustmentView = function(i) {
                     swapTo: t
                 })
             }
-            d ? zqa() : (n.addClass("noBackground"),
+            d ? Cqa() : (n.addClass("noBackground"),
             u.animate(_, {
                 duration: this.animationDuration
             }).onfinish = function(e) {
@@ -18126,7 +18157,7 @@ var UTTacticsPositionAdjustmentView = function(i) {
                 u.style.removeProperty("left"),
                 u.style.removeProperty("top"),
                 n.removeClass("noBackground"),
-                zqa()
+                Cqa()
             }
             )
         }
@@ -18620,7 +18651,7 @@ var UTTacticsFormationSelectViewController = function(a) {
         var r = this;
         if (DebugUtils.Assert(JSUtils.isValid(this.tacticsViewModel), "Missing tactics view model. Unable to change mentality formation."),
         this.tacticsViewModel) {
-            function Wsa() {
+            function Zsa() {
                 var e = repositories.Squad.getFormation(i.value);
                 DebugUtils.Assert(JSUtils.isValid(e), "Could not find formation with name: " + i.value),
                 e && (null == s || s.setFormation(e))
@@ -18630,7 +18661,7 @@ var UTTacticsFormationSelectViewController = function(a) {
               , n = JSUtils.isString(o) && "true" === o.toLowerCase()
               , a = "true" === services.UserSettings.getItem(UserSettingsKey.TACTICS_FORMATION_MESSAGE_DISPLAYED, "false").toLowerCase();
             if ((null == s ? void 0 : s.getId()) !== SquadMentalityType.BALANCED || n || a)
-                Wsa();
+                Zsa();
             else {
                 var l = new UTTacticsFormationPopupViewController;
                 l.modalDisplayStyle = "form",
@@ -18641,7 +18672,7 @@ var UTTacticsFormationSelectViewController = function(a) {
                     if (e.unobserve(r),
                     r.dismissViewController(),
                     t === enums.UIDialogOptions.OK)
-                        Wsa();
+                        Zsa();
                     else {
                         var n = r.getView();
                         n.removeTarget(r, r.onChangeFormation, UTTacticsFormationSelectView.Event.FORMATION_CHANGE),
@@ -22522,7 +22553,7 @@ var UTSquadActionsViewController = function(i) {
     }
     ,
     UTSquadActionsViewController.prototype._onMakeActive = function() {
-        function yJa(e, t) {
+        function BJa(e, t) {
             e.unobserve(i),
             t.success ? (i.onDataChange.notify(),
             i._setViewButtonStates(),
@@ -22537,10 +22568,10 @@ var UTSquadActionsViewController = function(i) {
                 var n = this._squad;
                 n.save().observe(this, function(e, t) {
                     e.unobserve(i),
-                    t.success ? services.Squad.setActiveSquad(n.getId()).observe(i, yJa) : services.Notification.queue([o.localize("popup.error.activesquad.SaveFailed"), UINotificationType.NEGATIVE])
+                    t.success ? services.Squad.setActiveSquad(n.getId()).observe(i, BJa) : services.Notification.queue([o.localize("popup.error.activesquad.SaveFailed"), UINotificationType.NEGATIVE])
                 })
             } else
-                services.Squad.setActiveSquad(this._squad.getId()).observe(this, yJa)
+                services.Squad.setActiveSquad(this._squad.getId()).observe(this, BJa)
     }
     ,
     UTSquadActionsViewController.prototype._onSquadBuilder = function() {
@@ -22683,7 +22714,7 @@ var UTSquadActionsViewController = function(i) {
     }
     ,
     UTSquadActionsViewController.prototype._onOpen = function() {
-        function HKa() {
+        function KKa() {
             var e = o.getNavigationController();
             if (e) {
                 var t = isPhone() ? new UTSquadOverviewViewController : new UTSquadSplitViewController;
@@ -22693,13 +22724,13 @@ var UTSquadActionsViewController = function(i) {
         }
         var o = this
           , n = this.getView();
-        this._squad && (this._squad.isSquadLoaded() ? HKa() : (n.setInteractionState(!1),
+        this._squad && (this._squad.isSquadLoaded() ? KKa() : (n.setInteractionState(!1),
         services.Squad.requestSquadById(this._squad.getId()).observe(this, function(e, t) {
             var i;
             e.unobserve(o),
             t.success && (null === (i = t.data) || void 0 === i ? void 0 : i.squad) && (o._squad = t.data.squad),
             n.setInteractionState(!0),
-            HKa()
+            KKa()
         })))
     }
     ,
@@ -22708,19 +22739,19 @@ var UTSquadActionsViewController = function(i) {
           , n = this._squad;
         if (DebugUtils.Assert(JSUtils.isValid(n), "Missing squad entity when changing formation."),
         n) {
-            function TKa() {
+            function WKa() {
                 var e = o._formations[i.index].value.toString()
                   , t = repositories.Squad.getFormation(e);
                 t && n.setFormation(t),
                 o._inSquadContext || o.onDataChange.notify()
             }
             var r = this.getView();
-            this._inSquadContext || n.isSquadLoaded() ? TKa() : (r.setInteractionState(!1),
+            this._inSquadContext || n.isSquadLoaded() ? WKa() : (r.setInteractionState(!1),
             services.Squad.requestSquadById(n.getId()).observe(this, function(e, t) {
                 var i;
                 e.unobserve(o),
                 t.success && (null === (i = t.data) || void 0 === i ? void 0 : i.squad) && (o.setSquad(t.data.squad),
-                TKa(),
+                WKa(),
                 r.toggleClearState(!n.isSquadEmpty())),
                 r.setInteractionState(!0)
             }))
@@ -22728,7 +22759,7 @@ var UTSquadActionsViewController = function(i) {
     }
     ,
     UTSquadActionsViewController.prototype._eTacticsSelected = function(e, t, i) {
-        function bLa() {
+        function eLa() {
             var e = isPhone() ? new UTTacticsMentalityMenuViewController : new UTTacticsSplitViewController
               , t = new UTSquadTacticsViewModel(services.Squad)
               , i = services.UserSettings.getSessionItem(UserSettingsKey.SAVE_TACTICS_MESSAGE_DISPLAYED);
@@ -22742,7 +22773,7 @@ var UTSquadActionsViewController = function(i) {
         if (TelemetryManager.trackEvent(TelemetryManager.Sections.SQUADS, TelemetryManager.Categories.BUTTON_PRESS, "Squads - Modify Tactics"),
         this._squad)
             if (this._squad.isSquadLoaded())
-                bLa.call(this);
+                eLa.call(this);
             else {
                 var n = this.getView();
                 n.setInteractionState(!1),
@@ -22751,13 +22782,13 @@ var UTSquadActionsViewController = function(i) {
                     e.unobserve(o),
                     t.success && (null === (i = t.data) || void 0 === i ? void 0 : i.squad) && (o._squad = t.data.squad),
                     n.setInteractionState(!0),
-                    bLa.call(o)
+                    eLa.call(o)
                 })
             }
     }
     ,
     UTSquadActionsViewController.prototype._eSquadUpdate = function(e, o) {
-        function oLa() {
+        function rLa() {
             var e, t;
             if (o.slots && n.isViewDisplayed()) {
                 var i = null !== (t = null === (e = n._squad) || void 0 === e ? void 0 : e.isSquadEmpty()) && void 0 !== t && t;
@@ -22767,11 +22798,11 @@ var UTSquadActionsViewController = function(i) {
         var t, n = this, r = this.getView();
         if (o)
             if (this._inSquadContext)
-                oLa(),
+                rLa(),
                 r.setCurrentFormation(this._getFormationDPIndex());
             else if (this._squad) {
                 var i = this._squad;
-                (o.chemistry && o.chemistry !== i.getChemistry() || o.rating && o.rating !== i.getRating() || o.type && o.type !== i.getType() || o.formation && o.formation.id !== (null === (t = i.getFormation()) || void 0 === t ? void 0 : t.id) || o.name && o.name !== i.getName()) && (oLa(),
+                (o.chemistry && o.chemistry !== i.getChemistry() || o.rating && o.rating !== i.getRating() || o.type && o.type !== i.getType() || o.formation && o.formation.id !== (null === (t = i.getFormation()) || void 0 === t ? void 0 : t.id) || o.name && o.name !== i.getName()) && (rLa(),
                 this.onDataChange.notify())
             }
     }
@@ -24084,16 +24115,16 @@ var UTSquadOverviewView = function(s) {
     }
     ,
     UTSquadOverviewView.prototype.onDragMove = function(e) {
-        function eSa(e, t) {
+        function hSa(e, t) {
             return !!t && (e.clientY >= t.top && e.clientY <= t.bottom && e.clientX >= t.left && e.clientX <= t.right)
         }
-        function iSa() {
+        function lSa() {
             var e, t, i, o, n;
             r.leftTabClientRect = null !== (t = null === (e = r.leftTab) || void 0 === e ? void 0 : e.getBoundingClientRect()) && void 0 !== t ? t : null,
             r.leftDockClientRect = null !== (o = null === (i = r.leftDock) || void 0 === i ? void 0 : i.getBoundingClientRect()) && void 0 !== o ? o : null,
             null === (n = r.utilDragDrop) || void 0 === n || n.updateCollisionData()
         }
-        function jSa() {
+        function mSa() {
             var e, t, i, o, n;
             r.rightTabClientRect = null !== (t = null === (e = r.rightTab) || void 0 === e ? void 0 : e.getBoundingClientRect()) && void 0 !== t ? t : null,
             r.rightDockClientRect = null !== (o = null === (i = r.rightDock) || void 0 === i ? void 0 : i.getBoundingClientRect()) && void 0 !== o ? o : null,
@@ -24110,10 +24141,10 @@ var UTSquadOverviewView = function(s) {
             }())
         }
         .call(this) ? this.leftDockClientRect && (null === (t = this.leftDock) || void 0 === t ? void 0 : t.isVisible) && !this.leftDock.isAnimating && o.clientY < this.leftDockClientRect.top ? this.closeLeftDock(function() {
-            return iSa()
+            return lSa()
         }) : this.rightDockClientRect && (null === (i = this.rightDock) || void 0 === i ? void 0 : i.isVisible) && !this.rightDock.isAnimating && o.clientY < this.rightDockClientRect.top && this.closeRightDock(function() {
-            return jSa()
-        }) : this.leftDock && eSa(o, this.leftTabClientRect) ? this.openLeftDock(iSa) : this.rightDock && eSa(o, this.rightTabClientRect) && this.openRightDock(jSa)
+            return mSa()
+        }) : this.leftDock && hSa(o, this.leftTabClientRect) ? this.openLeftDock(lSa) : this.rightDock && hSa(o, this.rightTabClientRect) && this.openRightDock(mSa)
     }
     ,
     UTSquadOverviewView.prototype.onDroppable = function(e) {
@@ -24180,7 +24211,7 @@ var UTSquadOverviewView = function(s) {
         }
         ),
         u)) {
-            function fTa() {
+            function iTa() {
                 n.removeClass("empty"),
                 n.setItemView(c),
                 r.setItemView(l),
@@ -24189,7 +24220,7 @@ var UTSquadOverviewView = function(s) {
                     swapTo: t
                 })
             }
-            d ? fTa() : (n.addClass("noBackground"),
+            d ? iTa() : (n.addClass("noBackground"),
             u.animate(_, {
                 duration: this.animationDuration
             }).onfinish = function(e) {
@@ -24197,7 +24228,7 @@ var UTSquadOverviewView = function(s) {
                 u.style.removeProperty("left"),
                 u.style.removeProperty("top"),
                 n.removeClass("noBackground"),
-                fTa()
+                iTa()
             }
             )
         }
@@ -28503,7 +28534,7 @@ function(t) {
         this.toggleClass("obtained", e === TierViewState.OBTAINED))
     }
     ,
-    UTSquadBattlesTierView.prototype.setProgress = function(e) {
+    UTSquadBattlesTierView.prototype.setLabel = function(e) {
         this.__label.textContent = e
     }
     ,
@@ -28751,6 +28782,10 @@ function(e) {
         this.__tierValue.textContent = e.toString()
     }
     ,
+    UTSquadBattlesProgressionHeaderView.prototype.setWeeklyPointsLabel = function(e) {
+        this.__currentPointsLabel.textContent = e
+    }
+    ,
     UTSquadBattlesProgressionHeaderView
 }(UTProgressionHeaderView));
 UTSquadBattlesProgressionHeaderView.prototype._generate = function _generate() {
@@ -28775,6 +28810,9 @@ UTSquadBattlesProgressionHeaderView.prototype._generate = function _generate() {
         this.__subtitle = document.createElement("p"),
         this.__subtitle.classList.add("ut-progression-header-view--subtitle"),
         o.appendChild(this.__subtitle),
+        this.__currentPointsLabel = document.createElement("p"),
+        this.__currentPointsLabel.classList.add("ut-squad-battles-progression-header-view--points"),
+        o.appendChild(this.__currentPointsLabel),
         this.__countdown = document.createElement("p"),
         this.__countdown.classList.add("ut-progression-header-view--countdown"),
         o.appendChild(this.__countdown),
@@ -28801,6 +28839,7 @@ UTSquadBattlesProgressionHeaderView.prototype.destroyGeneratedElements = functio
     this.__tierValue = null,
     this.__title = null,
     this.__subtitle = null,
+    this.__currentPointsLabel = null,
     this.__countdown = null,
     this._infoBtn.destroy(),
     this.__progressBarContainer = null,
@@ -29009,14 +29048,14 @@ var UTSquadBattlesView = function(i) {
     UTSquadBattlesView.prototype.generateEventTierTile = function(e, t, i) {
         var o = new UTSquadBattlesTierView
           , n = TierViewState.NONE;
-        return i ? n = TierViewState.SURPASSED : t < e.level ? n = TierViewState.SURPASSED : t === e.level ? (n = TierViewState.OBTAINED,
-        o.setProgress(this.loc.localize("squadbattles.tier.requirements-met"))) : t - 1 === e.level && (n = TierViewState.IN_PROGRESS),
+        return i ? n = TierViewState.SURPASSED : t < e.level ? n = TierViewState.SURPASSED : t === e.level ? n = TierViewState.OBTAINED : t - 1 === e.level && (n = TierViewState.IN_PROGRESS),
         o.init(),
         o.setId(e.awardSetId),
         o.setStyle(isPhone() ? "vertical" : "horizontal"),
         o.setTierLevelRewardOptions(e.rewardSet.rewards),
         o.setTitle(this.loc.localize("squadbattles.tier" + e.level + ".title")),
         o.setState(n),
+        o.setLabel(this.loc.localize("squadbattles.tier.pointsentry", [this.loc.localizeNumber(e.startPoints)])),
         o.toggleRewardsInfoButton(n !== TierViewState.SURPASSED && 1 < e.rewardSet.rewards.length),
         o.addTarget(this, this.onRewardInfoSelected, UTSquadBattlesTierView.Event.REWARDS_INFO),
         this.addSubview(o, this.__tierView),
@@ -29039,7 +29078,7 @@ var UTSquadBattlesView = function(i) {
         var i = new UTSquadBattlesTierView
           , o = TierViewState.NONE;
         return 0 < t && (t < e.start ? o = TierViewState.SURPASSED : t >= e.start && t < e.end && (o = TierViewState.OBTAINED,
-        i.setProgress(this.loc.localize("squadbattles.tier.requirements-met")))),
+        i.setLabel(this.loc.localize("squadbattles.tier.requirements-met")))),
         i.init(),
         i.setId(e.awardSetId),
         i.setStyle(isPhone() ? "vertical" : "horizontal"),
@@ -29083,7 +29122,8 @@ var UTSquadBattlesView = function(i) {
                 var n = t.score
                   , r = e.startPoints
                   , s = e.endPoints;
-                1 === e.level && 0 === r && -1 === s ? (this._header.setProgress(50),
+                this._header.setWeeklyPointsLabel(this.loc.localize("squadbattles.weeklypoints", [this.loc.localizeNumber(t.score)])),
+                1 === e.level && -1 === s ? (this._header.setProgress(50),
                 this._header.setProgressLabel(this.loc.localize("gamemodes.common.points", [n.toString()]))) : (this._header.setTierPoints(n, r, s),
                 this._header.setProgressLabel(this.loc.localize("gamemodes.common.points", [r.toString()])),
                 this._header.setProgressSecondLabel(this.loc.localize("gamemodes.common.points", [s.toString()]))),
@@ -29237,7 +29277,7 @@ var UTSquadBattlesViewController = function(t) {
     ,
     UTSquadBattlesViewController
 }(UTViewController)
-  , UTRivalsTierView = (__extends = this && this.__extends || function() {
+  , UTRivalsNextDivisionTierView = (__extends = this && this.__extends || function() {
     var i = function(e, t) {
         return (i = Object.setPrototypeOf || {
             __proto__: []
@@ -29260,6 +29300,74 @@ var UTSquadBattlesViewController = function(t) {
     }
 }(),
 function(t) {
+    function UTRivalsNextDivisionTierView() {
+        var e = t.call(this) || this;
+        return e.id = -1,
+        e
+    }
+    return __extends(UTRivalsNextDivisionTierView, t),
+    UTRivalsNextDivisionTierView.prototype.setDivisionCrest = function(e) {
+        var t = "";
+        t = e <= 0 ? "division_crest_master.png" : "division_crest_" + e + ".png",
+        this._divisionCrest.setLocalResource("images/gameModes/rivals/division/crests/" + t)
+    }
+    ,
+    UTRivalsNextDivisionTierView
+}(UTTierView));
+UTRivalsNextDivisionTierView.prototype._generate = function _generate() {
+    if (!this._generated) {
+        var e = document.createElement("div");
+        e.classList.add("ut-rivals-next-division-tier-view");
+        var t = document.createElement("section");
+        t.classList.add("ut-rivals-next-division-tier-view--content"),
+        this.__title = document.createElement("h1"),
+        this.__title.classList.add("ut-rivals-next-division-tier-view--title"),
+        t.appendChild(this.__title);
+        var i = document.createElement("div");
+        i.classList.add("ut-rivals-next-division-tier-view--crest"),
+        this._divisionCrest = new UTImageView,
+        i.appendChild(this._divisionCrest.getRootElement()),
+        t.appendChild(i),
+        e.appendChild(t),
+        this.__root = e,
+        this._generated = !0
+    }
+}
+,
+UTRivalsNextDivisionTierView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
+    DOMKit.remove(this.__root),
+    this.__root = null,
+    this.__title = null,
+    this._divisionCrest.destroy()
+}
+,
+UTRivalsNextDivisionTierView.prototype.getRootElement = function getRootElement() {
+    return this.__root
+}
+;
+__extends = this && this.__extends || function() {
+    var i = function(e, t) {
+        return (i = Object.setPrototypeOf || {
+            __proto__: []
+        }instanceof Array && function(e, t) {
+            e.__proto__ = t
+        }
+        || function(e, t) {
+            for (var i in t)
+                Object.prototype.hasOwnProperty.call(t, i) && (e[i] = t[i])
+        }
+        )(e, t)
+    };
+    return function(e, t) {
+        function __() {
+            this.constructor = e
+        }
+        i(e, t),
+        e.prototype = null === t ? Object.create(t) : (__.prototype = t.prototype,
+        new __)
+    }
+}();
+var UTRivalsTierView = function(t) {
     function UTRivalsTierView() {
         var e = t.call(this) || this;
         return e.id = -1,
@@ -29283,6 +29391,10 @@ function(t) {
         e === TierViewState.NONE ? this.removeClass("in-progress surpassed obtained") : (this.toggleClass("in-progress", e === TierViewState.IN_PROGRESS),
         this.toggleClass("surpassed", e === TierViewState.SURPASSED),
         this.toggleClass("obtained", e === TierViewState.OBTAINED))
+    }
+    ,
+    UTRivalsTierView.prototype.setSubtitle = function(e) {
+        this.__subtitle.textContent = e
     }
     ,
     UTRivalsTierView.prototype.setLabel = function(e) {
@@ -29319,10 +29431,11 @@ function(t) {
         REWARDS_INFO: "UTRivalsTierView.Event.REWARDS_INFO"
     },
     UTRivalsTierView
-}(UTTierView));
-UTTierView.prototype._generate = function _generate() {
+}(UTTierView);
+UTRivalsTierView.prototype._generate = function _generate() {
     if (!this._generated) {
         var e = document.createElement("div");
+        e.classList.add("ut-rivals-tier-view"),
         e.classList.add("ut-tier-view"),
         this.__overlay = document.createElement("div"),
         this.__overlay.classList.add("ut-tier-view--overlay"),
@@ -29334,6 +29447,9 @@ UTTierView.prototype._generate = function _generate() {
         this.__title = document.createElement("h1"),
         this.__title.classList.add("ut-tier-view--title"),
         t.appendChild(this.__title),
+        this.__subtitle = document.createElement("h2"),
+        this.__subtitle.classList.add("ut-tier-view--subtitle"),
+        t.appendChild(this.__subtitle),
         this.__label = document.createElement("div"),
         this.__label.classList.add("ut-tier-view--label"),
         t.appendChild(this.__label),
@@ -29360,12 +29476,13 @@ UTTierView.prototype._generate = function _generate() {
     }
 }
 ,
-UTTierView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
+UTRivalsTierView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
     DOMKit.remove(this.__root),
     this.__root = null,
     this.__overlay = null,
     this.__overlayText = null,
     this.__title = null,
+    this.__subtitle = null,
     this.__label = null,
     this._claimBtn.destroy(),
     this._rewardsCarousel.destroy(),
@@ -29374,75 +29491,7 @@ UTTierView.prototype.destroyGeneratedElements = function destroyGeneratedElement
     this._rewardsInfoBtn.destroy()
 }
 ,
-UTTierView.prototype.getRootElement = function getRootElement() {
-    return this.__root
-}
-;
-__extends = this && this.__extends || function() {
-    var i = function(e, t) {
-        return (i = Object.setPrototypeOf || {
-            __proto__: []
-        }instanceof Array && function(e, t) {
-            e.__proto__ = t
-        }
-        || function(e, t) {
-            for (var i in t)
-                Object.prototype.hasOwnProperty.call(t, i) && (e[i] = t[i])
-        }
-        )(e, t)
-    };
-    return function(e, t) {
-        function __() {
-            this.constructor = e
-        }
-        i(e, t),
-        e.prototype = null === t ? Object.create(t) : (__.prototype = t.prototype,
-        new __)
-    }
-}();
-var UTRivalsNextDivisionTierView = function(t) {
-    function UTRivalsNextDivisionTierView() {
-        var e = t.call(this) || this;
-        return e.id = -1,
-        e
-    }
-    return __extends(UTRivalsNextDivisionTierView, t),
-    UTRivalsNextDivisionTierView.prototype.setDivisionCrest = function(e) {
-        var t = "";
-        t = e <= 0 ? "division_crest_master.png" : "division_crest_" + e + ".png",
-        this._divisionCrest.setLocalResource("images/gameModes/rivals/division/crests/" + t)
-    }
-    ,
-    UTRivalsNextDivisionTierView
-}(UTTierView);
-UTRivalsNextDivisionTierView.prototype._generate = function _generate() {
-    if (!this._generated) {
-        var e = document.createElement("div");
-        e.classList.add("ut-rivals-next-division-tier-view");
-        var t = document.createElement("section");
-        t.classList.add("ut-rivals-next-division-tier-view--content"),
-        this.__title = document.createElement("h1"),
-        this.__title.classList.add("ut-rivals-next-division-tier-view--title"),
-        t.appendChild(this.__title);
-        var i = document.createElement("div");
-        i.classList.add("ut-rivals-next-division-tier-view--crest"),
-        this._divisionCrest = new UTImageView,
-        i.appendChild(this._divisionCrest.getRootElement()),
-        t.appendChild(i),
-        e.appendChild(t),
-        this.__root = e,
-        this._generated = !0
-    }
-}
-,
-UTRivalsNextDivisionTierView.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
-    DOMKit.remove(this.__root),
-    this.__root = null,
-    this.__title = null,
-    this._divisionCrest.destroy()
-}
-,
-UTRivalsNextDivisionTierView.prototype.getRootElement = function getRootElement() {
+UTRivalsTierView.prototype.getRootElement = function getRootElement() {
     return this.__root
 }
 ;
@@ -29507,6 +29556,49 @@ var UTRivalsProgressionHeaderView = function(e) {
         this.__subtitle.append(r, a)
     }
     ,
+    UTRivalsProgressionHeaderView.prototype.setRewardPreview = function(e) {
+        this._reward.setData([e]),
+        this._reward.render(!0)
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.setWeeklyRewardsTitle = function(e) {
+        this.__weeklyRewardsTitle.textContent = e
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.setUpgradedRewardsTitle = function(e) {
+        this.__upgradedRewardsTitle.textContent = e
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.toggleWeeklyRewardsTitle = function(e) {
+        this.__weeklyRewardsTitle.style.display = e ? "" : "none"
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.toggleUpgradedRewardsTitle = function(e) {
+        this.__upgradedRewardsTitle.style.display = e ? "" : "none"
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.setWeeklyRewardsComplete = function() {
+        DOMKit.addClass(this.__weeklyRewardsTitle, "complete")
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.setUpgradedRewardsComplete = function() {
+        DOMKit.addClass(this.__upgradedRewardsTitle, "complete")
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.setMatchesRemainingLabel = function(e) {
+        this.__matchesRemainingLabel.textContent = e
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.toggleRewardPreviewContainer = function(e) {
+        this.__rewardPreviewContainer.style.display = e ? "" : "none"
+    }
+    ,
+    UTRivalsProgressionHeaderView.prototype.toggleDivisionElements = function(e) {
+        this.toggleRewardPreviewContainer(e),
+        this.toggleUpgradedRewardsTitle(e),
+        this.toggleWeeklyRewardsTitle(e)
+    }
+    ,
     UTRivalsProgressionHeaderView
 }(UTProgressionHeaderView);
 UTRivalsProgressionHeaderView.prototype._generate = function _generate() {
@@ -29534,6 +29626,19 @@ UTRivalsProgressionHeaderView.prototype._generate = function _generate() {
         this.__countdown = document.createElement("p"),
         this.__countdown.classList.add("ut-progression-header-view--countdown"),
         o.appendChild(this.__countdown),
+        this.__weeklyRewardsTitle = document.createElement("p"),
+        this.__weeklyRewardsTitle.classList.add("ut-progression-header-view--rewards"),
+        o.appendChild(this.__weeklyRewardsTitle),
+        this.__upgradedRewardsTitle = document.createElement("p"),
+        this.__upgradedRewardsTitle.classList.add("ut-progression-header-view--rewards"),
+        o.appendChild(this.__upgradedRewardsTitle),
+        this.__rewardPreviewContainer = document.createElement("div"),
+        this.__rewardPreviewContainer.classList.add("ut-progression-header-view--rewards-preview"),
+        this._reward = new UTRewardsFooterView,
+        this.__rewardPreviewContainer.appendChild(this._reward.getRootElement()),
+        this.__matchesRemainingLabel = document.createElement("p"),
+        this.__rewardPreviewContainer.appendChild(this.__matchesRemainingLabel),
+        o.appendChild(this.__rewardPreviewContainer),
         t.appendChild(o),
         e.appendChild(t),
         this._infoBtn = new UTImageButtonControl,
@@ -29558,6 +29663,11 @@ UTRivalsProgressionHeaderView.prototype.destroyGeneratedElements = function dest
     this.__title = null,
     this.__subtitle = null,
     this.__countdown = null,
+    this.__weeklyRewardsTitle = null,
+    this.__upgradedRewardsTitle = null,
+    this.__rewardPreviewContainer = null,
+    this._reward.destroy(),
+    this.__matchesRemainingLabel = null,
     this._infoBtn.destroy(),
     this.__progressBarContainer = null,
     this._progressBar.destroy()
@@ -29683,6 +29793,7 @@ UTRivalsTierProgressBarView.prototype.getRootElement = function getRootElement()
     return this.__root
 }
 ;
+var RivalsRewardTileType;
 __extends = this && this.__extends || function() {
     var i = function(e, t) {
         return (i = Object.setPrototypeOf || {
@@ -29705,6 +29816,10 @@ __extends = this && this.__extends || function() {
         new __)
     }
 }();
+!function(e) {
+    e[e.UPGRADED_REWARDS = 1] = "UPGRADED_REWARDS",
+    e[e.WEEKLY_REWARDS = 2] = "WEEKLY_REWARDS"
+}(RivalsRewardTileType = RivalsRewardTileType || {});
 var UTRivalsView = function(i) {
     function UTRivalsView(e) {
         var t = i.call(this) || this;
@@ -29746,6 +29861,7 @@ var UTRivalsView = function(i) {
         this._header.toggleProgressBar(!1),
         this._header.setTitle(t.season.name),
         this._header.setSeasonalCrest(t.user.divisionId, t.user.seasonTier),
+        this._header.toggleDivisionElements(!1),
         this._header.setCountdown(this.loc.localize("rivals.season.rewards.countdown", [this.loc.localizeTimeRemaining(t.getSeasonTimeRemaining())])),
         t.division.prizeTiers.forEach(function(e) {
             i.progressBars.push(i.generateSeasonalTierProgress(t.user.divisionId, e, t.user.matchesPlayed, t.user.seasonTier, t.season)),
@@ -29766,6 +29882,13 @@ var UTRivalsView = function(i) {
         this._header.setSkillRatingRank(null !== (t = e.user.elo) && void 0 !== t ? t : 0, null !== (i = e.user.rank) && void 0 !== i ? i : 0)) : this._header.setTitle(this.loc.localize("rivals.division.progress.title", [e.user.divisionId.toString(), (null !== (n = null === (o = e.getUserCurrentRank()) || void 0 === o ? void 0 : o.rank) && void 0 !== n ? n : "").toString()])),
         this._header.setDivisionCrest(e.user.divisionId),
         this._header.setCountdown(this.loc.localize("rivals.division.rewards.countdown", [this.loc.localizeTimeRemaining(e.getDivisionTimeRemaining())])),
+        this._header.toggleDivisionElements(!0),
+        this._header.setWeeklyRewardsTitle(this.loc.localize("rivals.division.header.weeklyrewards.title")),
+        this._header.setUpgradedRewardsTitle(this.loc.localize("rivals.division.header.upgradedrewards.title")),
+        e.user.matchesWon >= e.season.weeklyTier2Threshold ? (this._header.setUpgradedRewardsComplete(),
+        this._header.setWeeklyRewardsComplete(),
+        this._header.toggleRewardPreviewContainer(!1)) : e.user.matchesWon < e.season.weeklyTier2Threshold && e.user.matchesWon >= e.season.weeklyTier1Threshold ? (this._header.setWeeklyRewardsComplete(),
+        this._header.setMatchesRemainingLabel(this.loc.localize("rivals.division.header.matchesremaining.label", [(e.season.weeklyTier2Threshold - e.user.matchesWon).toString()]))) : this._header.setMatchesRemainingLabel(this.loc.localize("rivals.division.header.matchesremaining.label", [(e.season.weeklyTier1Threshold - e.user.matchesWon).toString()])),
         this._header.toggleProgressBar(!1);
         var r = e.division.stages.filter(function(e) {
             return e.type === RivalsStageType.REWARD
@@ -29788,12 +29911,13 @@ var UTRivalsView = function(i) {
                 a = 0
             } else if (h === d && p.type === RivalsStageType.PROGRESSION && 0 < s) {
                 this.progressBars.push(this.generateLastDivisionTierProgress(e.user, s, e.user.divisionId, p.id, e.user.stageId, u, c, l));
-                var T = e.user.stageId >= p.id - a;
-                this.levels.push(this.generateNextDivisionTierTile(e.user.divisionId, T))
+                e.user.stageId,
+                p.id
             } else
                 p.demotionThreshold && c.push(a),
                 a++
         }
+        this._header.setRewardPreview(this.rewardPreview),
         this.layoutSubviews(),
         this.levels.forEach(function(e, t) {
             e instanceof UTRivalsTierView && e.setupRewardsCarousel(0)
@@ -29874,24 +29998,24 @@ var UTRivalsView = function(i) {
         var s = this
           , a = new UTRivalsTierView
           , l = TierViewState.NONE;
-        o && (o.rank < e.rank ? l = TierViewState.SURPASSED : o.rank === e.rank && o.id === e.id ? l = TierViewState.OBTAINED : o.rank - 1 === e.rank && (l = TierViewState.IN_PROGRESS)),
+        i >= r.weeklyTier2Threshold ? l = TierViewState.OBTAINED : i >= r.weeklyTier1Threshold ? t === RivalsRewardTileType.WEEKLY_REWARDS ? l = TierViewState.OBTAINED : t === RivalsRewardTileType.UPGRADED_REWARDS && (l = TierViewState.IN_PROGRESS) : t === RivalsRewardTileType.WEEKLY_REWARDS && (l = TierViewState.IN_PROGRESS),
         a.init(),
         a.setStyle(isPhone() ? "vertical" : "horizontal"),
-        a.setState(l);
-        var c = "";
-        0 === n ? c = "1" : 1 === n ? c = "2" : (c = "2",
-        n = 1),
-        a.setTitle(this.loc.localize("rivals.division.tier.title", [t.toString(), c]));
-        var d = e.prizeTiers[n].rewardSet;
-        return a.setTierLevelRewardOptions(d),
-        l !== TierViewState.SURPASSED && l !== TierViewState.OBTAINED ? 0 === n ? (a.setLabel(this.loc.localize("rivals.division.tier.label", [(r.weeklyTier1Threshold - i).toString(), c])),
-        a.setupWinsProgressLabel(i, r.weeklyTier1Threshold)) : (a.setLabel(this.loc.localize("rivals.division.tier.label", [(r.weeklyTier2Threshold - i).toString(), c])),
-        a.setupWinsProgressLabel(i, r.weeklyTier2Threshold)) : l === TierViewState.OBTAINED && a.setLabel(this.loc.localize("rivals.tier.requirements-met")),
-        a.toggleRewardsInfoButton(l !== TierViewState.SURPASSED && 1 < d.length),
+        a.setState(l),
+        a.addClass("division"),
+        o && a.setTitle(this.loc.localize("gamemodes.common.rank", [o.rank.toString()])),
+        t === RivalsRewardTileType.UPGRADED_REWARDS ? a.setSubtitle(this.loc.localize("rivals.division.tier.upgraded.title")) : t === RivalsRewardTileType.WEEKLY_REWARDS && a.setSubtitle(this.loc.localize("rivals.division.tier.weekly.title"));
+        var c = e.prizeTiers[n].rewardSet;
+        return this.rewardPreview = c[0].rewards[0],
+        a.setTierLevelRewardOptions(c),
+        l !== TierViewState.OBTAINED ? t === RivalsRewardTileType.WEEKLY_REWARDS ? (a.setLabel(this.loc.localize("rivals.division.tier.weekly.label", [(r.weeklyTier1Threshold - i).toString()])),
+        a.setupWinsProgressLabel(i, r.weeklyTier1Threshold)) : (a.setLabel(this.loc.localize("rivals.division.tier.upgraded.label", [(r.weeklyTier2Threshold - i).toString()])),
+        a.setupWinsProgressLabel(i, r.weeklyTier2Threshold)) : l === TierViewState.OBTAINED && (t === RivalsRewardTileType.UPGRADED_REWARDS ? a.setLabel(this.loc.localize("rivals.division.tier.upgraded.qualified.label")) : t === RivalsRewardTileType.WEEKLY_REWARDS && a.setLabel(this.loc.localize("rivals.division.tier.weekly.qualified.label"))),
+        a.toggleRewardsInfoButton(1 < c.length),
         a.addTarget(this, function() {
             return s.onRewardInfoSelected(a, UTRivalsTierView.Event.REWARDS_INFO, {
                 id: e.id,
-                rewardSet: d
+                rewardSet: c
             })
         }, UTRivalsTierView.Event.REWARDS_INFO),
         this.addSubview(a, this.__tierView),
@@ -29913,16 +30037,6 @@ var UTRivalsView = function(i) {
         return l.setDivisionCrest(i - 1),
         this.addSubview(l, this.__progressView),
         l
-    }
-    ,
-    UTRivalsView.prototype.generateNextDivisionTierTile = function(e, t) {
-        var i = new UTRivalsNextDivisionTierView;
-        return i.setStyle(isPhone() ? "vertical" : "horizontal"),
-        i.setTitle(this.loc.localize("rivals.division.nextdivision.title")),
-        i.setDivisionCrest(e - 1),
-        t && i.setState(TierViewState.IN_PROGRESS),
-        this.addSubview(i, this.__tierView),
-        i
     }
     ,
     UTRivalsView.prototype.scrollToActiveTier = function() {
@@ -30569,16 +30683,16 @@ var UTChampionsView = function(i) {
                 return h.pointsProgress >= e.tierStart && h.pointsProgress < e.tierEnd
             })
               , g = m ? m.tierStart : 0
-              , v = m ? m.tierEnd : null !== (l = null === (a = u.getFirstStageTier()) || void 0 === a ? void 0 : a.tierStart) && void 0 !== l ? l : 0;
+              , w = m ? m.tierEnd : null !== (l = null === (a = u.getFirstStageTier()) || void 0 === a ? void 0 : a.tierStart) && void 0 !== l ? l : 0;
             this._header.setProgressLabel(this.loc.localize("gamemodes.common.points", [g.toString()])),
-            this._header.setProgressSecondLabel(this.loc.localize("gamemodes.common.points", [v.toString()])),
-            this._header.setTierPoints(h.pointsProgress, g, v)
+            this._header.setProgressSecondLabel(this.loc.localize("gamemodes.common.points", [w.toString()])),
+            this._header.setTierPoints(h.pointsProgress, g, w)
         }
         if (u || d) {
-            var w = null != u ? u : d;
-            null == w || w.prizeTiers.forEach(function(e) {
+            var v = null != u ? u : d;
+            null == v || v.prizeTiers.forEach(function(e) {
                 var t, i;
-                c.progressBars.push(c.generateEventTierProgress(w, e, null !== (t = null == h ? void 0 : h.pointsProgress) && void 0 !== t ? t : 0)),
+                c.progressBars.push(c.generateEventTierProgress(v, e, null !== (t = null == h ? void 0 : h.pointsProgress) && void 0 !== t ? t : 0)),
                 c.levels.push(c.generateEventTierTile(e, null !== (i = null == h ? void 0 : h.pointsProgress) && void 0 !== i ? i : 0))
             }, this)
         }
@@ -30811,7 +30925,7 @@ function(t) {
             a.hasOutStandingRewards() ? (s.setTagText(n.localize("gamemodeshub.tag.enterclaim")),
             s.addTarget(this, this.eRivalsRewardSelected, EventType.TAP),
             s.toggleRewardsState(!0),
-            s.setInteractionState(!0)) : a.hasProgression() ? (s.addTarget(this, this.eRivalsTileSelected, EventType.TAP),
+            s.setInteractionState(!0)) : a.isFeatureAccessible() ? (s.addTarget(this, this.eRivalsTileSelected, EventType.TAP),
             s.setInteractionState(!0)) : (s.setInteractionState(!0),
             s.setTagText(n.localize("gamemodes.tag.no-progress")),
             s.addTarget(this, this.eRivalsTileNoProgressSelected, EventType.TAP))
@@ -30970,7 +31084,7 @@ function(t) {
     UTGameModesHubViewController.prototype.eRivalsRewardSelected = function(e, t, i) {
         var o, s = this;
         TelemetryManager.trackEvent(TelemetryManager.Sections.GAMEMODES, TelemetryManager.Categories.BUTTON_PRESS, "Game Modes - Rivals Reward Tile");
-        function vnb(e, t) {
+        function Fnb(e, t) {
             var i, o;
             e.unobserve(s);
             var n = null !== (o = null === (i = null == t ? void 0 : t.data) || void 0 === i ? void 0 : i.rewards) && void 0 !== o ? o : [];
@@ -30993,7 +31107,7 @@ function(t) {
             var n = null !== (o = null === (i = null == t ? void 0 : t.data) || void 0 === i ? void 0 : i.unclaimedRewards) && void 0 !== o ? o : [];
             if (t.success && 0 < n.length)
                 if (1 === n.length)
-                    s.rivalsViewModel.claimWeeklyRivalsRewardsById(n[0].id).observe(s, vnb);
+                    s.rivalsViewModel.claimWeeklyRivalsRewardsById(n[0].id).observe(s, Fnb);
                 else {
                     var r = new UTRewardSelectionChoiceViewController(n);
                     r.setTitleText(a.localize("rivals.rewards.weeklyclaimedtitle")),
@@ -31006,7 +31120,7 @@ function(t) {
     }
     ,
     UTGameModesHubViewController.prototype.checkForSeasonalRivalRewards = function() {
-        function Mnb(e, t) {
+        function Wnb(e, t) {
             var i, o;
             e.unobserve(s);
             var n = null !== (o = null === (i = null == t ? void 0 : t.data) || void 0 === i ? void 0 : i.rewards) && void 0 !== o ? o : [];
@@ -31028,7 +31142,7 @@ function(t) {
             var n = null !== (o = null === (i = null == t ? void 0 : t.data) || void 0 === i ? void 0 : i.unclaimedRewards) && void 0 !== o ? o : [];
             if (t.success && 0 < n.length)
                 if (1 === n.length)
-                    s.rivalsViewModel.claimSeasonalRivalsRewardsById(n[0].id).observe(s, Mnb);
+                    s.rivalsViewModel.claimSeasonalRivalsRewardsById(n[0].id).observe(s, Wnb);
                 else {
                     var r = new UTRewardSelectionChoiceViewController(n);
                     r.setTitleText(a.localize("rivals.rewards.seasonaltitle")),
@@ -37563,7 +37677,7 @@ function(r) {
     }
     ,
     UTGameFlowNavigationController.prototype._eNavigationBarTapped = function(e, t, i) {
-        function oQb() {
+        function yQb() {
             var e, t = services.User.getUser(), i = null !== (e = null == t ? void 0 : t.getSelectedPersona()) && void 0 !== e ? e : null, o = services.Localization;
             if (DebugUtils.Assert(JSUtils.isValid(t), "Missing user entity when launching FIFA points purchase flow"),
             t && t.hasTradeAccess()) {
@@ -37589,10 +37703,10 @@ function(r) {
                 gPopupClickShield.setActivePopup(r)
             }
         }
-        function pQb(e, t) {
+        function zQb(e, t) {
             if (e.unobserve(s),
             t === UTPlayerHealthLimitPopupView.Events.IGNORE_TAPPED)
-                oQb(),
+                yQb(),
                 services.PlayerHealth.storeLimitIgnoredTimestamp(PlayerHealthStatId.POINTS_PURCHASED);
             else if (t === UTPlayerHealthLimitPopupView.Events.REVIEW_TAPPED) {
                 var i = new UTPlayerHealthViewController;
@@ -37600,7 +37714,7 @@ function(r) {
                 s.pushViewController(i, !0)
             }
         }
-        function qQb(e, t) {
+        function AQb(e, t) {
             if (e.unobserve(s),
             t.success && JSUtils.isObject(t.data) && t.data.playerHealth) {
                 var i = t.data.playerHealth
@@ -37609,13 +37723,13 @@ function(r) {
                     var n = new UTPlayerHealthLimitPopupViewController
                       , r = n.getView();
                     n.init(),
-                    n.onExit.observe(s, pQb),
+                    n.onExit.observe(s, zQb),
                     r.setContentByType(o.id, o.limit),
                     gPopupClickShield.setActivePopup(n)
                 } else
-                    oQb()
+                    yQb()
             } else
-                oQb()
+                yQb()
         }
         var s = this;
         gClickShield.showShield(EAClickShieldView.Shield.LOADING),
@@ -37623,7 +37737,7 @@ function(r) {
             e.unobserve(s);
             var i = s._hasCommerceAccess();
             s._navigationBar.toggleClass("currency-purchase", i),
-            i && (services.PlayerHealth.isIgnoreLimitPeriodExpired(PlayerHealthStatId.POINTS_PURCHASED) ? services.PlayerHealth.readPlayerHealth().observe(s, qQb) : oQb()),
+            i && (services.PlayerHealth.isIgnoreLimitPeriodExpired(PlayerHealthStatId.POINTS_PURCHASED) ? services.PlayerHealth.readPlayerHealth().observe(s, AQb) : yQb()),
             gClickShield.hideShield(EAClickShieldView.Shield.LOADING)
         })
     }
@@ -41003,7 +41117,7 @@ UTSlotActionPanelViewController.prototype._eSearchMarket = function _eSearchMark
 }
 ,
 UTSlotActionPanelViewController.prototype._ePrefillSearch = function _ePrefillSearch() {
-    var e = this.getNavigationController();
+    var e = this.getRootNavigationController();
     if (e) {
         TelemetryManager.trackEvent(TelemetryManager.Sections.AUCTIONS, TelemetryManager.Categories.BUTTON_PRESS, "Squad Slot Detail View - Search On Transfer Market");
         var t = new UTMarketSearchFiltersViewController
@@ -48252,7 +48366,7 @@ function(o) {
     }
     ,
     UTStoreViewController.prototype.gotoUnassigned = function() {
-        function mzc(e, t) {
+        function wzc(e, t) {
             var i;
             e.unobserve(r);
             var o = r.getNavigationController();
@@ -48274,7 +48388,7 @@ function(o) {
             var i;
             e.unobserve(r),
             t.success && (null === (i = t.data) || void 0 === i ? void 0 : i.stadium) && (a = t.data.stadium),
-            services.Item.requestUnassignedItems().observe(r, mzc)
+            services.Item.requestUnassignedItems().observe(r, wzc)
         })
     }
     ,
@@ -48322,7 +48436,7 @@ function(o) {
             var u = !d.isPreviewed()
               , r = d.isCollectionCached();
             c.setInteractionState(!1);
-            function Wzc(e, t, i) {
+            function eAc(e, t, i) {
                 if (e.unobserve(l),
                 t === UTStoreRevealModalListView.Event.COIN_PURCHASE || t === UTStoreRevealModalListView.Event.POINTS_PURCHASE)
                     return l.isPreviewingPack = !1,
@@ -48334,11 +48448,11 @@ function(o) {
                 u && l.updateViewCategories(),
                 c.setInteractionState(!0)
             }
-            function Xzc() {
+            function fAc() {
                 if (n) {
                     var e = new UTStorePackRevealModalListViewController(r,d,n);
                     e.init(),
-                    e.onExit.observe(l, Wzc),
+                    e.onExit.observe(l, eAc),
                     gPopupClickShield.setActivePopup(e)
                 } else
                     DebugUtils.Assert(!1, "viewmodel is not undefined and required to progress")
@@ -48356,12 +48470,12 @@ function(o) {
                                 l.dismissViewController(!1, function() {
                                     o.dealloc()
                                 }),
-                                Xzc()
+                                fAc()
                             }),
                             o.modalDisplayStyle = "fullscreen",
                             l.presentViewController(o, !0)
                         } else
-                            Xzc();
+                            fAc();
                     else
                         DebugUtils.Assert(!1, "Unable to determine the itemToShow")
                 } else {
@@ -48401,12 +48515,12 @@ function(o) {
               , T = e === UTStorePackDetailsView.Event.BUY_POINTS || e === UTStoreBundleDetailsView.Event.BUY_POINTS || e === UTStoreRevealModalListView.Event.POINTS_PURCHASE ? GameCurrency.POINTS : GameCurrency.COINS;
             this.isOpeningPack = !0,
             p.setInteractionState(!1);
-            function rAc() {
+            function BAc() {
                 utils.PopupManager.showConfirmation(utils.PopupManager.Confirmations.UNASSIGNED_ENTITLEMENT, [], h.gotoUnassigned.bind(h), function() {
                     p.setInteractionState(!0)
                 })
             }
-            function sAc(e, t) {
+            function CAc(e, t) {
                 var i, o, n;
                 if (e.unobserve(h),
                 h.isOpeningPack = !1,
@@ -48463,7 +48577,7 @@ function(o) {
                         h.createCustomErrorPopup("fut.p.c.changed.title", "fut.p.x.p.c.changed");
                     else if (c === UtasErrorCode.ITEM_EXISTS)
                         repositories.Item.setDirty(ItemPile.PURCHASED),
-                        rAc.call(h);
+                        BAc.call(h);
                     else if (c === UtasErrorCode.SERVICE_IS_DISABLED) {
                         switch (T) {
                         case GameCurrency.COINS:
@@ -48489,12 +48603,12 @@ function(o) {
                     h.getStorePacks()
                 }
             }
-            function tAc() {
+            function DAc() {
                 if (_ instanceof UTStorePurchasableArticleEntity) {
                     var e = T === GameCurrency.POINTS ? utils.PopupManager.Confirmations.BUY_PACK_POINTS : utils.PopupManager.Confirmations.BUY_PACK_COINS;
                     _ instanceof UTStoreBundleEntity && _.isSingle ? e = T === GameCurrency.POINTS ? utils.PopupManager.Confirmations.BUY_ITEM_POINTS : utils.PopupManager.Confirmations.BUY_ITEM_COINS : _ instanceof UTStoreBundleEntity && !_.isSingle && (e = T === GameCurrency.POINTS ? utils.PopupManager.Confirmations.BUY_BUNDLE_POINTS : utils.PopupManager.Confirmations.BUY_BUNDLE_COINS),
                     utils.PopupManager.showConfirmation(e, [services.Localization.localize(_.packName), services.Localization.localizeNumber(_.getPrice(T))], function() {
-                        _.purchase(T).observe(this, sAc)
+                        _.purchase(T).observe(this, CAc)
                     }
                     .bind(h), function() {
                         this.isOpeningPack = !1,
@@ -48503,7 +48617,7 @@ function(o) {
                     .bind(h))
                 }
             }
-            function uAc(e, t) {
+            function EAc(e, t) {
                 if (e.unobserve(h),
                 t === UTPlayerHealthLimitPopupView.Events.IGNORE_TAPPED)
                     services.PIN.sendData(PINEventType.MILESTONE, {
@@ -48512,7 +48626,7 @@ function(o) {
                         mstid: PINMilestoneEventId.PACK_LIMIT,
                         type: PINMilestoneEventType.PLAY_TIME
                     }),
-                    tAc.call(h),
+                    DAc.call(h),
                     services.PlayerHealth.storeLimitIgnoredTimestamp(PlayerHealthStatId.PACKS_OPENED);
                 else if (t === UTPlayerHealthLimitPopupView.Events.REVIEW_TAPPED) {
                     var i = h.getNavigationController();
@@ -48527,8 +48641,8 @@ function(o) {
                     h.isOpeningPack = !1,
                     p.setInteractionState(!0)
             }
-            _ ? 0 < repositories.Item.numItemsInCache(ItemPile.PURCHASED) ? (rAc.call(this),
-            this.isOpeningPack = !1) : e === UTStorePackDetailsView.Event.OPEN ? _.open().observe(this, sAc) : services.PlayerHealth.isIgnoreLimitPeriodExpired(PlayerHealthStatId.PACKS_OPENED) ? services.PlayerHealth.readPlayerHealth().observe(this, function(e, t) {
+            _ ? 0 < repositories.Item.numItemsInCache(ItemPile.PURCHASED) ? (BAc.call(this),
+            this.isOpeningPack = !1) : e === UTStorePackDetailsView.Event.OPEN ? _.open().observe(this, CAc) : services.PlayerHealth.isIgnoreLimitPeriodExpired(PlayerHealthStatId.PACKS_OPENED) ? services.PlayerHealth.readPlayerHealth().observe(this, function(e, t) {
                 if (e.unobserve(h),
                 t.success && t.data && t.data.playerHealth) {
                     var i = t.data.playerHealth
@@ -48543,13 +48657,13 @@ function(o) {
                         var n = new UTPlayerHealthLimitPopupViewController;
                         n.init(),
                         n.getView().setContentByType(o.id, o.limit),
-                        n.onExit.observe(h, uAc),
+                        n.onExit.observe(h, EAc),
                         gPopupClickShield.setActivePopup(n)
                     } else
-                        tAc.call(h)
+                        DAc.call(h)
                 } else
-                    tAc.call(h)
-            }) : tAc.call(this) : DebugUtils.Assert(!1, "Unable to determine the pack from viewmodel")
+                    DAc.call(h)
+            }) : DAc.call(this) : DebugUtils.Assert(!1, "Unable to determine the pack from viewmodel")
         }
     }
     ,
@@ -49070,12 +49184,12 @@ function(n) {
             if (!services.Store.isMobileMTXEnabled())
                 return services.Notification.queue([services.Localization.localize("mtx.error.disabled"), UINotificationType.NEGATIVE]),
                 void this.disablePointsPurchasing();
-            function ZDc(e, t) {
+            function hEc(e, t) {
                 e.unobserve(s),
                 t.success || (s.isOpeningPack = !1,
                 services.Notification.queue([services.Localization.localize("mtx.error.nocharge"), UINotificationType.NEGATIVE]))
             }
-            function $Dc(e, t) {
+            function iEc(e, t) {
                 if (e.unobserve(s),
                 t === UTPlayerHealthLimitPopupView.Events.IGNORE_TAPPED)
                     services.PIN.sendData(PINEventType.MILESTONE, {
@@ -49084,7 +49198,7 @@ function(n) {
                         mstid: PINMilestoneEventId.POINT_LIMIT,
                         type: PINMilestoneEventType.PLAY_TIME
                     }),
-                    services.MTX.beginTransaction(r.nimbleMTXsku).observe(s, ZDc),
+                    services.MTX.beginTransaction(r.nimbleMTXsku).observe(s, hEc),
                     services.PlayerHealth.storeLimitIgnoredTimestamp(PlayerHealthStatId.POINTS_PURCHASED);
                 else if (t === UTPlayerHealthLimitPopupView.Events.REVIEW_TAPPED) {
                     var i = s.getNavigationController();
@@ -49097,7 +49211,7 @@ function(n) {
                 } else
                     s.isOpeningPack = !1
             }
-            function _Dc(e, t) {
+            function jEc(e, t) {
                 if (e.unobserve(s),
                 t.success && t.data && t.data.playerHealth) {
                     var i = t.data.playerHealth
@@ -49112,21 +49226,21 @@ function(n) {
                         var n = new UTPlayerHealthLimitPopupViewController;
                         n.init(),
                         n.getView().setContentByType(o.id, o.limit),
-                        n.onExit.observe(s, $Dc),
+                        n.onExit.observe(s, iEc),
                         gPopupClickShield.setActivePopup(n)
                     } else
-                        services.MTX.beginTransaction(r.nimbleMTXsku).observe(s, ZDc)
+                        services.MTX.beginTransaction(r.nimbleMTXsku).observe(s, hEc)
                 } else
-                    services.MTX.beginTransaction(r.nimbleMTXsku).observe(s, ZDc)
+                    services.MTX.beginTransaction(r.nimbleMTXsku).observe(s, hEc)
             }
             var i = function(e, t) {
                 e.unobserve(s),
-                t.success ? services.MTX.hasUnverifiedTransactions() ? services.MTX.verifyStoredTransactions().observe(s, i) : services.PlayerHealth.isIgnoreLimitPeriodExpired(PlayerHealthStatId.POINTS_PURCHASED) ? services.PlayerHealth.readPlayerHealth().observe(s, _Dc) : services.MTX.beginTransaction(r.nimbleMTXsku).observe(s, ZDc) : (s.isOpeningPack = !1,
+                t.success ? services.MTX.hasUnverifiedTransactions() ? services.MTX.verifyStoredTransactions().observe(s, i) : services.PlayerHealth.isIgnoreLimitPeriodExpired(PlayerHealthStatId.POINTS_PURCHASED) ? services.PlayerHealth.readPlayerHealth().observe(s, jEc) : services.MTX.beginTransaction(r.nimbleMTXsku).observe(s, hEc) : (s.isOpeningPack = !1,
                 services.Notification.queue([services.Localization.localize("mtx.error.nocharge"), UINotificationType.NEGATIVE]),
                 s.disablePointsPurchasing())
             };
             this.isOpeningPack = !0,
-            services.MTX.hasUnverifiedTransactions() ? services.MTX.verifyStoredTransactions().observe(this, i) : services.PlayerHealth.isIgnoreLimitPeriodExpired(PlayerHealthStatId.POINTS_PURCHASED) ? services.PlayerHealth.readPlayerHealth().observe(this, _Dc) : services.MTX.beginTransaction(r.nimbleMTXsku).observe(this, ZDc)
+            services.MTX.hasUnverifiedTransactions() ? services.MTX.verifyStoredTransactions().observe(this, i) : services.PlayerHealth.isIgnoreLimitPeriodExpired(PlayerHealthStatId.POINTS_PURCHASED) ? services.PlayerHealth.readPlayerHealth().observe(this, jEc) : services.MTX.beginTransaction(r.nimbleMTXsku).observe(this, hEc)
         }
     }
     ,
@@ -49632,7 +49746,7 @@ var UTWatchListViewController = function(o) {
     }
     ,
     UTWatchListViewController.prototype._renderView = function() {
-        function kHc(t) {
+        function uHc(t) {
             var e, i, o = null === (e = l.viewmodel) || void 0 === e ? void 0 : e.indexOf(function(e) {
                 return e.id === t.id
             });
@@ -49656,23 +49770,23 @@ var UTWatchListViewController = function(o) {
         var d = services.Localization
           , u = null !== (t = null === (e = this.viewmodel) || void 0 === e ? void 0 : e.getSectionItems(UTWatchSectionListViewModel.SECTION.ACTIVE)) && void 0 !== t ? t : []
           , h = c.renderSection(u, UTWatchSectionListViewModel.SECTION.ACTIVE, function(e) {
-            return kHc(e)
+            return uHc(e)
         });
         h.setHeader(d.localize("watchlist.dock.categories.active"), ""),
         h.setEmptyMessage(d.localize("watchlist.availabletransfers.empty.header"), d.localize("watchlist.availabletransfers.empty.body"));
         var p = null !== (o = null === (i = this.viewmodel) || void 0 === i ? void 0 : i.getSectionItems(UTWatchSectionListViewModel.SECTION.WATCHED)) && void 0 !== o ? o : []
           , _ = c.renderSection(p, UTWatchSectionListViewModel.SECTION.WATCHED, function(e) {
-            return kHc(e)
+            return uHc(e)
         });
         _.setHeader(d.localize("watchlist.dock.categories.watched"), ""),
         _.setEmptyMessage(d.localize("watchlist.watched.empty.header"), d.localize("watchlist.watched.empty.body"));
         var T = null !== (r = null === (n = this.viewmodel) || void 0 === n ? void 0 : n.getSectionItems(UTWatchSectionListViewModel.SECTION.WON)) && void 0 !== r ? r : [];
         c.renderSection(T, UTWatchSectionListViewModel.SECTION.WON, function(e) {
-            return kHc(e)
+            return uHc(e)
         }).setEmptyMessage(d.localize("watchlist.won.empty.header"), d.localize("watchlist.won.empty.body"));
         var m = null !== (a = null === (s = this.viewmodel) || void 0 === s ? void 0 : s.getSectionItems(UTWatchSectionListViewModel.SECTION.EXPIRED)) && void 0 !== a ? a : [];
         c.renderSection(m, UTWatchSectionListViewModel.SECTION.EXPIRED, function(e) {
-            return kHc(e)
+            return uHc(e)
         }).setEmptyMessage(d.localize("watchlist.expired.empty.header"), d.localize("watchlist.expired.empty.body")),
         this._updateSectionHeaders()
     }
@@ -50427,20 +50541,20 @@ UTRootViewController.prototype.showGameView = function showGameView() {
         g.setTag(UTGameTabBarController.TabTag.STADIUM),
         g.setText(services.Localization.localize("nav.label.customizeHub")),
         g.addClass("icon-stadium");
-        var v = new UTTabBarItemView;
-        v.init(),
-        v.setTag(UTGameTabBarController.TabTag.LEADERBOARDS),
-        v.setText(services.Localization.localize("nav.label.leaderboards")),
-        v.addClass("icon-leaderboards");
         var w = new UTTabBarItemView;
         w.init(),
-        w.setTag(UTGameTabBarController.TabTag.SETTINGS),
-        w.setText(services.Localization.localize("button.settings")),
-        w.addClass("icon-settings"),
+        w.setTag(UTGameTabBarController.TabTag.LEADERBOARDS),
+        w.setText(services.Localization.localize("nav.label.leaderboards")),
+        w.addClass("icon-leaderboards");
+        var v = new UTTabBarItemView;
+        v.init(),
+        v.setTag(UTGameTabBarController.TabTag.SETTINGS),
+        v.setText(services.Localization.localize("button.settings")),
+        v.addClass("icon-settings"),
         h.tabBarItem = m,
         p.tabBarItem = g,
-        _.tabBarItem = v,
-        T.tabBarItem = w,
+        _.tabBarItem = w,
+        T.tabBarItem = v,
         e = e.concat([h, p, _, T])
     }
     return t.initWithViewControllers(e),
