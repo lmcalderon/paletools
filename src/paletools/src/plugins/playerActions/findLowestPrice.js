@@ -6,6 +6,7 @@ import { findLowestMarketPrice } from "../../services/market";
 import tryAndCatch from "../../try";
 import { append } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
+import { addKeyboardAction } from "../../services/keyboard";
 
 const cfg = settings.plugins.playerActions;
 
@@ -16,6 +17,8 @@ const findLowestPriceAction = {
 
     generate: (instance, buttonsContainerFunc) => {
         if (cfg.findLowestPrice) {
+            addKeyboardAction("findLowestPrice", "KeyV", "plugins.playerActions.findLowestPrice.button", () => instance.onFindLowestPrice.notify());
+
             instance._findLowestPriceButton = new UTGroupButtonControl();
             instance._findLowestPriceButton.init();
             instance._findLowestPriceButton.setText(localize("plugins.playerActions.findLowestPrice.button"));

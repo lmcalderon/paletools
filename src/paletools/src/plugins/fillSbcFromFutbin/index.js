@@ -82,7 +82,7 @@ function run() {
 
         const { _squad, _challenge } = getCurrentController()._leftController;
 
-        const foundPlayers = await findPlayersInClub(sbcPlayers, onClubBatchLoadedCallback, true);
+        const foundPlayers = await findPlayersInClub(sbcPlayers, onClubBatchLoadedCallback, true, true);
 
         let conceptPlayerIds = sbcPlayers.filter(x => !foundPlayers[x.definitionId]).map(x => x.definitionId);
 

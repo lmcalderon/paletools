@@ -37,6 +37,9 @@ const buttons = {
         decBid: 'Delete',
         incBid: 'PageDown',
         compare: 'KeyM'
+    },
+    customActions: {
+        
     }
 };
 

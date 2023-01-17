@@ -1,23 +1,25 @@
 import { addLabelWithTextInputWithKeyPress, addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
+import { getKeyboardActions } from "../../services/keyboard";
 import settings, { saveConfiguration } from "../../settings";
+import { createElem } from "../../utils/dom";
 import { getObjectPropertyValueByPath, setObjectPropertyByPath } from "../../utils/object";
 
 const cfg = settings.plugins.snipe;
 export default function menu() {
 
-    function input(container, path) {
-        const value = getObjectPropertyValueByPath(cfg, path)
-        addLabelWithTextInputWithKeyPress(container, `plugins.snipe.settings.${path.replace('buttons.', '')}`, value, (elem, code) => {
+    function input(container, path, defaultValue, locale) {
+        const value = getObjectPropertyValueByPath(cfg, path) || defaultValue;
+        addLabelWithTextInputWithKeyPress(container, locale || `plugins.snipe.settings.${path.replace('buttons.', '')}`, value, (elem, code) => {
             elem.value = code;
             setObjectPropertyByPath(cfg, path, code);
             saveConfiguration();
         }, null, true);
     }
 
-    function toggle(container, path, displayWarning) {
+    function toggle(container, path, displayWarning, locale) {
         const value = getObjectPropertyValueByPath(cfg, path)
-        addLabelWithToggle(container, `plugins.snipe.settings.${path.replace('buttons.', '')}`, value, toggleState => {
+        addLabelWithToggle(container, locale || `plugins.snipe.settings.${path.replace('buttons.', '')}`, value, toggleState => {
             if (toggleState && displayWarning && !confirm(localize("plugins.dangerous"))) {
                 return false;
             }
@@ -66,6 +68,11 @@ export default function menu() {
     input(bidContainer, "buttons.search.incMaxBuy");
     input(bidContainer, "buttons.search.oneTouchMinBid");
     input(bidContainer, "buttons.search.oneTouchMinBuy");
+
+    let customContainer = createElem("div");
+    for(const action of getKeyboardActions()){
+        input(customContainer, `customActions.${action.name}`, action.keyCode, action.locale);
+    }
 
 
 

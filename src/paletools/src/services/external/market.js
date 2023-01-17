@@ -10,7 +10,7 @@ const priceProviders = {
     "futbin": new FutbinPriceProvider()
 }
 
-export async function getExternalMarketPricesProviders(){
+export async function getExternalMarketPricesProviders() {
     return settings.externalServices.prices.providers;
 }
 
@@ -22,6 +22,9 @@ export async function getExternalMarketPrices(items) {
     if (!isExternalRequestSupported()) return {};
 
     items = items.filter(x => x.isPlayer());
+
+    if (items.length === 0) return {};
+
     const priceProvider = priceProviders[settings.externalServices.prices.provider];
 
     const itemsToQuery = [];

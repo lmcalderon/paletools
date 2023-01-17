@@ -6,6 +6,7 @@ import { EVENTS, on } from "../../events";
 import UTMarketSearchResultsSplitViewControllerHelpers from "../../helpers/UTMarketSearchResultsSplitViewControllerHelpers";
 import localize from "../../localization";
 import { getUnassignedPlayers } from "../../services/club";
+import { getKeyboardActions } from "../../services/keyboard";
 import sendPinEvents from "../../services/pinEvents";
 import { addSnipeRequest, clearSnipeRequests, enableMarketSnipe } from "../../services/ui/market";
 import { navigateBack } from "../../services/ui/navigation";
@@ -404,6 +405,14 @@ function run() {
         if (action) {
             action();
             e.preventDefault();
+        }
+        else {
+            const actions = getKeyboardActions(e.code);
+            if(actions.length > 0){
+                for(const action of actions) {
+                    action.action();
+                }
+            }
         }
     });
 

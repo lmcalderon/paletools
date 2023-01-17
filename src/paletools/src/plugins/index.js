@@ -53,7 +53,6 @@ const plugins = [
     wideMode,
     duplicatedToSbc,
     selectCheapest,
-    snipe,
     fillSbcFromFutbin,
     improvedPlayerSearch,
     markDuplicated,
@@ -84,7 +83,8 @@ const plugins = [
     importantLeagues,
     experimental,
     refreshCoins,
-    externalMarketPrices
+    externalMarketPrices,
+    snipe
 ].filter(x => x);
 
 const menus = [];
