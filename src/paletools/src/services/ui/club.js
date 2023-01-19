@@ -101,7 +101,7 @@ export async function findPlayersInClub(players, callback, asDictionary = false,
         return foundPlayers;
     }
     else {
-        await loadClubPlayers(callback);
+        await loadClubPlayers(callback, true, ignoreCache);
         const foundPlayers = asDictionary ? {} : [];
 
         for (let playerId of playerIds) {
