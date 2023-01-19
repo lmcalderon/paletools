@@ -138,6 +138,11 @@ function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback
     });
 }
 
+export async function getUnassignedPlayersCount() {
+    const usermassinfo = await http('usermassinfo');
+    return usermassinfo.userInfo.unassignedPileSize;
+}
+
 export function getUnassignedPlayers() {
     //return http('purchased/items');
     repositories.Item.setDirty(ItemPile.PURCHASED);

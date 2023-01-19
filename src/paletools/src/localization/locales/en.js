@@ -7,6 +7,7 @@ export default {
     "page.restart": "Please reload the page and re-execute Paletools for the changes to take effect",
     "market.itemBuy.success": "Item bought succesfully! - {COINS}",
     "confirm": "Are you sure you want to proceed?",
+    "loading": "Loading",
 
     /// #if process.env.GRID_MODE
     "plugins.gridMode.title": "Grid Mode",
@@ -287,6 +288,11 @@ export default {
     /// #if process.env.EXPERIMENTAL
     'plugins.experimental.settings.title': "Experimental Stuff - Use at your own risk",
     'plugins.experimental.settings.fastClubSearch': 'Fast club search',
+    /// #endif
+
+    /// #if process.env.PACK_COLLECTOR
+    "plugins.packCollector.settings.title": "Pack Collector Integration",
+    "plugins.packCollector.link.text": "View Packs Value in Pack Collector",
     /// #endif
 
     "plugins.warningScreen.title": "PALETOOLS - USAGE WARNING",

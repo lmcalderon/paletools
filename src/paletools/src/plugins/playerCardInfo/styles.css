@@ -112,7 +112,7 @@
     display: none;
     position: absolute;
     width: 100%;
-    text-align: center;
+    margin-left: 10px;
 }
 
 .SearchResults .pristine-player .ut-item-view--main::after {

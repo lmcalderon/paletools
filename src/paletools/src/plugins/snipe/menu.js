@@ -1,6 +1,6 @@
 import { addLabelWithTextInputWithKeyPress, addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
-import { getKeyboardActions } from "../../services/keyboard";
+import { getAllKeyboardActions, updateKeyboardAction } from "../../services/keyboard";
 import settings, { saveConfiguration } from "../../settings";
 import { createElem } from "../../utils/dom";
 import { getObjectPropertyValueByPath, setObjectPropertyByPath } from "../../utils/object";
@@ -8,11 +8,18 @@ import { getObjectPropertyValueByPath, setObjectPropertyByPath } from "../../uti
 const cfg = settings.plugins.snipe;
 export default function menu() {
 
-    function input(container, path, defaultValue, locale) {
-        const value = getObjectPropertyValueByPath(cfg, path) || defaultValue;
-        addLabelWithTextInputWithKeyPress(container, locale || `plugins.snipe.settings.${path.replace('buttons.', '')}`, value, (elem, code) => {
+    function input(container, path) {
+        inputRaw(container, 
+            `plugins.snipe.settings.${path.replace('buttons.', '')}`, 
+            () => getObjectPropertyValueByPath(cfg, path), 
+            value => setObjectPropertyByPath(cfg, path, value));
+    }
+
+    function inputRaw(container, locale, getter, setter) {
+        const value = getter();
+        addLabelWithTextInputWithKeyPress(container, locale, value, (elem, code) => {
+            setter(elem.value, code);
             elem.value = code;
-            setObjectPropertyByPath(cfg, path, code);
             saveConfiguration();
         }, null, true);
     }
@@ -70,15 +77,16 @@ export default function menu() {
     input(bidContainer, "buttons.search.oneTouchMinBuy");
 
     let customContainer = createElem("div");
-    for(const action of getKeyboardActions()){
-        input(customContainer, `customActions.${action.name}`, action.keyCode, action.locale);
+    for (const action of getAllKeyboardActions()) {
+        inputRaw(customContainer, action.locale, action.getKeyCode, (prevValue, newValue) => {
+            updateKeyboardAction(prevValue, action.name, newValue);
+        });
     }
-
-
 
     container.appendChild(generalContainer);
     container.appendChild(searchContainer);
     container.appendChild(bidContainer);
+    container.appendChild(customContainer);
 
     return container;
 }

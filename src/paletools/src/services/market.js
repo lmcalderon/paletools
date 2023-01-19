@@ -56,6 +56,15 @@ export function getWatchedItems() {
 	});
 }
 
+export async function tryBidItem(item, bid) {
+	if(!item) return false;
+
+	if(auction._tradeState === AuctionTradeStateEnum.ACTIVE) {
+		const bidResponse = await toPromise(itemActionController.bid(item, bid));
+		return bidResponse.success;
+	}
+}
+
 export function tryBuyItem(items) {
 	if (!items || items.length === 0) return false;
 

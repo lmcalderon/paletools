@@ -24,11 +24,11 @@
 #paletools-settings-snipe-container>div {
     display: flex;
     width: 100%;
+    flex-wrap: wrap;
 }
 
 #paletools-settings-snipe-container>div>div {
     display: table;
-    float: left;
     margin-right: 40px;
 }
 

@@ -21,14 +21,15 @@ function run() {
         removeStyle('paletools-groupmypacks');
     }
 
-    const UTStoreViewController_setCategory = UTStoreViewController.prototype.setCategory;
-    UTStoreViewController.prototype.setCategory = function (e) {
-        UTStoreViewController_setCategory.call(this, e);
-        if (!cfg.enabled) return;
+    const UTStoreView_setPacks = UTStoreView.prototype.setPacks;
+    UTStoreView.prototype.setPacks = function(...args) {
+        UTStoreView_setPacks.call(this, ...args);
 
-        if (this.packLoadObservable) return;
+        if(!settings.enabled || !cfg.enabled) return;
 
-        if (!this.viewmodel.hasMyPacks) return;
+        const packEntities = args[0];
+
+        if(packEntities.length === 0 || !packEntities[0].isMyPack) return;
 
         const parent = select(".ut-store-hub-view--content");
 

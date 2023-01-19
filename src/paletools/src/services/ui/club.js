@@ -71,7 +71,10 @@ export async function findPlayersInClub(players, callback, asDictionary = false,
                 }
             }
             else {
-                if (!_playerIdsNotInClub.has(id)) {
+                if(ignoreCache){
+                    missingPlayerIds.push(id);
+                }
+                else if (!_playerIdsNotInClub.has(id)) {
                     missingPlayerIds.push(id);
                 }
             }

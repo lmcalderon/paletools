@@ -30,9 +30,9 @@ export async function getExternalMarketPrices(items) {
     const itemsToQuery = [];
     const prices = {};
     for (let item of items) {
-        const cacheEntry = _pricesCache.get(item.definitionId);
+        const price = _pricesCache.get(item.definitionId);
         if (cacheEntry) {
-            prices[cacheEntry.key] = cacheEntry.data;
+            prices[cacheEntry.key] = price;
         }
         else {
             itemsToQuery.push(item);

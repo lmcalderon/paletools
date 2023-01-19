@@ -41,6 +41,8 @@ import importantLeagues from "./importantLeagues";
 import experimental from "./experimental";
 import refreshCoins from "./refreshCoins";
 import externalMarketPrices from "./externalMarketPrices";
+import bidAll from "./bidAll";
+import packCollector from "./packCollector";
 
 const plugins = [
     minMaxPrices,
@@ -79,12 +81,14 @@ const plugins = [
     debugMode,
     playerCardInfo,
     transactionsHistory,
-    keyListener,
     importantLeagues,
     experimental,
     refreshCoins,
+    bidAll,
+    packCollector,
     externalMarketPrices,
-    snipe
+    snipe,
+    keyListener,
 ].filter(x => x);
 
 const menus = [];
@@ -94,7 +98,7 @@ export default function runPlugins() {
         return a.order - b.order;
     });
     for (let plugin of plugins) {
-        if(!plugin.run) continue;
+        if (!plugin.run) continue;
 
         plugin.run();
         if (plugin.settings) {
@@ -102,7 +106,7 @@ export default function runPlugins() {
         }
     }
 
-    if(settingsMenu){
+    if (settingsMenu) {
         settingsMenu.run(menus);
     }
 }

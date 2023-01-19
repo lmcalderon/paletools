@@ -39,7 +39,7 @@ const buttons = {
         compare: 'KeyM'
     },
     customActions: {
-        
+        findLowestPrice: "KeyV"
     }
 };
 
@@ -214,6 +214,9 @@ let settings = {
             enabled: true
         },
         externalMarketPrices: {
+            enabled: true
+        },
+        packCollector: {
             enabled: true
         }
     }

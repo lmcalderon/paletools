@@ -408,7 +408,7 @@ function run() {
         }
         else {
             const actions = getKeyboardActions(e.code);
-            if(actions.length > 0){
+            if(actions && actions.length > 0){
                 for(const action of actions) {
                     action.action();
                 }

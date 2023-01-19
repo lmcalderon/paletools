@@ -1,9 +1,11 @@
+import getWindow from "../services/window";
+
 const getProto = Object.getPrototypeOf;
 const class2type = {};
 const hasOwn = class2type.hasOwnProperty;
 const toString = class2type.toString;
 const fnToString = hasOwn.toString;
-const ObjectFunctionString = fnToString.call( Object );
+const ObjectFunctionString = fnToString.call(Object);
 
 function isPlainObject(obj) {
     var proto, Ctor;
@@ -24,6 +26,31 @@ function isPlainObject(obj) {
     // Objects with prototype are plain iff they were constructed by a global Object function
     Ctor = hasOwn.call(proto, "constructor") && proto.constructor;
     return typeof Ctor === "function" && fnToString.call(Ctor) === ObjectFunctionString;
+}
+
+export function extendControl() {
+    if (getWindow().__extends) return getWindow().__extends;
+
+    var i = function (t, e) {
+        return (i = Object.setPrototypeOf || {
+            __proto__: []
+        } instanceof Array && function (t, e) {
+            t.__proto__ = e
+        }
+            || function (t, e) {
+                for (var i in e)
+                    Object.prototype.hasOwnProperty.call(e, i) && (t[i] = e[i])
+            }
+        )(t, e)
+    };
+    return function (t, e) {
+        function __() {
+            this.constructor = t
+        }
+        i(t, e),
+            t.prototype = null === e ? Object.create(e) : (__.prototype = e.prototype,
+                new __)
+    }
 }
 
 export default function extend() {

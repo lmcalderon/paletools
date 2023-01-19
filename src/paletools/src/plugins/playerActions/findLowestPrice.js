@@ -6,7 +6,8 @@ import { findLowestMarketPrice } from "../../services/market";
 import tryAndCatch from "../../try";
 import { append } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
-import { addKeyboardAction } from "../../services/keyboard";
+import { addKeyboardAction, updateKeyboardAction } from "../../services/keyboard";
+import getCurrentController from "../../utils/controller";
 
 const cfg = settings.plugins.playerActions;
 
@@ -15,15 +16,35 @@ const findLowestPriceAction = {
         return instance === UTDefaultActionPanelView || instance === UTAuctionActionPanelView;
     },
 
+    inject: (proto) => {
+        addKeyboardAction("findLowestPrice",
+            () => settings.plugins.snipe.buttons.customActions.findLowestPrice,
+            value => settings.plugins.snipe.buttons.customActions.findLowestPrice = value,
+            "plugins.playerActions.findLowestPrice.button",
+            () => {
+
+                let controller = getCurrentController()._itemDetailController;
+                if(!controller) return;
+                controller = controller.getCurrentController();
+                if(!controller) return;
+
+                if(controller._panel && controller._panel.onFindLowestPrice) {
+                    controller._panel.onFindLowestPrice.notify();
+                }
+
+            },
+            ".find-lowest-price > .btn-text");
+    },
+
     generate: (instance, buttonsContainerFunc) => {
         if (cfg.findLowestPrice) {
-            addKeyboardAction("findLowestPrice", "KeyV", "plugins.playerActions.findLowestPrice.button", () => instance.onFindLowestPrice.notify());
+
 
             instance._findLowestPriceButton = new UTGroupButtonControl();
             instance._findLowestPriceButton.init();
             instance._findLowestPriceButton.setText(localize("plugins.playerActions.findLowestPrice.button"));
             instance._findLowestPriceButton.addTarget(instance, () => instance.onFindLowestPrice.notify(), EventType.TAP);
-            instance._findLowestPriceButton.getRootElement().classList.add("paletools-element");
+            instance._findLowestPriceButton.getRootElement().classList.add("paletools-element", "find-lowest-price");
             instance._findLowestPriceButton.displayCurrencyIcon();
             instance.onFindLowestPrice = new EAObservable();
             append(buttonsContainerFunc(instance), instance._findLowestPriceButton.getRootElement());
@@ -38,12 +59,12 @@ const findLowestPriceAction = {
             on("findLowestPriceAction:searchend", (ev) => {
                 tryAndCatch(() => {
                     instance._findLowestPriceButton.setText(localize("plugins.playerActions.findLowestPrice.button"));
-                    if(ev.detail === "ERROR"){
-                        instance._findLowestPriceButton.setSubtext("ERROR");    
+                    if (ev.detail === "ERROR") {
+                        instance._findLowestPriceButton.setSubtext("ERROR");
                     }
                     else {
                         let html = "<ol>";
-                        for(let value of ev.detail){
+                        for (let value of ev.detail) {
                             html += `<li>${value.value} x${value.count}</li>`;
                         }
                         html += "</ol>";

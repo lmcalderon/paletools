@@ -41,6 +41,8 @@ module.exports = {
     IMPORTANT_LEAGUES: true,
     EXPERIMENTAL: true,
     REFRESH_COINS: true,
-    EXTERNAL_MARKET_PRICES: false
+    EXTERNAL_MARKET_PRICES: false,
+    BID_ALL: false,
+    PACK_COLLECTOR: true
 
 };

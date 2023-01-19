@@ -3,7 +3,7 @@ export default class CacheEntry {
     #data;
     #expirationDateUtc;
 
-    contructor(key, data, expirationDateUtc) {
+    constructor(key, data, expirationDateUtc) {
         this.#key = key;
         this.#data = data;
         this.#expirationDateUtc = expirationDateUtc;
@@ -26,6 +26,8 @@ export default class CacheEntry {
     }
 
     get isExpired() {
+        if(!this.#expirationDateUtc) return false;
+
         return new Date().getUTCDate() > this.#expirationDateUtc;
     }
 }
