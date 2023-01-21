@@ -312,6 +312,16 @@ function run() {
             this.viewModel.searchSettings.importantLeaguesOnly = this.getView().getSearchToggleState("important-leagues-only");
             this.viewModel.searchSettings.unimportantLeaguesOnly = this.getView().getSearchToggleState("unimportant-leagues-only");
 
+            if (this.viewModel.searchCriteria.sortBy === SearchSortType.RATING) {
+                e.response.items.sort((a, b) => {
+                    if (this.viewModel.searchCriteria.sort === "asc") {
+                        return a.rating - b.rating;
+                    } else {
+                        return b.rating - a.rating;
+                    }
+                });
+            }
+
             e.response.items = e.response.items.filter(x => {
                 if (this.viewModel.searchSettings.minRating && x.rating < this.viewModel.searchSettings.minRating) {
                     return false;
@@ -352,16 +362,6 @@ function run() {
 
                 return true;
             });
-
-            if (this.viewModel.searchCriteria.sortBy === SearchSortType.RATING) {
-                e.response.items.sort((a, b) => {
-                    if (this.viewModel.searchCriteria.sort === "asc") {
-                        return a.rating - b.rating;
-                    } else {
-                        return b.rating - a.rating;
-                    }
-                });
-            }
 
             if (this.viewModel.searchSettings.maxPlayers && e.response.items.length > this.viewModel.searchSettings.maxPlayers) {
                 e.response.items = e.response.items.slice(0, this.viewModel.searchSettings.maxPlayers);

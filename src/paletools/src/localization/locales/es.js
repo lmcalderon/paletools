@@ -34,6 +34,7 @@ export default {
     "plugins.playerActions.settings.futbinSearch": "Habilitar búsqueda en FUTBIN",
     "plugins.playerActions.settings.findLowestPrice": "Buscar el valor más barato",
     "plugins.playerActions.settings.listForProfit": "Botones de listado rápido en el mercado",
+    "plugins.playerActions.settings.displayApplyConsumable": "Siempre mostrar aplicar consumibles",
 
     "plugins.playerActions.copyPlayerId": "Copiar Id del jugador al portapapeles",
     "plugins.playerActions.futbinSearch": "Buscar en FUTBIN",

@@ -35,7 +35,7 @@ export default {
     "plugins.playerActions.settings.findLowestPrice": "Find lowest market price",
     "plugins.playerActions.settings.listForProfit": "Quick market list - show buttons",
     "plugins.playerActions.settings.listForProfitAutoPublish": "Quick market list - auto publish",
-
+    "plugins.playerActions.settings.displayApplyConsumable": "Always display apply consumable",
 
     "plugins.playerActions.copyPlayerId": "Copy Player Id to clipboard",
     "plugins.playerActions.futbinSearch": "FUTBIN search",

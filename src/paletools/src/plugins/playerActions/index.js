@@ -9,27 +9,31 @@ import settings, { saveConfiguration } from "../../settings";
 import listForProfitAction from "./listForProfitAction";
 import styles from "./styles.css";
 import { addStyle } from "../../utils/styles";
+import alwaysDisplayApplyConsumableAction from "./alwaysDisplayApplyConsumableAction";
 
 const cfg = settings.plugins.playerActions;
 
-let actions = [copyPlayerIdAction, futbinSearchAction, findLowestPriceAction, listForProfitAction];
+let actions = [copyPlayerIdAction, futbinSearchAction, findLowestPriceAction, listForProfitAction, alwaysDisplayApplyConsumableAction];
+
+function forEachAction(canRun, execute) {
+    for(const action of actions){
+        if(canRun(action)){
+            execute(action);
+        }
+    }
+}
 
 function run() {
     function addActionsToActionPanel(className, buttonsContainerFunc) {
         const generate = className.prototype._generate;
 
-        for(let action of actions.filter(x => x.canRun(className) && x.inject)){
-            action.inject(className.prototype);
-        }
+        forEachAction(action => action.canRun(className) && action.inject, action => action.inject(className.prototype));
 
         className.prototype._generate = function _generate() {
             generate.call(this);
-            if(!settings.enabled) return;
+            if (!settings.enabled) return;
             if (!this._generateAddActionsToPanelCalled) {
-                for (let action of actions.filter(x => x.canRun(className))) {
-                    action.generate(this, buttonsContainerFunc);
-                }
-
+                forEachAction(action => action.canRun(className) && action.generate, action => action.generate(this, buttonsContainerFunc));
                 this._generateAddActionsToPanelCalled = true;
             }
         }
@@ -37,17 +41,13 @@ function run() {
         const _destroyGeneratedElements = className.prototype.destroyGeneratedElements;
         className.prototype.destroyGeneratedElements = function destroyGeneratedElements() {
             _destroyGeneratedElements.call(this);
-            for (let action of actions.filter(x => x.canRun(className))) {
-                action.destroyGeneratedElements(this);
-            }
+            forEachAction(action => action.canRun(className) && action.destroyGeneratedElements, action => action.destroyGeneratedElements(this));
         }
 
         const dealloc = className.prototype.dealloc;
         className.prototype.dealloc = function () {
             dealloc.call(this);
-            for (let action of actions.filter(x => x.canRun(className))) {
-                action.dealloc(this);
-            }
+            forEachAction(action => action.canRun(className) && action.dealloc, action => action.dealloc(this));
         }
     }
 
@@ -58,24 +58,20 @@ function run() {
     const ItemDetails__getPanelViewInstanceFromData = controllers.items.ItemDetails.prototype._getPanelViewInstanceFromData;
     controllers.items.ItemDetails.prototype._getPanelViewInstanceFromData = function _getPanelViewInstanceFromData(e, t) {
         ItemDetails__getPanelViewInstanceFromData.call(this, e, t);
-        if (this._panel instanceof UTDefaultActionPanelView 
+        if (this._panel instanceof UTDefaultActionPanelView
             || this._panel instanceof UTAuctionActionPanelView) {
-            for (let action of actions) {
-                action.attachEvent(this);
-            }
+            forEachAction(action => action.attachEvent, action => action.attachEvent(this));
         }
     }
 
-    for (let action of actions) {
-        action.createEvent(controllers.items.ItemDetails.prototype);
-    }
+    forEachAction(action => action.createEvent, action => action.createEvent(controllers.items.ItemDetails.prototype));
 
     addStyle("player-actions", styles);
 }
 
-function menu(){
+function menu() {
     var container = document.createElement("div");
-    function add(id){
+    function add(id) {
         addLabelWithToggle(container, `plugins.playerActions.settings.${id}`, cfg[id], toggleState => {
             cfg[id] = toggleState;
             saveConfiguration();
@@ -87,11 +83,12 @@ function menu(){
     add('findLowestPrice');
     add('listForProfit');
     add('listForProfitAutoPublish');
+    add('displayApplyConsumable');
 
     return container;
 }
 
-plugin =  {
+plugin = {
     run: run,
     order: 6,
     settings: {

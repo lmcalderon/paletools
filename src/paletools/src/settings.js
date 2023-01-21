@@ -83,7 +83,8 @@ let settings = {
             futbinSearch: true,
             findLowestPrice: true,
             listForProfit: true,
-            listForProfitAutoPublish: false
+            listForProfitAutoPublish: false,
+            displayApplyConsumable: true
         },
         snipeMobile: {
             enabled: true,
