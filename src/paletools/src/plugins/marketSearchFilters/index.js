@@ -345,6 +345,7 @@ function run() {
 
 function menu() {
     var container = document.createElement("div");
+    container.classList.add("menuContainer");
     function add(id) {
         addLabelWithToggle(container, `plugins.marketSearchFilters.settings.${id}`, cfg[id], toggleState => {
             if (toggleState) {

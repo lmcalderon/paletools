@@ -27,15 +27,23 @@ SettingsView.prototype._generate = function _generate() {
             createPluginsMenues();
         }, EventType.TAP)
 
-
         prepend(contentContainer, addClass(resetSettingsButton, "reset-settings"));
-
 
         const self = this;
         function createPluginsMenues(){
             for(let menu of self._menus){
                 const menuContainer = createElem("div", { id: `paletools-settings-${menu.name}-container`, className: "tile col-1-1"})
                 const header = createElem("header", `<h3 class="tileHeader">${localize(menu.title)}</h3>`);
+                header.classList.add("menuCollapsible");
+                header.addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.maxHeight){
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
                 menuContainer.appendChild(header);
                 menuContainer.appendChild(menu.menu());
                 content.appendChild(menuContainer);
@@ -43,8 +51,6 @@ SettingsView.prototype._generate = function _generate() {
         }
 
         createPluginsMenues();
-
-        
 
         this.__root = contentContainer;
         this.generated = true;

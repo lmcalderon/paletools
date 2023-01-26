@@ -107,6 +107,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
     addLabelWithToggle(container, "enabled", cfg.enabled, toggleState => {
         cfg.enabled = toggleState;
         saveConfiguration();
@@ -151,9 +152,12 @@ function menu() {
         "plugins.fillSbcFromFutbin.settings.importToolLinkText",
         `javascript:eval(atob('${btoa(exportSbcCode)}'))`);
 
+    const labelMessage = document.createElement("label");
+    labelMessage.innerHTML = localize('plugins.fillSbcFromFutbin.settings.installInstructions');
+
     const linkMessage = document.createElement("div");
-    linkMessage.classList.add("install-instructions");
-    linkMessage.innerHTML = localize('plugins.fillSbcFromFutbin.settings.installInstructions');
+    linkMessage.appendChild(labelMessage);
+
     container.appendChild(linkMessage);
 
     return container;

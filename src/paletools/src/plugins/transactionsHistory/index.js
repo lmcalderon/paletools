@@ -6,7 +6,6 @@ import localize from "../../localization";
 import db from "../../services/db";
 import settings, { saveConfiguration } from "../../settings";
 import getCurrentController from "../../utils/controller";
-import delay from "../../utils/delay";
 import { addClass, append, select } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 import { TransactionsHistoryController } from "./TransactionsHistoryController";
@@ -88,6 +87,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
     addLabelWithToggle(container, "enabled", cfg.enabled, toggleState => {
         cfg.enabled = toggleState;
         saveConfiguration();

@@ -118,6 +118,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
     ["enabled", "alternatePositions", "skillMoves", "weakFoot", "untradeable", "pristine", "contracts", "league", "importantLeague"].forEach(x => {
         addLabelWithToggle(container, x === "enabled" ? x : `plugins.playerCardInfo.settings.${x}`, cfg[x], toggleState => {
             cfg[x] = toggleState;

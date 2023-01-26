@@ -175,6 +175,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
     addLabelWithToggle(container, "enabled", cfg.enabled, toggleState => {
         if (toggleState) {
             if (confirm(localize("plugins.sellMultiple.warning"))) {

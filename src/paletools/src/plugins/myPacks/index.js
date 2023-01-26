@@ -299,6 +299,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
 
     function addSetting(settingPath, settingLabelLocale) {
         if (!settingLabelLocale) {

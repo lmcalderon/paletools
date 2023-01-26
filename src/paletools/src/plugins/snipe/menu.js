@@ -4,14 +4,16 @@ import { getAllKeyboardActions, updateKeyboardAction } from "../../services/keyb
 import settings, { saveConfiguration } from "../../settings";
 import { createElem } from "../../utils/dom";
 import { getObjectPropertyValueByPath, setObjectPropertyByPath } from "../../utils/object";
+import styles from "./styles.css";
+import { addStyle } from "../../utils/styles";
 
 const cfg = settings.plugins.snipe;
 export default function menu() {
 
     function input(container, path) {
-        inputRaw(container, 
-            `plugins.snipe.settings.${path.replace('buttons.', '')}`, 
-            () => getObjectPropertyValueByPath(cfg, path), 
+        inputRaw(container,
+            `plugins.snipe.settings.${path.replace('buttons.', '')}`,
+            () => getObjectPropertyValueByPath(cfg, path),
             (oldValue, newValue) => setObjectPropertyByPath(cfg, path, newValue));
     }
 
@@ -35,9 +37,6 @@ export default function menu() {
             saveConfiguration();
         });
     }
-
-
-    let container = document.createElement("div");
 
     let generalContainer = document.createElement("div");
     input(generalContainer, "buttons.enableDisable");
@@ -83,10 +82,17 @@ export default function menu() {
         });
     }
 
-    container.appendChild(generalContainer);
-    container.appendChild(searchContainer);
-    container.appendChild(bidContainer);
-    container.appendChild(customContainer);
+    let snipeContainer = document.createElement("div");
+    snipeContainer.appendChild(generalContainer);
+    snipeContainer.appendChild(searchContainer);
+    snipeContainer.appendChild(bidContainer);
+    snipeContainer.appendChild(customContainer);
+
+    let container = document.createElement("div");
+    container.classList.add("menuContainer");
+    container.appendChild(snipeContainer);
+
+    addStyle('paletools-settings-snipe', styles);
 
     return container;
 }

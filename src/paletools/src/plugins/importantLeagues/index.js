@@ -17,6 +17,7 @@ function menu() {
     const toggles = {};
 
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
 
     const autoPopulateFromSbcButton = new UTStandardButtonControl();
     autoPopulateFromSbcButton.init();

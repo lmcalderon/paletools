@@ -82,7 +82,7 @@ function run() {
                     this._maxPriceText.textContent = this._maxBuyNowPrice;
 
                     setPlayerSellValue(definitionId, this._minBuyNowPrice);
-                    
+
                     show(this._minMaxPriceContainer);
                 }
                 else {
@@ -102,6 +102,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
     addLabelWithToggle(container, "enabled", cfg.enabled, toggleState => {
         cfg.enabled = toggleState;
         saveConfiguration();

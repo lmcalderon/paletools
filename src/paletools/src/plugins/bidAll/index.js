@@ -38,7 +38,7 @@ function run() {
                 text => {
                     const bidPrice = parseInt(select("#bid-all-price").value);
                     if (text !== 2) return;
-    
+
                     if (isNaN(bidPrice) || !bidPrice) {
                         notifyFailure(`${localize("auctioninfo.bidprice")} - ${localize("invalid")}`);
                         return;
@@ -46,7 +46,7 @@ function run() {
 
                     for(const row of view.listRows) {
                         const data = row.data;
-                        
+
                     }
                 });
         }, EventType.TAP);
@@ -61,6 +61,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
     addLabelWithToggle(container, "enabled", cfg.enabled, toggleState => {
         cfg.enabled = toggleState;
         saveConfiguration();

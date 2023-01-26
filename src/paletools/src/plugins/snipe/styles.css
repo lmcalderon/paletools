@@ -1,0 +1,34 @@
+#paletools-settings-snipe-container>div {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+#paletools-settings-snipe-container>div>div {
+    align-items: baseline;
+}
+
+#paletools-settings-snipe-container>div>div>div {
+
+}
+
+#paletools-settings-snipe-container>div>div>div>div>label {
+    display: inline-block;
+    width: 70%;
+    padding: 0.5rem;
+}
+
+#paletools-settings-snipe-container>div>div>div>div>input {
+    display: inline-block;
+    width: 75%;
+    margin: 0 0.5rem 0.5rem;
+}
+
+#paletools-settings-snipe-container>div>div>div>div>i {
+    display: inline-block;
+    color: red;
+}
+
+#paletools-settings-snipe-container>div>div>div>div>.ut-toggle-control {
+    display: inline-block;
+}

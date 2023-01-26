@@ -35,6 +35,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
     addLabelWithToggle(container, "plugins.clubAnalyzer.settings.autoRefresh", cfg.autoRefresh, toggleState => {
         cfg.autoRefresh = toggleState;
         saveConfiguration();

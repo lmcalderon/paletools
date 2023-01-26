@@ -38,7 +38,7 @@ function run() {
                     else {
                         controller._leftController.refreshList();
                     }
-                    
+
                 });
 
             }, EventType.TAP)
@@ -59,6 +59,7 @@ function run() {
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
     addLabelWithToggle(container, "enabled", cfg.enabled, toggleState => {
         cfg.enabled = toggleState;
         saveConfiguration();

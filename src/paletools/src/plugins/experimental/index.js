@@ -10,6 +10,7 @@ const cfg = settings.plugins.experimental;
 
 function menu() {
     const container = document.createElement("div");
+    container.classList.add("menuContainer");
 
     function add(setting) {
         addLabelWithToggle(container, `plugins.experimental.settings.${setting}`, cfg[setting], toggleState => {

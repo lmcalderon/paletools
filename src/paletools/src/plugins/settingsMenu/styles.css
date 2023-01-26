@@ -1,58 +1,63 @@
-.paletools-settings-wrapper .tile>div {
-    display: table;
+.paletools-settings-wrapper .tile>div.menuContainer {
     padding-left: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
 }
 
-.paletools-settings-wrapper .tile>div>div {
-    display: table-row;
-    height: 40px;
-}
-
-.paletools-settings-wrapper .tile>div>div>label {
-    display: table-cell;
-    width: 80%;
-}
-
-.paletools-settings-wrapper .tile>div>div>input {
-    display: table-cell;
-}
-
-.paletools-settings-wrapper .tile>div>div>.ut-toggle-control {
-    display: table-cell;
-}
-
-#paletools-settings-snipe-container>div {
+.paletools-settings-wrapper .tile>div.menuContainer>div {
     display: flex;
+    align-items: center;
+}
+
+.paletools-settings-wrapper .tile>div.menuContainer>div>label {
+    display: inline-block;
+    width: 80%;
+    padding: 0.5rem;
+}
+
+.paletools-settings-wrapper .tile>div.menuContainer>div>input {
+    display: inline-block;
+}
+
+.paletools-settings-wrapper .tile>div.menuContainer>div>.ut-toggle-control {
+    display: inline-block;
+}
+
+.paletools-settings-wrapper .menuCollapsible {
+    cursor: pointer;
     width: 100%;
-    flex-wrap: wrap;
+    border: none;
+    text-align: left;
+    outline: none;
+    padding-left: 0.5rem;
+    font-size: 2.5rem;
+    box-sizing: border-box;
+    font-family: UltimateTeamCondensed,sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    font-style: italic;
+    line-height: 1em;
+    text-transform: uppercase;
+    width: 100%;
+    color: #f8eede;
 }
 
-#paletools-settings-snipe-container>div>div {
-    display: table;
-    margin-right: 40px;
+.paletools-settings-wrapper .active, .paletools-settings-wrapper .menuCollapsible:hover {
+    background-color: #2b333b;
+    border-color: #556c95;
 }
 
-#paletools-settings-snipe-container>div>div>div {
-    display: table-row;
-    height: 50px;
+.paletools-settings-wrapper .menuCollapsible .tileHeader:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-right: 8px;
 }
 
-#paletools-settings-snipe-container>div>div>div>label {
-    display: table-cell;
-    width: 70%;
-}
-
-#paletools-settings-snipe-container>div>div>div>input {
-    display: table-cell;
-}
-
-#paletools-settings-snipe-container>div>div>div>i {
-    display: table-cell;
-    color: red;
-}
-
-#paletools-settings-snipe-container>div>div>div>.ut-toggle-control {
-    display: table-cell;
+.paletools-settings-wrapper .active .tileHeader:after {
+    content: "\2212";
 }
 
 .reset-settings {
@@ -63,7 +68,7 @@
 }
 
 #paletools-settings-important-leagues-container .column>div {
-    margin-bottom: 10px;
+    padding: 0.5rem;
 }
 
 #paletools-settings-important-leagues-container label {
@@ -74,14 +79,12 @@
     float: right;
 }
 
-
-
 @media screen and (min-width: 800px) {
     #paletools-settings-important-leagues-container>div {
         width: 99%;
     }
 
-    .paletools-settings-wrapper .tile>div {
-        width: 300px;
-    }
+    /* .paletools-settings-wrapper .tile>div.menuContainer {
+        width: 450px;
+    } */
 }
