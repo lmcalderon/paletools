@@ -15,7 +15,7 @@ module.exports = (env) => {
         GRID_MODE: false,
         WIDE_MODE: false,
         SNIPE: false,
-        CLUB_ANALYZER: false,
+        CLUB_ANALYZER: true,
         SELL_MULTIPLE: false,
         SBC_SMART_BUILDER: false,
         CLUB_SEARCH_ENHACER: false,

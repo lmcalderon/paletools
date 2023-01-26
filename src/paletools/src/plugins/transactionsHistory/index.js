@@ -22,8 +22,8 @@ function run() {
     UTTransfersHubView.prototype._generate = function _generate() {
         UTTransfersHubView_generate.call(this);
 
-        if(!settings.enabled || !cfg.enabled) return;
-        
+        if (!settings.enabled || !cfg.enabled) return;
+
         if (!this._paletoolsGenerated) {
             const container = select("div", this.getRootElement());
 
@@ -47,25 +47,19 @@ function run() {
 
             this._paletoolsGenerated = !0
 
-            let setupCountsRetries = 0;
-
             let buyCount = 0;
             let sellCount = 0;
 
             const setupCounts = async () => {
                 buyCount = await db.transactions.getBuyCount();
                 sellCount = await db.transactions.getSellCount();
-                
-                displayCounts();
 
-                if(buyCount + sellCount === 0 && setupCountsRetries < 3){
-                    await delay(50);
-                    setupCounts();
-                    setupCountsRetries++;
-                }
+                displayCounts();
             };
 
             const displayCounts = () => {
+                buyCount = buyCount || 0;
+                sellCount = sellCount || 0;
                 this._transferHistoryTile.setTotalTransferCount(buyCount + sellCount);
                 this._transferHistoryTile.setActiveTransferCount(buyCount);
                 this._transferHistoryTile.setFinishedTransferCount(sellCount);

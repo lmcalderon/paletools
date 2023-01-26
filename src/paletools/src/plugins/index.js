@@ -18,7 +18,6 @@ import clubAnalyzer from "./clubAnalyzer";
 import showConsoleOutput from "./showConsoleOutput";
 import wideMode from "./wideMode";
 import countMyPacks from "./countMyPacks";
-import groupMyPacks from "./groupMyPacks";
 import transferListSendAllToClub from "./transferListSendAllToClub";
 import transferListToSbc from "./transferListToSbc";
 import sbcBuilderEnhacer from "./sbcBuilderEnhacer";
@@ -42,7 +41,8 @@ import experimental from "./experimental";
 import refreshCoins from "./refreshCoins";
 import externalMarketPrices from "./externalMarketPrices";
 import bidAll from "./bidAll";
-import packCollector from "./packCollector";
+import myPacks from "./myPacks";
+import limbo from "./limbo";
 
 const plugins = [
     minMaxPrices,
@@ -63,7 +63,6 @@ const plugins = [
     clubAnalyzer,
     showConsoleOutput,
     countMyPacks,
-    groupMyPacks,
     transferListSendAllToClub,
     transferListToSbc,
     sbcBuilderEnhacer,
@@ -85,10 +84,12 @@ const plugins = [
     experimental,
     refreshCoins,
     bidAll,
-    packCollector,
+    myPacks,
     externalMarketPrices,
+    limbo,
     snipe,
     keyListener,
+
 ].filter(x => x);
 
 const menus = [];

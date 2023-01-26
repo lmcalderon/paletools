@@ -1,0 +1,52 @@
+.packs-settings-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#filter-packs {
+    border: 1px solid #4ee6eb;
+    font-size: 14px;
+    padding: 18px;
+    margin-left: 16px;
+    margin-right: 16px;
+    background-color: #262c38;
+    color: #4ee6eb;
+    font-weight: bold;
+}
+
+#search-packs {
+    max-width: 20%;
+}
+
+.pack-collector-btn {
+    line-height: 1.5rem;
+    background-color: #f8eede;
+    color: #243962;
+    box-sizing: border-box;
+    display: inline-block;
+    font-family: UltimateTeamCondensed,sans-serif;
+    font-size: 1.6em;
+    margin: 10px;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.ut-store-hub-view--content .ut-store-pack-details-view {
+	position: relative;
+}
+
+.pack-counter {
+    position: absolute;
+    display: block;
+    right: 0;
+    top: 0;
+    background-color: #f11656;
+    width: 20px;
+    text-align: center;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding: 4px;
+    cursor: pointer;
+    cursor: hand;
+}

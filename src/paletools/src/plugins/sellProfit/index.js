@@ -1,16 +1,14 @@
 let plugin;
 /// #if process.env.SELL_PROFIT
-import styles from "./styles.css";
 import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
 import localize, { localizeNumber } from "../../localization";
-import db from "../../services/db";
+import { getAuctionProfit } from "../../services/market";
 import settings, { saveConfiguration } from "../../settings";
 import { addClass, append, createElem, insertAfter, removeClass, selectAll } from "../../utils/dom";
 import { addStyle, removeStyle } from "../../utils/styles";
 import { hide, show } from "../../utils/visibility";
-import { getPriceAfterTax, listItemOnTransferMarket } from "../../services/market";
-import { logDebug } from "../../services/log";
+import styles from "./styles.css";
 
 const cfg = settings.plugins.sellProfit;
 
@@ -25,7 +23,7 @@ function removeStyles() {
 function run() {
 
     async function setProfitValue(container, item, sellPrice) {
-        const [profit, profitPerc] = await item.getAuctionProfit(sellPrice);
+        const [profit, profitPerc] = await getAuctionProfit(item, sellPrice);
         container.textContent = `${localizeNumber(profit)} (${localizeNumber(profitPerc)}%)`;
         if (profit < 0) {
             addClass(container, "profit-loss");

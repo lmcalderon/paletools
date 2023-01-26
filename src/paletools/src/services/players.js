@@ -1,8 +1,4 @@
-import settings from "../settings";
-import { flattenArray } from "../utils/array";
 import delay from "../utils/delay";
-import { isFastConceptSearchEnabled } from "./experimental";
-import { toPromise } from "../utils/observable";
 
 export function getPlayerAlternativePositions(preferredPosition) {
   switch (preferredPosition) {
@@ -65,12 +61,12 @@ export function getConceptPlayers(playerIds) {
   //   });
   // }
   // else {
-    let promises = [];
-    for (let playerId of playerIds) {
-      promises.push(getConceptPlayer(playerId));
-    }
+  let promises = [];
+  for (let playerId of playerIds) {
+    promises.push(getConceptPlayer(playerId));
+  }
 
-    return Promise.all(promises);
+  return Promise.all(promises);
   // }
 }
 

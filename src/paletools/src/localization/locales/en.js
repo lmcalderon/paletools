@@ -184,8 +184,14 @@ export default {
     "plugins.countMyPacks.settings.title": "My Packs counter",
     /// #endif
 
-    /// #if process.env.GROUP_MY_PACKS
-    "plugins.groupMyPacks.settings.title": "Group My Packs",
+    /// #if process.env.MY_PACKS
+    "plugins.myPacks.settings.title": "My Packs",
+    "plugins.myPacks.settings.group": "Group",
+    "plugins.myPacks.settings.filter": "Filter",
+    "plugins.myPacks.settings.packCollector": "Pack Collector",
+    "plugins.myPacks.filter.label": "Search My Packs",
+    "plugins.myPacks.filter.default": "-- ALL MY PACKS --",
+    "plugins.myPacks.packCollector.link.text": "Open Pack Collector",
     /// #endif
 
     /// #if process.env.TRANSFER_LIST_SEND_ALL_TO_CLUB
@@ -288,11 +294,6 @@ export default {
     /// #if process.env.EXPERIMENTAL
     'plugins.experimental.settings.title': "Experimental Stuff - Use at your own risk",
     'plugins.experimental.settings.fastClubSearch': 'Fast club search',
-    /// #endif
-
-    /// #if process.env.PACK_COLLECTOR
-    "plugins.packCollector.settings.title": "Pack Collector Integration",
-    "plugins.packCollector.link.text": "View Packs Value in Pack Collector",
     /// #endif
 
     "plugins.warningScreen.title": "PALETOOLS - USAGE WARNING",

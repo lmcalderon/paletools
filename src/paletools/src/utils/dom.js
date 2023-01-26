@@ -9,6 +9,12 @@ export function getRealElement(elem) {
     return elem;
 }
 
+export function parent(elem) {
+    elem = getRealElement(elem);
+
+    return elem.parentNode;
+}
+
 export function select(query, parent = document) {
     if (!query) return;
 

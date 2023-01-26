@@ -1,10 +1,53 @@
 import delay from "../utils/delay";
 import { toPromise } from "../utils/observable";
+import db from "./db";
 import sendPinEvents from "./pinEvents";
 
 const itemActionController = new UTItemActionController();
 
 const playerSellValues = {};
+
+export function getAuctionProfit(item, sellPrice) {
+	return new Promise(resolve => {
+		const calc = buyPrice => {
+
+			if (!sellPrice) {
+				const auctionData = item.getAuctionData();
+				sellPrice = auctionData.isSold()
+					? auctionData.currentBid
+					: auctionData.currentBid > 0
+						? auctionData.currentBid
+						: auctionData.buyNowPrice;
+			}
+
+			resolve(calculateProfit(buyPrice, sellPrice));
+		}
+
+		if (item.lastSalePrice > 0 || item.hasOwnProperty("hasBuyInfo")) {
+			calc(item.lastSalePrice);
+		}
+		else {
+			db.transactions.getBuyByItemId(item.id).then(tx => {
+				if (tx && tx.price) {
+					item.hasBuyInfo = true;
+					item.lastSalePrice = tx.price;
+					calc(tx.price);
+				}
+				else {
+					item.hasBuyInfo = false;
+					calc(0);
+				}
+			});
+		}
+	});
+}
+
+export function calculateProfit(buyPrice, sellPrice) {
+	const profit = Math.round((getPriceAfterTax(sellPrice) - buyPrice) * 100) / 100;
+	const profitPerc = Math.round((profit / sellPrice) * 10000) / 100;
+
+	return [profit, profitPerc];
+}
 
 export function setPlayerSellValue(definitionId, minValue) {
 	playerSellValues[definitionId] = minValue;

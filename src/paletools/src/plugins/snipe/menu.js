@@ -12,7 +12,7 @@ export default function menu() {
         inputRaw(container, 
             `plugins.snipe.settings.${path.replace('buttons.', '')}`, 
             () => getObjectPropertyValueByPath(cfg, path), 
-            value => setObjectPropertyByPath(cfg, path, value));
+            (oldValue, newValue) => setObjectPropertyByPath(cfg, path, newValue));
     }
 
     function inputRaw(container, locale, getter, setter) {

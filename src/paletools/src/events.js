@@ -1,4 +1,5 @@
 import getWindow from "./services/window";
+import { getRealElement } from "./utils/dom";
 import { isIterable } from "./utils/iterable";
 
 export function on(target, eventName, callback) {
@@ -10,13 +11,13 @@ export function on(target, eventName, callback) {
 
     eventName = getEventName(eventName);
 
-    if(isIterable(target)){
-        for(let t of target){
+    if(isIterable(getRealElement(target))){
+        for(let t of getRealElement(target)){
             t.addEventListener(eventName, callback);
         }
     }
     else {
-        target.addEventListener(eventName, callback);
+        getRealElement(target).addEventListener(eventName, callback);
     }
 }
 
@@ -51,5 +52,6 @@ export const EVENTS = {
     ITEMS_SOLD: "itemsSold",
     ITEM_MOVED: "itemMoved",
     ITEM_DISCARDED: "itemDiscarded",
-    TRANSACTIONS_RELOADED: "transactionsReindex"
+    TRANSACTIONS_RELOADED: "transactionsReindex",
+    REQUEST_UNASSIGNED: "requestUnassigned"
 }

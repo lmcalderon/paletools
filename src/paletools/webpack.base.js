@@ -43,6 +43,6 @@ module.exports = {
     REFRESH_COINS: true,
     EXTERNAL_MARKET_PRICES: false,
     BID_ALL: false,
-    PACK_COLLECTOR: true
-
+    LIMBO: false,
+    MY_PACKS: true
 };

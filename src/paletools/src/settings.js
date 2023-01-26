@@ -219,6 +219,16 @@ let settings = {
         },
         packCollector: {
             enabled: true
+        },
+        limbo: {
+            enabled: true
+        },
+        myPacks: {
+            enabled: true,
+            group: true,
+            packCollector: true,
+            filter: true,
+            filterText: null,
         }
     }
 };
