@@ -190,8 +190,8 @@ export default {
     "plugins.myPacks.settings.group": "Agrupar",
     "plugins.myPacks.settings.filter": "Filtrar",
     "plugins.myPacks.settings.packCollector": "Pack Collector",
-    "plugins.myPacks.settings.filter.label": "Buscar Mis Packs",
-    "plugins.myPacks.settings.filter.default": "-- TODOS MIS PACKS --",
+    "plugins.myPacks.filter.label": "Buscar Mis Packs",
+    "plugins.myPacks.filter.default": "-- TODOS MIS PACKS --",
     "plugins.myPacks.packCollector.link.text": "Abrir Pack Collector",
     /// #endif
 
