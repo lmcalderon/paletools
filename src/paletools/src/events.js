@@ -11,6 +11,10 @@ export function on(target, eventName, callback) {
 
     eventName = getEventName(eventName);
 
+    if(eventName === "click" && isPhone()) {
+        eventName = "pointerdown";
+    }
+
     if(isIterable(getRealElement(target))){
         for(let t of getRealElement(target)){
             t.addEventListener(eventName, callback);

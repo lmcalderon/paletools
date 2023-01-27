@@ -74,6 +74,15 @@ export function remove(elem) {
     return elem;
 }
 
+export function attr(elem, name, value) {
+    if(!value) {
+        return getRealElement(elem).getAttribute(name);
+    }
+    else {
+        getRealElement(elem).setAttribute(name, value);
+    }
+}
+
 export function createElem(tag, attrs, html) {
     let elem = document.createElement(tag);
     if (typeof attrs === "string") {

@@ -5,7 +5,7 @@ import styles from "./styles.css";
 import { addLabelWithToggle } from "../../controls";
 import localize from "../../localization";
 import settings, { saveConfiguration } from "../../settings";
-import { addClass, append, createElem, detach, insertBefore, isHidden, parent, select, selectAll } from "../../utils/dom";
+import { addClass, append, attr, createElem, detach, insertBefore, isHidden, parent, remove, removeClass, select, selectAll } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 import { EVENTS, on } from "../../events";
 import { addStyle, removeStyle } from "../../utils/styles";
@@ -37,10 +37,10 @@ function run() {
         for (let pack of packs) {
             const packName = localize(pack.packName);
             if (!packsCounter[packName]) {
-                packsCounter[packName] = 1;
+                packsCounter[packName] = { id: pack.id, tradeable: pack.tradable ? 1 : 0, untradeable: pack.tradable ? 0 : 1 };
             }
             else {
-                packsCounter[packName]++;
+                packsCounter[packName][pack.tradable ? "tradeable" : "untradeable"]++;
             }
         }
 
@@ -50,11 +50,12 @@ function run() {
         view.__packsDropDown.addOption(`${localize("plugins.myPacks.filter.default")} (${packs.length})`, "");
 
         for (const packName of packNames) {
-            view.__packsDropDown.addOption(`${packName} (${packsCounter[packName]})`, packName);
+            const packData = packsCounter[packName];
+            view.__packsDropDown.addOption(`${packName} (${packData.tradeable + packData.untradeable})`, `${packData.id}`);
         }
     }
 
-    function searchPacks(text) {
+    function searchPacks(text, isPackId = false) {
         cfg.filterText = text;
         saveConfiguration();
         if (!text) {
@@ -79,11 +80,24 @@ function run() {
 
         text = removeDiacritics(text).toLowerCase();
         for (const pack of selectAll(".ut-store-pack-details-view--title")) {
-            if (removeDiacritics(pack.textContent.toLowerCase()).indexOf(text) > -1) {
-                show(parent(pack));
+            const packName = removeDiacritics(pack.textContent.toLowerCase());
+            const packParent = parent(pack);
+            if (isPackId) {
+                if (packParent.dataset.id == text || packParent.dataset.id == `6${text}`) {
+                    // EA uses the same id but with at 6 in the front for packs that are the same but do not assure a player with a certain rating
+                    show(packParent);
+                }
+                else {
+                    hide(packParent);
+                }
             }
             else {
-                hide(parent(pack));
+                if (packName.indexOf(text) > -1) {
+                    show(packParent);
+                }
+                else {
+                    hide(packParent);
+                }
             }
         }
     }
@@ -116,69 +130,31 @@ function run() {
         detach(packs);
 
         packs.sort((a, b) => {
-            const aTradeable = a.classList.contains("is-tradeable");
-            const bTradeable = b.classList.contains("is-tradeable");
-            const aTitle = select(".ut-store-pack-details-view--title", a).textContent;
-            const bTitle = select(".ut-store-pack-details-view--title", b).textContent;
+            const aTitle = a.dataset.title;
+            const bTitle = b.dataset.title;
+            const aTradeable = a.dataset.tradeable;
+            const bTradeable = b.dataset.tradeable;
+            const aGroupFirst = a.dataset.groupFirst;
+            const bGroupFirst = b.dataset.groupFirst;
+            const aId = parseInt(a.dataset.id);
+            const bId = parseInt(b.dataset.id);
 
-            if (aTitle === bTitle) {
-                return aTradeable ? -1 : bTradeable ? 1 : 0;
+            if(aTitle === bTitle) {
+                if (aId === bId) {
+                    if (aTradeable === bTradeable) {
+                        return aGroupFirst ? -1 : bGroupFirst ? 1 : 0;
+                    }
+    
+                    return aTradeable ? -1 : bTradeable ? 1 : 0;
+                }
+
+                return aId < bId ? -1 : aId > bId ? 1 : 0;
             }
 
-            return aTitle < bTitle ? -1 : aTitle > bTitle ? 1 : 0;
+            return aTitle.localeCompare(bTitle);
+
+            
         });
-
-        let prevTitle = null;
-        let prevTradeable = null;
-
-        for (let pack of packs) {
-            pack.setAttribute("data-title", select(".ut-store-pack-details-view--title", pack).textContent);
-            pack.setAttribute("data-tradeable", pack.classList.contains("is-tradeable"));
-        }
-
-        for (let pack of packs) {
-            let title = pack.getAttribute("data-title");
-            let tradeable = pack.getAttribute("data-tradeable");
-
-            const appendCounter = () => {
-                const packCounter = createElem("div", { className: "pack-counter" });
-                const filteredPacks = packs
-                    .filter(elem => elem.getAttribute("data-title") === title)
-                    .filter(elem => elem.getAttribute("data-tradeable") === tradeable);
-
-                let samePacksCount = filteredPacks.length;
-                packCounter.textContent = samePacksCount;
-                append(pack, packCounter);
-                pack.setAttribute("data-group-first", "true");
-
-                on(packCounter, "click", () => {
-                    for (let pack of filteredPacks.filter(x => x.classList.contains("duplicated"))) {
-                        if (isHidden(pack)) {
-                            pack.setAttribute("data-group", "expanded");
-                            show(pack);
-                        }
-                        else {
-                            pack.setAttribute("data-group", "collapsed");
-                            hide(pack);
-                        }
-                    };
-                });
-            }
-
-            if (prevTitle !== title) {
-                prevTitle = title;
-                prevTradeable = tradeable;
-                appendCounter();
-            }
-            else if (prevTradeable !== tradeable) {
-                prevTradeable = tradeable;
-                appendCounter();
-            }
-            else {
-                addClass(pack, "duplicated");
-                hide(pack);
-            }
-        }
 
         append(parent, ...packs);
     }
@@ -188,12 +164,53 @@ function run() {
         UTStoreViewController_setCategory.call(this, ...args);
         if (!settings.enabled || !cfg.enabled) return;
         if (!this.viewmodel.hasMyPacks) return;
+        if (args[0] !== PurchaseDisplayGroup.MYPACKS) return;
 
         const packs = this.viewmodel.myPacks.values();
 
         setupPackCollectorLink(packs, this.getView());
         setupFilterPacks(packs, this.getView());
         setupPackGroups(packs);
+    }
+
+
+    const UTStoreView_setupPack = UTStoreView.prototype.setupPack;
+    UTStoreView.prototype.setupPack = function (...args) {
+        const packView = UTStoreView_setupPack.call(this, ...args);
+        if (packView instanceof UTStorePackDetailsView) {
+            const pack = args[0];
+            attr(packView, "data-id", localize(pack.id));
+            attr(packView, "data-title", localize(pack.packName));
+            attr(packView, "data-tradeable", pack.tradable);
+            if (cfg.group) {
+                const packKey = pack.tradable ? `${pack.id}_tradeable` : `${pack.id}_untradeable`;
+                if (!this._packGroups[packKey]) {
+                    this._packGroups[packKey] = [packView];
+                    const packCounter = createElem("div", { className: "pack-counter" }, "1");
+                    append(packView, packCounter);
+                    attr(packView, "data-group-first", "true");
+                    on(packCounter, "click", () => {
+                        for (let index = 1; index < this._packGroups[packKey].length; index++) {
+                            const groupedPack = this._packGroups[packKey][index];
+                            if (isHidden(groupedPack)) {
+                                attr(groupedPack, "data-group", "expanded");
+                                show(groupedPack);
+                            }
+                            else {
+                                attr(groupedPack, "data-group", "collapsed");
+                                hide(groupedPack);
+                            }
+                        };
+                    });
+                }
+                else {
+                    this._packGroups[packKey].push(packView);
+                    hide(packView);
+                    select(".pack-counter", this._packGroups[packKey][0]).textContent = this._packGroups[packKey].length;
+                }
+            }
+        }
+        return packView;
     }
 
     const UTStoreView__generate = UTStoreView.prototype._generate;
@@ -210,7 +227,7 @@ function run() {
                     this.__packsDropDown = new UTNativeDropDownControl();
                     this.__packsDropDown.init();
                     this.__packsDropDown.onChange(packName => {
-                        searchPacks(packName);
+                        searchPacks(packName, true);
                     });
                     this.__packsDropDown.getRootElement().id = "filter-packs";
                     append(settingsContainer, this.__packsDropDown);
@@ -241,6 +258,7 @@ function run() {
 
     const UTStoreView_setPacks = UTStoreView.prototype.setPacks;
     UTStoreView.prototype.setPacks = function (...args) {
+        this._packGroups = {};
         UTStoreView_setPacks.call(this, ...args);
 
         if (!settings.enabled || !cfg.enabled) return;
@@ -261,7 +279,9 @@ function run() {
                 show(this.__packsDropDown);
             }
 
-            setupPackGroups(packs);
+            if (cfg.group) {
+                setupPackGroups(packs);
+            }
         }
         else {
             hide(this.__packCollectorLink);

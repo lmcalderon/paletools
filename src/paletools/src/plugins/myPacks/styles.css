@@ -4,6 +4,10 @@
     justify-content: center;
 }
 
+.phone .packs-settings-container {
+    flex-direction: column;
+}
+
 #filter-packs {
     border: 1px solid #4ee6eb;
     font-size: 14px;
@@ -15,8 +19,16 @@
     font-weight: bold;
 }
 
+.phone #filter-packs {
+    width: 100%;
+}
+
 #search-packs {
     max-width: 20%;
+}
+
+.phone #search-packs {
+    max-width: 100%;
 }
 
 .pack-collector-btn {

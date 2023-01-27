@@ -29,11 +29,11 @@ function run() {
         tile.innerHTML = html;
         prepend(select(".layout-hub", this.getRootElement()), tile);
 
-        on(select("#donate-ml", tile), "pointerdown", () => {
+        on(select("#donate-ml", tile), "click", () => {
             messageBus.publish("openurl", "https://ceneka.net/mp/d/paletaeaa");
         });
 
-        on(select("#donate-pp", tile), "pointerdown", () => {
+        on(select("#donate-pp", tile), "click", () => {
             messageBus.publish("openurl", "https://streamlabs.com/paleta_ar/tip");
         });
 

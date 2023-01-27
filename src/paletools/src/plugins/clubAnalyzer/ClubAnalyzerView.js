@@ -1,7 +1,7 @@
 /// #if process.env.CLUB_ANALYZER
 
 import localize from "../../localization";
-import { addClass, append, createElem, isVisible, removeClass, select, selectAll } from "../../utils/dom";
+import { addClass, append, createElem, isVisible, remove, removeClass, select, selectAll } from "../../utils/dom";
 import { hide, show } from "../../utils/visibility";
 import { on } from "../../events";
 
@@ -33,35 +33,26 @@ ClubAnalyzerView.prototype.dealloc = function dealloc() {
 }
 
 ClubAnalyzerView.prototype._appendMainMenu = function (container) {
-    append(container, createElem("div", { className: "ea-filter-bar-view" }, `
-    <div class="menu-container">
-            <button id="clubanalyzer-players-dashboard" class="ea-filter-bar-item-view selected">Dashboard</button>
-            <button id="clubanalyzer-players-by-rating" class="ea-filter-bar-item-view">Rating</button>
-            <button id="clubanalyzer-players-by-rarity" class="ea-filter-bar-item-view">${loc("extendedPlayerInfo.general.rarity")}</button>
-            <button id="clubanalyzer-players-by-league" class="ea-filter-bar-item-view">${loc("search.details.itemLeague")}</button>
-            <button id="clubanalyzer-players-by-nation" class="ea-filter-bar-item-view">${loc("extendedPlayerInfo.general.nation")}</button>
-            <button id="clubanalyzer-players-by-club-bought" class="ea-filter-bar-item-view">${loc("view.tab.club")}</button>
-            <button id="clubanalyzer-players-by-unnasigned" class="ea-filter-bar-item-view">${loc("navbar.label.newitems")} <span id="clubanalyzer-counter-unnasigned"></span></button>
-            <button id="clubanalyzer-players-by-transferlist" class="ea-filter-bar-item-view">${loc("panel.label.transferlist")} <span id="clubanalyzer-counter-tradepile"></span></button>
-            <button id="clubanalyzer-players-by-transfertargets" class="ea-filter-bar-item-view">${loc("panel.label.transfertargets")}  <span id="clubanalyzer-counter-watchlist"></span></button>
-        </div>`));
+    const clubAnalyzerMenu = new EAFilterBarView();
+    clubAnalyzerMenu.addTab("clubanalyzer-players-dashboard", "Dashboard");
+    clubAnalyzerMenu.addTab("clubanalyzer-players-by-rating", "Rating");
+    clubAnalyzerMenu.addTab("clubanalyzer-players-by-rarity", loc("extendedPlayerInfo.general.rarity"));
+    clubAnalyzerMenu.addTab("clubanalyzer-players-by-league", loc("search.details.itemLeague"));
+    clubAnalyzerMenu.addTab("clubanalyzer-players-by-nation", loc("extendedPlayerInfo.general.nation"));
+    clubAnalyzerMenu.addTab("clubanalyzer-players-by-club-bought", loc("view.tab.club"));
+    clubAnalyzerMenu.addTab("clubanalyzer-players-by-unnasigned", loc("navbar.label.newitems"));
+    clubAnalyzerMenu.addTab("clubanalyzer-players-by-transferlist", loc("panel.label.transferlist"));
+    clubAnalyzerMenu.addTab("clubanalyzer-players-by-transfertargets", loc("panel.label.transfertargets"));
 
-    const allButtons = selectAll(".menu-container > button", container);
-
-    on(allButtons, "mouseover", ev => {
-        removeClass(allButtons, "hover");
-        addClass(ev.currentTarget, "hover");
-    });
-
-    on(allButtons, "click", ev => {
+    clubAnalyzerMenu.addTarget(this, (_, __, menuItem) => {
         hide(selectAll(".club-analyzer-report"));
-        removeClass(allButtons, "selected");
-        addClass(ev.currentTarget, "selected");
-
-        let targetId = ev.currentTarget.id.replace("players-", "report-");
+        let targetId = menuItem.id.replace("players-", "report-");
         show(select(`#${targetId}`));
         show(selectAll(`.${targetId}`));
-    });
+    }, EventType.TAP)
+    append(container, clubAnalyzerMenu);
+    clubAnalyzerMenu.setActiveTab("clubanalyzer-players-dashboard");
+    clubAnalyzerMenu.layoutSubviews();
 }
 
 ClubAnalyzerView.prototype._appendBody = function (container) {
@@ -69,29 +60,36 @@ ClubAnalyzerView.prototype._appendBody = function (container) {
     const content = createElem("div", { className: "ut-content" });
     const pinnedList = createElem("div", { className: "ut-pinned-list club-analyzer" });
 
-    append(content, pinnedList);
+    const commandsContainer = createElem("div", { id: "clubanalyzercommands", className: "button-container" });
+
+    const reloadButton = new UTStandardButtonControl();
+    reloadButton.init();
+    reloadButton.setText(loc("view.buttons.reload"));
+    reloadButton.addTarget(this, () => this.onReloadClicked.notify(), EventType.TAP);
+    addClass(reloadButton, "call-to-action");
+    append(commandsContainer, reloadButton);
+
+    if (!isPhone()) {
+        const exportCsvButton = new UTStandardButtonControl();
+        exportCsvButton.init();
+        exportCsvButton.setText(loc("view.buttons.exportCsv"));
+        exportCsvButton.addTarget(this, () => this.onReloadClicked.notify(), EventType.TAP);
+        addClass(exportCsvButton, "call-to-action");
+
+        const exportHtmlButton = new UTStandardButtonControl();
+        exportHtmlButton.init();
+        exportHtmlButton.setText(loc("view.buttons.exportHtml"));
+        exportHtmlButton.addTarget(this, () => this.onReloadClicked.notify(), EventType.TAP);
+        addClass(exportHtmlButton, "call-to-action");
+
+        append(commandsContainer, exportCsvButton, exportHtmlButton);
+    }
+
+    append(container, contentContainer);
     append(contentContainer, content);
+    append(content, commandsContainer);
+    append(content, pinnedList);
 
-    append(container,
-
-        createElem("div", { id: "clubanalyzercommands", className: "button-container" }, `
-            <button id="reload-club-analyzer" class="btn-standard call-to-action" data-loading="Reloading...">${loc("view.buttons.reload")}</button>
-            <button id="export-csv-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${loc("view.buttons.exportCsv")}</button>
-            <button id="export-html-club-analyzer" class="btn-standard call-to-action" data-loading="Exporting...">${loc("view.buttons.exportHtml")}</button>
-            `),
-        contentContainer,);
-
-    on(select("#reload-club-analyzer", container), "click", () => {
-        this.onReloadClicked.notify();
-    });
-
-    on(select("#export-csv-club-analyzer", container), "click", () => {
-        this.onExportCsvClicked.notify();
-    });
-
-    on(select("#export-html-club-analyzer", container), "click", () => {
-        this.onExportHtmlClicked.notify();
-    });
 
 
     return pinnedList;
@@ -190,8 +188,8 @@ ClubAnalyzerView.prototype._createCountReportTree = function (data, level) {
 ClubAnalyzerView.prototype._setupAuctionReportSort = function () {
     const reports = selectAll(".club-analyzer-auctionreport");
 
-    on(window, "click", ev => {
-        if(!ev.target.dataset.sortby) return;
+    on("click", ev => {
+        if (!ev.target.dataset.sortby) return;
 
         const header = ev.target;
         const parentDiv = ev.target.closest("div");
@@ -350,9 +348,9 @@ ClubAnalyzerView.prototype.prepareForUpdate = function () {
 }
 
 ClubAnalyzerView.prototype.update = function (viewmodel) {
-    select("#clubanalyzer-counter-unnasigned").textContent = viewmodel.counters.unnasignedTotal;
-    select("#clubanalyzer-counter-tradepile").textContent = viewmodel.counters.tradepileTotal;
-    select("#clubanalyzer-counter-watchlist").textContent = viewmodel.counters.watchlistTotal;
+    // select("#clubanalyzer-counter-unnasigned").textContent = viewmodel.counters.unnasignedTotal;
+    // select("#clubanalyzer-counter-tradepile").textContent = viewmodel.counters.tradepileTotal;
+    // select("#clubanalyzer-counter-watchlist").textContent = viewmodel.counters.watchlistTotal;
 
     this._body.innerHTML = "";
 
@@ -385,11 +383,11 @@ ClubAnalyzerView.prototype.update = function (viewmodel) {
 
         if (isVisible(childUl)) {
             hide(childUl);
-            addClass(elem, "expanded");
+            removeClass(elem, "expanded");
         }
         else {
             show(childUl);
-            removeClass(elem, "expanded");
+            addClass(elem, "expanded");
         }
 
         ev.stopPropagation();
