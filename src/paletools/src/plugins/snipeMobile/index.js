@@ -4,14 +4,13 @@ let plugin;
 
 /// #if process.env.SNIPE_MOBILE
 import { addLabelWithToggle } from "../../controls";
-import { getUnassignedItems } from "../../services/getUnassignedItems";
-import { addSnipeRequest, addSnipeRequestNoBack, enableMarketSnipe } from "../../services/ui/market";
-import { incrementPriceRow } from "../../services/ui/search";
-import { addClass, append, createElem, select } from "../../utils/dom";
-import settings, { saveConfiguration } from "../../settings";
 import { EVENTS, on } from "../../events";
-import { navigateBack } from "../../services/ui/navigation";
 import localize from "../../localization";
+import { addSnipeRequest, addSnipeRequestNoBack, enableMarketSnipe } from "../../services/ui/market";
+import { navigateBack } from "../../services/ui/navigation";
+import { incrementPriceRow } from "../../services/ui/search";
+import settings, { saveConfiguration } from "../../settings";
+import { addClass, append, createElem, select } from "../../utils/dom";
 
 const cfg = settings.plugins.snipe;
 
