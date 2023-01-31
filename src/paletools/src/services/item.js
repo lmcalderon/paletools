@@ -1,5 +1,6 @@
 import localize from "../localization";
 import { toPromise } from "../utils/observable";
+import sendPinEvents from "./pinEvents";
 
 export function getItemAsText(item, lastNameFirst = false) {
   if (item.isPlayer()) {
