@@ -1,5 +1,5 @@
 import { EVENTS, on } from "../../events";
-import { getUnassignedPlayers } from "../club";
+import { getUnassignedItems } from "../item";
 import { dateToInt } from "../date";
 import { logDebug } from "../log";
 import { getTransferListItems, getWatchedItems } from "../market";
@@ -111,7 +111,7 @@ export class TransactionsStore {
         }
 
         try {
-            let items = await getUnassignedPlayers();
+            let items = await getUnassignedItems();
             for (let item of items.filter(x => x.lastSalePrice > 0)) {
                 this.insertBuy(item, item.lastSalePrice, item.timestamp);
             }

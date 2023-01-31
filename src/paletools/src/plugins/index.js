@@ -40,6 +40,7 @@ import importantLeagues from "./importantLeagues";
 import experimental from "./experimental";
 import refreshCoins from "./refreshCoins";
 import externalMarketPrices from "./externalMarketPrices";
+import packsOpener from "./packsOpener";
 import bidAll from "./bidAll";
 import myPacks from "./myPacks";
 import limbo from "./limbo";
@@ -83,6 +84,7 @@ const plugins = [
     importantLeagues,
     experimental,
     refreshCoins,
+    packsOpener,
     bidAll,
     myPacks,
     externalMarketPrices,

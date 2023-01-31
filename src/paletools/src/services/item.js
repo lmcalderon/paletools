@@ -1,4 +1,5 @@
 import localize from "../localization";
+import { toPromise } from "../utils/observable";
 
 export function getItemAsText(item, lastNameFirst = false) {
   if (item.isPlayer()) {
@@ -56,4 +57,27 @@ export function getItemStaticDataId(item) {
   }
 
   return 0;
+}
+
+export function getUnassignedItems() {
+  //return http('purchased/items');
+  repositories.Item.setDirty(ItemPile.PURCHASED);
+  sendPinEvents("Unassigned Items - List View");
+  return new Promise((resolve) => {
+      services.Item.requestUnassignedItems().observe(this, (sender, response) => {
+          resolve(response.response.items);
+      });
+  });
+}
+
+export function moveItemsToTransferList(items) {
+  return toPromise(services.Item.move(items, ItemPile.TRANSFER));
+}
+
+export function moveItemsToClub(items) {
+  return toPromise(services.Item.move(items, ItemPile.CLUB));
+}
+
+export function discardItems(items) {
+  return toPromise(services.Item.discard(items));
 }

@@ -141,6 +141,10 @@ function run() {
             db.unassigned.insertItem(item);
         }
     });
+
+    getDefaultDispatcher().addObserver(UNASSIGNED_ITEM_ADDED, () => {
+    
+    });
 }
 
 function menu() {

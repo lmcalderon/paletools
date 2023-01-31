@@ -4,7 +4,7 @@ let plugin;
 import { addLabelWithToggle } from "../../controls";
 import { EVENTS, on } from "../../events";
 import localize from "../../localization";
-import { getUnassignedPlayers } from "../../services/club";
+import { getUnassignedItems } from "../../services/item";
 import { fillSbc } from "../../services/sbc";
 import { navigateBack } from "../../services/ui/navigation";
 import { getSbcChallengeFromController } from "../../services/ui/sbc";
@@ -26,7 +26,7 @@ function run() {
             this._useUnnasignedPlayersButton.setText(localize('plugins.duplicatedToSbc.button.text'));
             this._useUnnasignedPlayersButton.addTarget(this, async () => {
                 try {
-                    await fillSbc(getSbcChallengeFromController(), await getUnassignedPlayers(), count => {
+                    await fillSbc(getSbcChallengeFromController(), await getUnassignedItems(), count => {
                         this._useUnnasignedPlayersButton.setInteractionState(false);
                         this._useUnnasignedPlayersButton.setText(localize('plugins.duplicatedToSbc.button.textLoading').replace("{count}", count));
                     });

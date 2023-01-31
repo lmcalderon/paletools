@@ -3,7 +3,6 @@ import delay from "../utils/delay";
 import promiseState from "../utils/promiseState";
 import { randomInt } from "../utils/random";
 import http from "./http";
-import sendPinEvents from "./pinEvents";
 import { toPromise } from "../utils/observable";
 import { flattenArray } from "../utils/array";
 import settings from "../settings";
@@ -141,17 +140,6 @@ function internalGetAllClubPlayers(filterLoaned, playerId, onBatchLoadedCallback
 export async function getUnassignedPlayersCount() {
     const usermassinfo = await http('usermassinfo');
     return usermassinfo.userInfo.unassignedPileSize;
-}
-
-export function getUnassignedPlayers() {
-    //return http('purchased/items');
-    repositories.Item.setDirty(ItemPile.PURCHASED);
-    sendPinEvents("Unassigned Items - List View");
-    return new Promise((resolve) => {
-        services.Item.requestUnassignedItems().observe(this, (sender, response) => {
-            resolve(response.response.items);
-        });
-    });
 }
 
 

@@ -176,6 +176,13 @@ function run() {
         this._searchToggles.destroy();
     }
 
+    const UTSBCSquadOverviewViewController_onChallengeSubmitted = UTSBCSquadOverviewViewController.prototype._onChallengeSubmitted;
+    UTSBCSquadOverviewViewController.prototype._onChallengeSubmitted = function _onChallengeSubmitted(...args) {
+        UTSBCSquadOverviewViewController_onChallengeSubmitted.call(this, ...args);
+
+        this.getNavigationController().pushViewController(this);
+    }
+
     const UTSquadBuilderViewController_init = UTSquadBuilderViewController.prototype.init;
     UTSquadBuilderViewController.prototype.init = function () {
         UTSquadBuilderViewController_init.call(this);

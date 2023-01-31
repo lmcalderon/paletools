@@ -12,7 +12,6 @@ module.exports = (env) => {
         SELECT_CHEAPEST: false,
         DONATION: false,
         FILL_SBC_FROM_FUTBIN: false,
-        GRID_MODE: false,
         WIDE_MODE: false,
         SNIPE: false,
         CLUB_ANALYZER: true,

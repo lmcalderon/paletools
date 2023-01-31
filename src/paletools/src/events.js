@@ -30,11 +30,18 @@ export function triggerEvent(eventName, data) {
     getWindow().dispatchEvent(new CustomEvent(eventName, { bubbles: true, detail: data }));
 }
 
+export function listenToWebAppEvents(){
+    getDefaultDispatcher().addObserver(AppNotification.UNASSIGNED_ITEM_ADDED, this, ...args => {
+        triggerEvent(EVENTS.UNASSIGNED_ITEM_ADDED, args);
+    });
+}
+
 function getEventName(eventName){
     return EVENTS.hasOwnProperty(eventName) 
         ? `paletools:${eventName}`
         : eventName;
 }
+
 
 export const EVENTS = {
     APP_ENABLED: "appEnabled",
@@ -57,5 +64,6 @@ export const EVENTS = {
     ITEM_MOVED: "itemMoved",
     ITEM_DISCARDED: "itemDiscarded",
     TRANSACTIONS_RELOADED: "transactionsReindex",
-    REQUEST_UNASSIGNED: "requestUnassigned"
+    REQUEST_UNASSIGNED: "requestUnassigned",
+    UNASSIGNED_ITEM_ADDED: "unassignedItemAdded"
 }

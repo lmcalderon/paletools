@@ -4,7 +4,7 @@ let plugin;
 
 /// #if process.env.SNIPE_MOBILE
 import { addLabelWithToggle } from "../../controls";
-import { getUnassignedPlayers } from "../../services/club";
+import { getUnassignedItems } from "../../services/getUnassignedItems";
 import { addSnipeRequest, addSnipeRequestNoBack, enableMarketSnipe } from "../../services/ui/market";
 import { incrementPriceRow } from "../../services/ui/search";
 import { addClass, append, createElem, select } from "../../utils/dom";

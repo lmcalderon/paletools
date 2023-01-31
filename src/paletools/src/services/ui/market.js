@@ -2,7 +2,7 @@ import { addMarketSearchPreRender } from "../../core-overrides/UTMarketSearchRes
 import { EVENTS, triggerEvent } from "../../events";
 import localize, { localizeNumber } from "../../localization";
 import { notifySuccess } from "../../utils/notifications";
-import { getUnassignedPlayers } from "../club";
+import { getUnassignedItems } from "../item";
 import getDebugSettings from "../debug";
 import { logDebug } from "../log";
 import { tryBuyItem } from "../market";
@@ -72,7 +72,7 @@ export function enableMarketSnipe() {
                     request({ success: true, item: response.item });
 
                     // this refreshes the unassigned players at the home page
-                    getUnassignedPlayers();
+                    getUnassignedItems();
 
                     triggerEvent(EVENTS.SNIPE_SUCCESS, response.item);
                     notifySuccess(localize("market.itemBuy.success").replace("{COINS}", localizeNumber(response.item._auction.buyNowPrice)));

@@ -1,5 +1,5 @@
 import runOverrides from "./core-overrides";
-import { EVENTS, triggerEvent } from "./events";
+import { EVENTS, listenToWebAppEvents, triggerEvent } from "./events";
 import runPlugins from "./plugins";
 import db from "./services/db";
 import { logDebug } from "./services/log";
@@ -97,6 +97,7 @@ function initApp() {
     if (isAppLoaded) {
         addStyle("paletools", styles);
         runPlugins();
+        //listenToWebAppEvents();
         getAppMain().getRootViewController().showGameView();
         triggerEvent(EVENTS.APP_LOADED);
         watchForPlayersMovement(); 

@@ -87,24 +87,33 @@
 	padding-left: 4px !important;
 }
 
-section.ui-layout-right .listFUTItem {
+section.ui-layout-right .listFUTItem, .phone .listFUTItem {
 	height: 110px !important;
 	width: 24.50% !important;
 	border-right-width: 1px !important;
 	display: inline-block !important;
 }
 
-section.ui-layout-right .listFUTItem .entityContainer {
+.phone .listFUTItem.has-auction-data {
+	width: 49% !important;
+}
+
+.phone .listFUTItem.has-auction-data .auction {
+    left: 44% !important;
+    width: 55% !important;
+}
+
+section.ui-layout-right .listFUTItem .entityContainer, .phone .listFUTItem .entityContainer {
 	height: 100% !important;
 	width: 100% !important;
 }
 
-section.ui-layout-right .listFUTItem .entityContainer .item {
+section.ui-layout-right .listFUTItem .entityContainer .item, .phone .listFUTItem .entityContainer .item {
 	width: 90px !important;
 	height: 106px !important;
 }
 
-section.ui-layout-right .listFUTItem .btnAction.add {
+section.ui-layout-right .listFUTItem .btnAction.add, .phone .listFUTItem .btnAction.add {
 	display: block !important;
 	position: absolute !important;
 	width: 100% !important;
@@ -113,11 +122,11 @@ section.ui-layout-right .listFUTItem .btnAction.add {
 	opacity: 0 !important;
 }
 
-section.ui-layout-right .listFUTItem .entityContainer .name {
+section.ui-layout-right .listFUTItem .entityContainer .name, .phone .listFUTItem .entityContainer .name {
 	display: none !important;
 }
 
-section.ui-layout-right .listFUTItem .entityContainer .consumable+.name {
+section.ui-layout-right .listFUTItem .entityContainer .consumable+.name, .phone .listFUTItem .entityContainer .consumable+.name {
 	display: block !important;
 	font-size: 10px !important;
 	max-width: 100% !important;
@@ -127,7 +136,7 @@ section.ui-layout-right .listFUTItem .entityContainer .consumable+.name {
 	text-align: center !important;
 }
 
-section.ui-layout-right .listFUTItem .entityContainer .consumable+.name+.dataString {
+section.ui-layout-right .listFUTItem .entityContainer .consumable+.name+.dataString, .phone .listFUTItem .entityContainer .consumable+.name+.dataString {
 	display: block !important;
 	font-size: 10px !important;
 	max-width: 100% !important;
@@ -138,18 +147,18 @@ section.ui-layout-right .listFUTItem .entityContainer .consumable+.name+.dataStr
 	text-align: center !important;
 }
 
-section.ui-layout-right .listFUTItem .entityContainer .ut-squad-slot-chemistry-points-view.item {
+section.ui-layout-right .listFUTItem .entityContainer .ut-squad-slot-chemistry-points-view.item, .phone .listFUTItem .entityContainer .ut-squad-slot-chemistry-points-view.item {
 	width: 18px !important;
 	height: 18px !important;
 }
 
 
-section.ui-layout-right .listFUTItem .entityContainer .name.untradeable {
+section.ui-layout-right .listFUTItem .entityContainer .name.untradeable, .phone .listFUTItem .entityContainer .name.untradeable {
 	color: red !important;
 }
 
 
-section.ui-layout-right .listFUTItem .entityContainer .name.untradeable::before {
+section.ui-layout-right .listFUTItem .entityContainer .name.untradeable::before, .phone .listFUTItem .entityContainer .name.untradeable::before {
 	display: none !important;
 }
 
@@ -160,7 +169,8 @@ section.ui-layout-right .listFUTItem .entityContainer .name.untradeable::before 
 
 section.ui-layout-right .listFUTItem .entityContainer .player-stats-data-component,
 .ut-transfer-list-view .listFUTItem .player-stats-data-component,
-.SearchResults .listFUTItem .player-stats-data-component {
+.SearchResults .listFUTItem .player-stats-data-component,
+.phone .listFUTItem .entityContainer .player-stats-data-component {
 	display: none !important;
 }
 
@@ -168,7 +178,7 @@ section.ui-layout-right .listFUTItem .auction {
 	display: none !important;
 }
 
-section.ui-layout-right .listFUTItem.untradeable::before {
+section.ui-layout-right .listFUTItem.untradeable::before, .phone .listFUTItem.untradeable::before {
 	font-family: UltimateTeam-Icons, sans-serif;
 	color: #f6b803;
 	margin-top: 2px;
@@ -227,7 +237,7 @@ div.ut-pinned-item .listFUTItem div.entityContainer div.player-stats-data-compon
 	border-bottom-width: 0 !important;
 }
 
-.ut-store-hub-view--content .ut-store-pack-details-view {
+.landscape .ut-store-hub-view--content .ut-store-pack-details-view {
 	display: inline-block;
 	margin-left: 0 !important;
 	margin-right: 10px !important;
@@ -305,7 +315,7 @@ div.ut-pinned-item .listFUTItem div.entityContainer div.player-stats-data-compon
 	margin: 0 !important;
 }
 
-.ut-sbc-set-tile-view {
+.landscape .ut-sbc-set-tile-view {
 	max-width: calc(50% - 1rem);
 }
 
